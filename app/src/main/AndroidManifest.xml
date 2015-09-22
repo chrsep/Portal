@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.directdev.portal" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".tools.uihelper.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".ui.MainActivity"
+            android:label="@string/title_activity_main"
+            android:launchMode="singleTop" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.access.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:theme="@style/LoginTheme" >
+        </activity>
+        <activity
+            android:name=".ui.access.LogoutAuthorization"
+            android:label="@string/title_activity_logout" >
+        </activity>
+        <activity
+            android:name=".ui.access.LoginAuthorization"
+            android:label="@string/title_activity_login_authorization" >
+        </activity>
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/SettingsTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.directdev.portal.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.finance.FinanceActivity"
+            android:label="@string/title_activity_finance"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/FinanceTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.directdev.portal.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.grades.GradesActivity"
+            android:label="@string/title_activity_grades"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/GradesTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.directdev.portal.ui.MainActivity" />
+        </activity>
+    </application>
+
+</manifest>

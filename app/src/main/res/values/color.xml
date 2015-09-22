@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#212121</color>
+    <color name="accent">#00BFA5</color>
+    <color name="primary_dark">#151515</color>
+    <color name="primary_light">#424242</color>
+    <color name="white">#FFFFFF</color>
+    <color name="inactive_white">#57FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="black_light">#1f000000</color>
+    <color name="bg_default">#EEEEEE</color>
+    <color name="card_topbar">#424242</color>
+</resources>

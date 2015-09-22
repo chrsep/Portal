@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/primary_light">
+
+    <ImageView
+        android:id="@+id/birthday_picture"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/picture_birthday"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        android:gravity="center"
+        android:layout_below="@+id/birthday_picture"
+        android:text="@string/text_happy_birthday"
+        android:textColor="@color/inactive_white"
+        android:layout_marginBottom="10dp"/>
+
+</RelativeLayout>

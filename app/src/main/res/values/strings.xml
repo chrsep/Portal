@@ -1,0 +1,85 @@
+<resources>
+    <string name="app_name">Portal</string>
+    <string name="title_activity_main">Portal</string>
+    <string name="title_activity_login_authorization">LoginAuthorization</string>
+
+    <string name="toolbar_main_notification">Notification</string>
+    <string name="toolbar_main_news">News</string>
+
+    <string name="main_tab_schedule">Schedules</string>
+    <string name="main_tab_Resource">Resources</string>
+    <string name="main_tab_Other">Others</string>
+    <string name="holidayText">Happy Holiday</string>
+
+    <string name="shared_preferences">login_preferences</string>
+    <string name="login_cookie_pref">Cookie</string>
+    <string name="login_condition_pref">condition</string>
+    <string name="login_data_given_pref">given</string>
+    <string name="login_password_pref">Password</string>
+    <string name="login_username_pref">Username</string>
+
+    <string name="indicator_firstrun_pref">firstrun</string>
+
+    <string name="login_button">Login</string>
+    <string name="login_email_ending">\@binus.ac.id</string>
+    <string name="login_loading">Signing you in</string>
+    <string name="login_loading_info">Taking too long ? Press back</string>
+    <string name="logout_loading">Signing you out</string>
+
+    <string name="request_schedule">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/learning/classschedule</string>
+    <string name="request_finance">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/financial/statusocs/</string>
+    <string name="request_notification">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/profile/getNotifications/2</string>
+    <string name="request_notification_data">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/profile/getNotifications/0</string>
+    <string name="request_student_info">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/init/indexpage</string>
+    <string name="request_news">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/general/newsevents/</string>
+    <string name="request_dashboard">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/init/dashboard</string>
+    <string name="request_photo">https://newbinusmaya.binus.ac.id/services/ci/index.php/general/getPhoto</string>
+    <string name="request_terms">https://newbinusmaya.binus.ac.id/services/ci/index.php/scoring/ViewGrade/getPeriodByBinusianId</string>
+    <string name="request_scores">https://newbinusmaya.binus.ac.id/services/ci/index.php/scoring/ViewGrade/getStudentScore/</string>
+
+    <string name="resource_schedule_new_pref">schedule_json</string>
+    <string name="resource_finance_new_pref">finance_json</string>
+    <string name="resource_exam_new_pref">exam_json</string>
+
+    <string name="resource_schedule_old_pref">schedule_old_json</string>
+    <string name="resource_finance_old_pref">finance_old_json</string>
+    <string name="resource_exam_old_pref">exam_old_json</string>
+
+    <string name="resource_photo">acc_photo</string>
+    <string name="resource_account_name">account_name</string>
+    <string name="resource_major">major</string>
+    <string name="resource_gpa">gpa</string>
+    <string name="resource_small_photo">small_photo</string>
+    <string name="resource_terms">terms</string>
+    <string name="resource_scores">grades</string>
+
+    <string name="account_name_placeholder">JONATHAN DOE</string>
+    <string name="major_placeholder">Biomedical Engineering</string>
+    <string name="last_update_placeholder">Last updated: 2012&#8211;21&#8211;12 12:12</string>
+    <string name="gpa_placeholder">4.0</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Still on progress, Sorry</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_logout">LogoutActivity</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="photo_downloaded">isphotodownload</string>
+    <string name="last_update_pref">last_updated</string>
+
+    <string name="menu_grades">Grades</string>
+    <string name="menu_finance">Finance</string>
+    <string name="menu_forum">Forum</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_signout">Sign Out</string>
+
+    <string name="setting_photo">photo_setting</string>
+    <string name="setting_gpa">gpa_setting</string>
+    <string name="setting_auto_refresh">auto_refresh_setting</string>
+
+    <string name="is_refreshing_journal_pref">isRefreshing</string>
+    <string name="text_happy_birthday">Happy Birthday !!!</string>
+    <string name="title_activity_finance">FinanceActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_grades">GradesActivity</string>
+</resources>

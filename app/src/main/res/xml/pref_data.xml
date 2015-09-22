@@ -1,0 +1,20 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Behavior">
+        <SwitchPreference
+            android:key="@string/setting_photo"
+            android:title="Hide profile photo"
+            android:summary="Show or hide profile photo"
+            android:defaultValue="false" />
+        <SwitchPreference
+            android:key="@string/setting_gpa"
+            android:title="Hide GPA"
+            android:summary="Show or hide GPA"
+            android:defaultValue="false"/>
+        <SwitchPreference
+            android:key="@string/setting_auto_refresh"
+            android:title="Manual refresh only"
+            android:summary="Data won't be updated when app opened"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+</PreferenceScreen>

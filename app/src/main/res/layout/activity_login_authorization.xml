@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.directdev.portal.ui.access.LoginAuthorization"
+    android:background="@color/primary">
+
+    <ProgressBar android:indeterminate="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/marker_progress"
+        style="?android:attr/progressBarStyle"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_margin="10dp"
+        android:layout_centerInParent="true" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login_loading"
+        android:textColor="@color/white"
+        android:layout_below="@+id/marker_progress"
+        android:gravity="center_horizontal"
+        android:textSize="16sp"
+        android:id="@+id/login_authenticator_text"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:text="@string/login_loading_info"
+        android:textColor="@color/white"
+        android:textSize="12sp"/>
+    <WebView
+        android:id="@+id/loginWebView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"/>
+
+</RelativeLayout>
