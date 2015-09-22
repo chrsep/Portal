@@ -11,6 +11,6 @@ We will provide better documentation and try to improve our source code readabil
 We are also building a a way to track and coordinate the development of this app through trello:
 https://goo.gl/UcFrNr
 
-We will put all pull request into our consideration. You can email us at directdev.mobile@gmail.com if you have any question
+We will put all pull request into our consideration. You can email us at directdev.mobile@gmail.com if you have any question.
 
 
