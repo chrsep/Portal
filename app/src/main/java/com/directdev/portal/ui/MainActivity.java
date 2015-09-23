@@ -89,15 +89,6 @@ public class MainActivity  extends AppCompatActivity {
         }
     }
 
-    public void onEvent(AccountResponseEvent event){
-        if(sPref.getString(getString(R.string.resource_account_name),"").equals("EDWINA AYU KUSTIAWAN ") && sPref.getInt("hasSayBirthday", 0)!=1){
-            sPref.edit().putInt("hasSayBirthday", 1).apply();
-            Dialog dialog = new Dialog(this);
-            dialog.setContentView(R.layout.dialog_custom_birthday);
-            dialog.show();
-        }
-    }
-
     public void onEvent(TermResponseEvent event){
         List<String> terms;
         try{
@@ -112,8 +103,8 @@ public class MainActivity  extends AppCompatActivity {
         }catch (JSONException e){
 
         }
-
     }
+
     public void onEvent(GradesResponseEvent event){
         try {
             JSONObject data= new JSONObject(sPref.getString(getString(R.string.resource_scores) + "_" + event.term, ""));
