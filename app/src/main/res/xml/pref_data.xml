@@ -4,12 +4,12 @@
         <SwitchPreference
             android:key="@string/setting_photo"
             android:title="Hide profile photo"
-            android:summary="Show or hide profile photo"
+            android:summary="Hide your photo and show Portal logo"
             android:defaultValue="false" />
         <SwitchPreference
             android:key="@string/setting_gpa"
             android:title="Hide GPA"
-            android:summary="Show or hide GPA"
+            android:summary="Hide your GPA and show 4.0"
             android:defaultValue="false"/>
         <SwitchPreference
             android:key="@string/setting_auto_refresh"

@@ -7,7 +7,6 @@ import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
-import android.util.Log;
 
 import com.directdev.portal.tools.datatype.FinanceData;
 import com.directdev.portal.tools.datatype.ScheduleData;
@@ -243,7 +242,6 @@ public class JournalDB extends SQLiteOpenHelper {
     }
 
     public List<FinanceData> queryFinance(String type){
-        Log.d("query call", "INITIATED");
         db = this.getReadableDatabase();
         Cursor cursor;
         FinanceData financeData;

@@ -1,23 +1,25 @@
 package com.directdev.portal.ui;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.View;
 
 import com.directdev.portal.R;
 import com.directdev.portal.tools.database.CourseDB;
-import com.directdev.portal.tools.event.AccountResponseEvent;
 import com.directdev.portal.tools.event.GradesResponseEvent;
 import com.directdev.portal.tools.event.TermResponseEvent;
 import com.directdev.portal.tools.fetcher.FetchScore;
 import com.directdev.portal.tools.uihelper.MainViewPagerAdapter;
 import com.directdev.portal.ui.access.LoginActivity;
+import com.directdev.portal.ui.access.LoginAuthorization;
 import com.directdev.portal.ui.journal.JournalFragment;
 
 import org.json.JSONArray;
@@ -109,7 +111,9 @@ public class MainActivity  extends AppCompatActivity {
         try {
             JSONObject data= new JSONObject(sPref.getString(getString(R.string.resource_scores) + "_" + event.term, ""));
             db.addGrades(data,event.term);
-        }catch (JSONException e){}
+        }catch (JSONException e){
+
+        }
     }
 }
 

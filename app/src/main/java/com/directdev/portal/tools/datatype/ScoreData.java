@@ -7,7 +7,6 @@ public class ScoreData {
     public  String mid;
     public  String fin;
 
-
     public ScoreData(){
         this.grade = "0";
         this.assignment = "0";

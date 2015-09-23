@@ -16,15 +16,10 @@ import org.solovyev.android.views.llm.LinearLayoutManager;
 
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class BillingFragment extends Fragment {
 
 
-    public BillingFragment() {
-        // Required empty public constructor
-    }
+    public BillingFragment() {}
 
 
     @Override

@@ -1,6 +1,5 @@
 package com.directdev.portal.tools.datatype;
 
-
 public class ScheduleData {
     public String date;
     public String room;

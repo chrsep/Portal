@@ -1,12 +1,10 @@
 package com.directdev.portal.ui.access;
 
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -49,22 +47,17 @@ public class LoginAuthorization extends AppCompatActivity {
         @Override
         public void onPageFinished(WebView webView, String url) {
             String currUrl = webView.getUrl();
-            if (currUrl.equals("https://newbinusmaya.binus.ac.id/student/#/index/dashboard")) {
-
-            }else {
-                if (sharedPreferences.getInt("LoginAttempt", 0) == 4 && sharedPreferences.getInt(getString(R.string.login_condition_pref), 0) == 0 || currUrl.equals("http://newbinusmaya.binus.ac.id/default/login.html")) {
-                    edit.putInt(getString(R.string.login_condition_pref), 0).commit();
-                    finish();
-                }
-                if (sharedPreferences.getInt("LoginAttempt", 0) < 4) {
-                    int tries = sharedPreferences.getInt("LoginAttempt", 0);
-                    tries = tries + 1;
-                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_UsernameTextBoxBM').value='" + USERNAME + "'})()");
-                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_PasswordTextBoxBM').value='" + PASSWORD + "'})()");
-                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_SubmitButtonBM').click()})()");
-                    edit.putInt("LoginAttempt", tries).commit();
-
-                }
+            if (sharedPreferences.getInt("LoginAttempt", 0) == 4 && sharedPreferences.getInt(getString(R.string.login_condition_pref), 0) == 0 || currUrl.equals("http://newbinusmaya.binus.ac.id/default/login.html")) {
+                edit.putInt(getString(R.string.login_condition_pref), 0).commit();
+                finish();
+            }
+            if (sharedPreferences.getInt("LoginAttempt", 0) < 4) {
+                int tries = sharedPreferences.getInt("LoginAttempt", 0);
+                tries = tries + 1;
+                webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_UsernameTextBoxBM').value='" + USERNAME + "'})()");
+                webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_PasswordTextBoxBM').value='" + PASSWORD + "'})()");
+                webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_SubmitButtonBM').click()})()");
+                edit.putInt("LoginAttempt", tries).commit();
             }
         }
 

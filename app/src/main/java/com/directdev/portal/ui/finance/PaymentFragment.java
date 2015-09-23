@@ -20,9 +20,7 @@ import java.util.List;
 public class PaymentFragment extends Fragment {
 
 
-    public PaymentFragment() {
-        // Required empty public constructor
-    }
+    public PaymentFragment() {}
 
 
     @Override

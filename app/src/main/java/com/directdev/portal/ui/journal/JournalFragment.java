@@ -1,6 +1,5 @@
 package com.directdev.portal.ui.journal;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -187,8 +186,8 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         }
         catch (JSONException e)
         {
-            Snackbar snackbar = Snackbar.make(view, "Update session to fetch new data", Snackbar.LENGTH_LONG)
-                    .setAction("UPDATE", new View.OnClickListener() {
+            Snackbar snackbar = Snackbar.make(view, "Refresh session to load new data", Snackbar.LENGTH_LONG)
+                    .setAction("REFRESH", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             firstRequestSent = false;

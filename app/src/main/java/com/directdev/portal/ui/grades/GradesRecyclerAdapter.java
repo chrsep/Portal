@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,8 +58,6 @@ public class GradesRecyclerAdapter extends RecyclerView.Adapter{
         }else if (data.grade.substring(0,1).equals("E")){
             gradesViewHolder.cardView.setCardBackgroundColor(Color.BLACK);
         }
-
-        Log.d("RecyclerAdapter", course.get(i));
     }
 
     @Override

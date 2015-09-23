@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,11 +41,6 @@ public class GradesByTermFragment extends Fragment {
         }
         db = new CourseDB(getActivity());
         term = db.queryCourse(mParam1);
-        Log.d("term",Integer.toString(term.size()));
-        Log.d("term",mParam1);
-        for (int i = 0 ; i< term.size() ; i++){
-            Log.d("termsResponse", term.get(i));
-        }
     }
 
     @Override
