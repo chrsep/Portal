@@ -12,16 +12,17 @@
         android:longClickable="true"
         android:foreground="?android:attr/selectableItemBackground" >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/finance_description"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:singleLine="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/finance_date"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentTop="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +32,7 @@
             android:id="@+id/finance_upcoming"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/finance_date"
+            android:layout_below="@id/finance_date"
             android:layout_alignParentEnd="true"
             android:text="UPCOMING"
             android:textColor="#F44336"
@@ -40,7 +41,7 @@
             android:id="@+id/finance_passed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/finance_date"
+            android:layout_below="@id/finance_date"
             android:layout_alignParentEnd="true"
             android:text="PASSED"
             android:textColor="#4CAF50"

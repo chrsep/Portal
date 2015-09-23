@@ -52,6 +52,7 @@
     <string name="resource_small_photo">small_photo</string>
     <string name="resource_terms">terms</string>
     <string name="resource_scores">grades</string>
+    <string name="resource_scores_new">grades_new</string>
 
     <string name="account_name_placeholder">JONATHAN DOE</string>
     <string name="major_placeholder">Biomedical Engineering</string>

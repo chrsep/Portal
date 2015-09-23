@@ -61,6 +61,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.directdev.portal.ui.MainActivity" />
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="e2f91483c94217ff3e141cda751f285d0415b76f" />
     </application>
 
 </manifest>

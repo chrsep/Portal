@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.database.JournalDB;
 import com.directdev.portal.tools.datatype.ScheduleData;
@@ -78,6 +80,11 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         EventBus.getDefault().register(this);
         sPref = getActivity().getSharedPreferences(getString(R.string.shared_preferences), Context.MODE_PRIVATE);
         edit = sPref.edit();
+
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("View schedule")
+                .putContentType("Activity")
+                .putContentId("activity-3"));
     }
 
     @Override

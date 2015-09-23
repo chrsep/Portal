@@ -25,13 +25,13 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/ic_bad_mood"/>
+                    android:src="@drawable/ic_sad"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    android:text="Term score\nHasn't been published"
+                    android:text="Term score\nhasn't been published"
                     android:textColor="@color/white"/>
                 <TextView
                     android:layout_width="wrap_content"

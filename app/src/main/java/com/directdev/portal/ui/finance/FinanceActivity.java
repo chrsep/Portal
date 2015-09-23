@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.database.JournalDB;
 import com.directdev.portal.tools.datatype.FinanceData;
@@ -65,6 +67,11 @@ public class FinanceActivity extends AppCompatActivity {
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
+
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("View finance")
+                .putContentType("Activity")
+                .putContentId("activity-1"));
     }
 
     private void setupViewPager(ViewPager viewPager) {

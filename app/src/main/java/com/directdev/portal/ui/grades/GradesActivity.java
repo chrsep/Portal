@@ -14,6 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.database.CourseDB;
 import com.directdev.portal.tools.event.GradesResponseEvent;
@@ -64,6 +66,11 @@ public class GradesActivity extends AppCompatActivity {
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
+
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("View grades")
+                .putContentType("Activity")
+                .putContentId("activity-2"));
     }
 
     @Override
