@@ -27,7 +27,7 @@ public class MyApplication extends Application {
         if (appDir.exists()) {
             String[] children = appDir.list();
             for (String s : children) {
-                if (!s.equals("lib")||!s.equals("app_webview")||!s.equals("code_cache")||!s.equals("cache")) {
+                if (!s.equals("lib")) {
                     deleteDir(new File(appDir, s));
                     Log.d(s,s);
                 }
