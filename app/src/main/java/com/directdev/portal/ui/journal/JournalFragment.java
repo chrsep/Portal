@@ -23,7 +23,6 @@ import com.directdev.portal.tools.event.DatabaseUpdateEvent;
 import com.directdev.portal.tools.event.FetchResponseEvent;
 import com.directdev.portal.tools.fetcher.FetchAccountData;
 import com.directdev.portal.tools.fetcher.FetchSchedule;
-import com.directdev.portal.tools.fetcher.FetchScore;
 import com.directdev.portal.ui.access.LoginAuthorization;
 
 import org.json.JSONArray;
@@ -148,10 +147,6 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         FetchAccountData fetcher = new FetchAccountData(getActivity());
         fetcher.requestAllData();
-
-        FetchScore fetchScore = new FetchScore(getActivity());
-        fetchScore.requestTerm();
-
     }
 
     @Override

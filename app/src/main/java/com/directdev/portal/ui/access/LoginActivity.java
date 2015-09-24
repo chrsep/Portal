@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.directdev.portal.R;
+import com.directdev.portal.tools.fetcher.FetchScore;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
@@ -42,6 +43,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
         if(sharedPref.getInt(getResources().getString(R.string.login_condition_pref),0) ==1){
+            FetchScore fetchScore = new FetchScore(this);
+            fetchScore.requestTerm();
             finish();
         }else if(sharedPref.getInt(getResources().getString(R.string.login_data_given_pref),0) ==1){
             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Wrong password or email", Snackbar.LENGTH_SHORT)

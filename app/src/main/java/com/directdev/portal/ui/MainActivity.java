@@ -78,7 +78,7 @@ public class MainActivity  extends AppCompatActivity {
         new ResourceFragment();
         new AccountFragment();
         adapter.addFrag(JournalFragment.newInstance(null, null), "SCHEDULE");
-        adapter.addFrag(ResourceFragment.newInstance(null, null), "RESOURCES");
+        adapter.addFrag(ResourceFragment.newInstance(null, null), "INFO");
         adapter.addFrag(AccountFragment.newInstance(null, null), "ACCOUNT");
         viewPager.setAdapter(adapter);
     }

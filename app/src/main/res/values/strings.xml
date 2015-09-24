@@ -60,7 +60,7 @@
     <string name="gpa_placeholder">4.0</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Still on progress, Sorry</string>
+    <string name="hello_blank_fragment">hello</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_logout">LogoutActivity</string>
     <string name="action_refresh">Refresh</string>
