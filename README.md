@@ -13,11 +13,6 @@ https://goo.gl/UcFrNr
 
 We will put all pull request into our consideration. You can email us at directdev.mobile@gmail.com if you have any question.
 
-<b>HOW TO USE</b>
-
-1. Clone or download this source code and extract it
-2. Install and then open android studio
-3. Choose existing project
-4. Choose the source code folder
+<b>Import to android studio to use</b>
 
 
