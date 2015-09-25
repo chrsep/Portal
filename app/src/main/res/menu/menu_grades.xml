@@ -5,4 +5,9 @@
     <item android:id="@+id/action_refresh" android:title="@string/action_refresh"
         android:orderInCategory="100" app:showAsAction="always"
         android:icon="@drawable/ic_refresh"/>
+    <item android:id="@+id/action_grades_webapp"
+        android:title="@string/action_webapp"
+        android:orderInCategory="100"
+        app:showAsAction="collapseActionView"
+        android:icon="@drawable/ic_refresh"/>
 </menu>

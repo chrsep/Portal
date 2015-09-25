@@ -63,7 +63,10 @@
     <string name="hello_blank_fragment">hello</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_logout">LogoutActivity</string>
+
     <string name="action_refresh">Refresh</string>
+    <string name="action_webapp">Open in web-app</string>
+
     <string name="photo_downloaded">isphotodownload</string>
     <string name="last_update_pref">last_updated</string>
 
@@ -83,4 +86,20 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_grades">GradesActivity</string>
+    <string name="title_activity_finance_webapp">FinanceWebappActivity</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="info_what">What is this ?</string>
+    <string name="info_what_description">Due to some confusion on who made Portal and concerns about it\'s safety, RESOURCES tab will be temporarily replaced with this INFO tab until it\'s ready.</string>
+    <string name="info_official">Is Portal official ?</string>
+    <string name="info_official_tldr">No, Portal is a third party app</string>
+    <string name="info_official_description">We have explicitly written in the description that Portal is being built INDEPENDENTLY from Binus and that it is a THIRD PARTY app. It is not an official mobile app created by Binus University.</string>
+    <string name="info_safe">Is Portal safe ?</string>
+    <string name="info_safe_tldr">Yes, Portal is safe</string>
+    <string name="info_safe_description">We understand this question, you don\'t know who we are, and why we make Portal, we\'ll be concerned too if we were to be presented to an unofficial app build by an unknown developer, just like Portal. So we made this INFO tab to explain.\n\nTo prove that your private data is safe, and to open the development to everyone, we have published our source code into GitHub, because of this, do not install/update Portal from sources other than the Play store. \n\nLink: https://github.com/directdevmain/portal</string>
+    <string name="info_who">Who made Portal ?</string>
+    <string name="info_who_description">We are just like any of you who are using Portal, we use it ourselves, we are active students of Binus University. We are not some hacker group that is trying to release financial data and GPA of every Binus students that we could find just because we believe in transparency. \n\nPortal will not send any of your private data away from your phone.</string>
+    <string name="info_who_tldr">Students</string>
+    <string name="info_why">Why made Portal ?</string>
+    <string name="info_why_description">We find it a bit impractical to have your university data available 24/7 online, but can only be easily accessed through big screens and decent connection, which is something that is hard to get on campus, this leads us to use notes, screenshots and other static means of capturing information to make those online data easily accessible. This, coupled with our believe that CS students should focus more on experiment and building practical software, we decided to build Portal. \n\nWhy build Portal rather than other more serious applications? Because we have zero experience in real mobile and software development, Portal is easily the most practical and impactful thing we can currently build.</string>
 </resources>

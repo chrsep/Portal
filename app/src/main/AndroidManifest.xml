@@ -47,7 +47,8 @@
             android:name=".ui.finance.FinanceActivity"
             android:label="@string/title_activity_finance"
             android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/FinanceTheme" >
+            android:theme="@style/FinanceTheme"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.directdev.portal.ui.MainActivity" />
@@ -56,14 +57,25 @@
             android:name=".ui.grades.GradesActivity"
             android:label="@string/title_activity_grades"
             android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/GradesTheme" >
+            android:theme="@style/GradesTheme"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.directdev.portal.ui.MainActivity" />
         </activity>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="e2f91483c94217ff3e141cda751f285d0415b76f" />
+
+        <activity
+            android:name=".ui.FinanceWebappActivity"
+            android:label="@string/title_activity_finance_webapp"
+            android:parentActivityName=".ui.finance.FinanceActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.directdev.portal.ui.finance.FinanceActivity" />
+        </activity>
     </application>
 
 </manifest>

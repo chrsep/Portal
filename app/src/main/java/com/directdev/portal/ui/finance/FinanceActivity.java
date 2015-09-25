@@ -1,5 +1,7 @@
 package com.directdev.portal.ui.finance;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -7,6 +9,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.crashlytics.android.answers.Answers;
@@ -14,6 +19,7 @@ import com.crashlytics.android.answers.ContentViewEvent;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.database.JournalDB;
 import com.directdev.portal.tools.uihelper.MainViewPagerAdapter;
+import com.directdev.portal.ui.FinanceWebappActivity;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -53,6 +59,25 @@ public class FinanceActivity extends AppCompatActivity {
                 .putContentName("View finance")
                 .putContentType("Activity")
                 .putContentId("activity-1"));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_finance, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_finance_webapp:
+//                Intent intent = new Intent(this, FinanceWebappActivity.class);
+//                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {

@@ -21,11 +21,11 @@
                 android:textColor="@color/white"
                 android:gravity="center_vertical"
                 android:elevation="1dp"
-                android:text="What is this ?" />
+                android:text="@string/info_what" />
             <TextView android:layout_width="match_parent"
                 android:padding="16dp"
                 android:layout_height="wrap_content"
-                android:text="Due to some confusion on who made Portal and concerns about it's safety, RESOURCES tab will be temporarily replaced with this INFO tab until it's ready." />
+                android:text="@string/info_what_description" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
                 android:textColor="@color/white"
                 android:gravity="center_vertical"
                 android:elevation="1dp"
-                android:text="Is Portal official ?"/>
+                android:text="@string/info_official"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,12 +45,12 @@
                 android:paddingTop="16dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:text="No, Portal is a third party app"/>
+                android:text="@string/info_official_tldr"/>
             <TextView android:layout_width="match_parent"
                 android:padding="16dp"
                 android:layout_height="wrap_content"
                 android:textIsSelectable="true"
-                android:text="We have explicitly written that Portal is being build INDEPENDENTLY from Binus and that it is a THIRD PARTY app. It is not officially released or endorsed by Binus." />
+                android:text="@string/info_official_description" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                 android:textColor="@color/white"
                 android:gravity="center_vertical"
                 android:elevation="1dp"
-                android:text="Is Portal safe ?"/>
+                android:text="@string/info_safe"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,13 +70,13 @@
                 android:paddingTop="16dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:text="Yes, Portal is safe"/>
+                android:text="@string/info_safe_tldr"/>
             <TextView android:layout_width="match_parent"
                 android:padding="16dp"
                 android:layout_height="wrap_content"
                 android:textIsSelectable="true"
                 android:linksClickable="true"
-                android:text="We understand this question, you don't know who we are, and why we make this app, we'll be concerned too if we were to be presented to an unofficial app build by an unknown developer, just like Portal. So we made this INFO tab to explain.\n\nTo prove it's safety, and to open the development to everyone, we have published our source code into GitHub \nLink: https://github.com/directdevmain/portal" />
+                android:text="@string/info_safe_description" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                 android:textColor="@color/white"
                 android:gravity="center_vertical"
                 android:elevation="1dp"
-                android:text="Who made Portal ?"
+                android:text="@string/info_who"
                 android:layout_marginTop="8dp"/>
             <TextView
                 android:layout_width="match_parent"
@@ -97,12 +97,12 @@
                 android:paddingTop="16dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:text="Students"/>
+                android:text="@string/info_who_tldr"/>
             <TextView android:layout_width="match_parent"
                 android:padding="16dp"
                 android:layout_height="wrap_content"
                 android:textIsSelectable="true"
-                android:text="We are just like any of you who are using Portal, we use it ourselves, we are active students of Binus University. We are not some hacker group that is trying to release every financial data and gpa of Binus students we could find just because we believe in transparency. \n\nWe mean no harm." />
+                android:text="@string/info_who_description" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -114,13 +114,13 @@
                 android:textColor="@color/white"
                 android:gravity="center_vertical"
                 android:elevation="1dp"
-                android:text="Why made Portal ?"
+                android:text="@string/info_why"
                 android:layout_marginTop="8dp"/>
             <TextView android:layout_width="match_parent"
                 android:padding="16dp"
                 android:layout_height="wrap_content"
                 android:textIsSelectable="true"
-                android:text="We finds it a bit impractical to have your university data available 24/7 online, but can only be easily accessed through big screens, this leads us to use notes, screenshots and other static means of capturing information to make those online data easily accessible. This, coupled with our believe that CS students should focus on experiment and building practical software, we decided to build Portal. \n\nWhy build Portal and not other more serious applications? Because we are unskilled, with zero experience in mobile and software development, Portal is easily the most practical and impactful thing we can currently build." />
+                android:text="@string/info_why_description"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>
