@@ -73,7 +73,6 @@ public class LoginAuthorization extends AppCompatActivity {
             if (url.equals("https://newbinusmaya.binus.ac.id/student/")) {
                 view.stopLoading();
                 String cookie = android.webkit.CookieManager.getInstance().getCookie("https://newbinusmaya.binus.ac.id/student/#/index/dashboard");
-                CookieSyncManager.getInstance().sync();
                 edit.putString(getString(R.string.login_cookie_pref), cookie)
                         .putInt(getString(R.string.login_condition_pref), 1)
                         .putBoolean(getString(R.string.is_no_session),false)
