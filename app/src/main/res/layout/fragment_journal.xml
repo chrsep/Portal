@@ -22,11 +22,11 @@
             android:layout_height="wrap_content"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:text="Swipe down to refresh"/>
+            android:text="We are getting your data"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="And please wait a moment"/>
+            android:text="Pull down if we are not getting your data"/>
 
     </LinearLayout>
     <android.support.v4.widget.SwipeRefreshLayout

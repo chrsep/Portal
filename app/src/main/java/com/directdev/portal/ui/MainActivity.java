@@ -80,6 +80,12 @@ public class MainActivity  extends AppCompatActivity {
                 Toast news = Toast.makeText(this, "News is still being built", Toast.LENGTH_SHORT);
                 news.show();
                 return true;
+            case R.id.action_schedule_webapp:
+                Intent intent = new Intent(this, WebappActivity.class);
+                intent.putExtra("url","https://newbinusmaya.binus.ac.id/student/index.html#/learning/lecturing");
+                intent.putExtra("title","Schedules");
+                startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

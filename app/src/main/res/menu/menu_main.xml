@@ -13,4 +13,9 @@
         android:title="@string/toolbar_main_news"
         android:icon="@drawable/ic_news"
         app:showAsAction="ifRoom"/>
+    <item android:id="@+id/action_schedule_webapp"
+        android:title="@string/action_sched_webapp"
+        android:orderInCategory="100"
+        app:showAsAction="collapseActionView"
+        android:icon="@drawable/ic_refresh"/>
 </menu>

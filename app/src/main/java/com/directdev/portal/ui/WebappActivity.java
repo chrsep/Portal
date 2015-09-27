@@ -1,15 +1,16 @@
 package com.directdev.portal.ui;
 
 import android.animation.Animator;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.directdev.portal.R;
+import com.directdev.portal.ui.access.LoginAuthorization;
 
 
 public class WebappActivity extends AppCompatActivity {
@@ -19,6 +20,9 @@ public class WebappActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webapp);
         Bundle bundle = getIntent().getExtras();
+
+        Intent intent = new Intent(this, LoginAuthorization.class);
+        startActivity(intent);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.finance_webapp_toolbar);
         setSupportActionBar(toolbar);

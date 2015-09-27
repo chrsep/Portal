@@ -95,23 +95,10 @@ public class GradesActivity extends AppCompatActivity {
                 fetch.requestTerm();
                 return true;
             case R.id.action_grades_webapp:
-                if (sPref.getBoolean(getString(R.string.is_no_session),true)){
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Refresh session to load new data", Snackbar.LENGTH_LONG)
-                            .setAction("REFRESH", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(GradesActivity.this, LoginAuthorization.class);
-                                    startActivity(intent);
-                                }
-                            })
-                            .setActionTextColor(Color.YELLOW);
-                    snackbar.show();
-                }else{
-                    Intent intent = new Intent(this, WebappActivity.class);
-                    intent.putExtra("url","https://newbinusmaya.binus.ac.id/student/#/score/viewscore");
-                    intent.putExtra("title","View Grades");
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(this, WebappActivity.class);
+                intent.putExtra("url","https://newbinusmaya.binus.ac.id/student/#/score/viewscore");
+                intent.putExtra("title","View Grades");
+                startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);
         }

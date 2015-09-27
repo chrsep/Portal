@@ -66,6 +66,7 @@
 
     <string name="action_refresh">Refresh</string>
     <string name="action_webapp">Open in web-app</string>
+    <string name="action_sched_webapp">Open schedule in web-app</string>
 
     <string name="photo_downloaded">isphotodownload</string>
     <string name="last_update_pref">last_updated</string>

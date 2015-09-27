@@ -76,24 +76,10 @@ public class FinanceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_finance_webapp:
-                SharedPreferences sPref = getSharedPreferences(getString(R.string.shared_preferences), Context.MODE_PRIVATE);
-                if (sPref.getBoolean(getString(R.string.is_no_session),true)){
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Refresh session to load new data", Snackbar.LENGTH_LONG)
-                            .setAction("REFRESH", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(FinanceActivity.this, LoginAuthorization.class);
-                                    startActivity(intent);
-                                }
-                            })
-                            .setActionTextColor(Color.YELLOW);
-                    snackbar.show();
-                }else {
-                    Intent intent = new Intent(this, WebappActivity.class);
-                    intent.putExtra("url", "https://newbinusmaya.binus.ac.id/student/#/financial/financialStatus");
-                    intent.putExtra("title", "Financial Status");
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(this, WebappActivity.class);
+                intent.putExtra("url", "https://newbinusmaya.binus.ac.id/student/#/financial/financialStatus");
+                intent.putExtra("title", "Financial Status");
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
