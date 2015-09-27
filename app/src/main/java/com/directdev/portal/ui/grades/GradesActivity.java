@@ -1,9 +1,12 @@
 package com.directdev.portal.ui.grades;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
 import com.directdev.portal.R;
@@ -22,6 +26,8 @@ import com.directdev.portal.tools.event.GradesResponseEvent;
 import com.directdev.portal.tools.event.TermResponseEvent;
 import com.directdev.portal.tools.fetcher.FetchScore;
 import com.directdev.portal.tools.uihelper.MainViewPagerAdapter;
+import com.directdev.portal.ui.WebappActivity;
+import com.directdev.portal.ui.access.LoginAuthorization;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,7 +78,7 @@ public class GradesActivity extends AppCompatActivity {
         Answers.getInstance().logContentView(new ContentViewEvent()
                 .putContentName("View grades")
                 .putContentType("Activity")
-                .putContentId("activity-2"));
+                .putContentId("studentData"));
     }
 
     @Override
@@ -88,6 +94,24 @@ public class GradesActivity extends AppCompatActivity {
             case R.id.action_refresh:
                 fetch.requestTerm();
                 return true;
+            case R.id.action_grades_webapp:
+                if (sPref.getBoolean(getString(R.string.is_no_session),true)){
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Refresh session to load new data", Snackbar.LENGTH_LONG)
+                            .setAction("REFRESH", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(GradesActivity.this, LoginAuthorization.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setActionTextColor(Color.YELLOW);
+                    snackbar.show();
+                }else{
+                    Intent intent = new Intent(this, WebappActivity.class);
+                    intent.putExtra("url","https://newbinusmaya.binus.ac.id/student/#/score/viewscore");
+                    intent.putExtra("title","View Grades");
+                    startActivity(intent);
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -111,7 +135,7 @@ public class GradesActivity extends AppCompatActivity {
                 fetch.requestScores(terms.get(i));
             }
         }catch (JSONException e){
-
+            Crashlytics.logException(e);
         }
 
     }
@@ -119,7 +143,9 @@ public class GradesActivity extends AppCompatActivity {
         try {
             JSONObject data= new JSONObject(sPref.getString(getString(R.string.resource_scores) + "_" + event.term, ""));
             db.addGrades(data,event.term);
-        }catch (JSONException e){}
+        }catch (JSONException e){
+            Crashlytics.logException(e);
+        }
     }
 
     private void setupViewPager(ViewPager viewPager, List<String> terms) {

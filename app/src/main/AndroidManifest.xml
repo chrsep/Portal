@@ -69,7 +69,7 @@
             android:value="e2f91483c94217ff3e141cda751f285d0415b76f" />
 
         <activity
-            android:name=".ui.FinanceWebappActivity"
+            android:name=".ui.WebappActivity"
             android:label="@string/title_activity_finance_webapp"
             android:parentActivityName=".ui.finance.FinanceActivity" >
             <meta-data

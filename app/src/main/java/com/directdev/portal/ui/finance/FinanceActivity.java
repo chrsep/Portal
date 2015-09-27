@@ -1,9 +1,12 @@
 package com.directdev.portal.ui.finance;
 
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +22,8 @@ import com.crashlytics.android.answers.ContentViewEvent;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.database.JournalDB;
 import com.directdev.portal.tools.uihelper.MainViewPagerAdapter;
-import com.directdev.portal.ui.FinanceWebappActivity;
+import com.directdev.portal.ui.WebappActivity;
+import com.directdev.portal.ui.access.LoginAuthorization;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -58,7 +62,7 @@ public class FinanceActivity extends AppCompatActivity {
         Answers.getInstance().logContentView(new ContentViewEvent()
                 .putContentName("View finance")
                 .putContentType("Activity")
-                .putContentId("activity-1"));
+                .putContentId("studentData"));
     }
 
     @Override
@@ -72,13 +76,30 @@ public class FinanceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_finance_webapp:
-//                Intent intent = new Intent(this, FinanceWebappActivity.class);
-//                startActivity(intent);
+                SharedPreferences sPref = getSharedPreferences(getString(R.string.shared_preferences), Context.MODE_PRIVATE);
+                if (sPref.getBoolean(getString(R.string.is_no_session),true)){
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Refresh session to load new data", Snackbar.LENGTH_LONG)
+                            .setAction("REFRESH", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(FinanceActivity.this, LoginAuthorization.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setActionTextColor(Color.YELLOW);
+                    snackbar.show();
+                }else {
+                    Intent intent = new Intent(this, WebappActivity.class);
+                    intent.putExtra("url", "https://newbinusmaya.binus.ac.id/student/#/financial/financialStatus");
+                    intent.putExtra("title", "Financial Status");
+                    startActivity(intent);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     private void setupViewPager(ViewPager viewPager) {
         MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());

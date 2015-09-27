@@ -81,7 +81,8 @@
     <string name="setting_auto_refresh">auto_refresh_setting</string>
 
     <string name="is_refreshing_journal_pref">isRefreshing</string>
-    <string name="text_happy_birthday">Happy Birthday !!!</string>
+    <string name="is_no_session">isSession</string>
+
     <string name="title_activity_finance">FinanceActivity</string>
 
     <string name="hello_world">Hello world!</string>
@@ -102,4 +103,6 @@
     <string name="info_who_tldr">Students</string>
     <string name="info_why">Why made Portal ?</string>
     <string name="info_why_description">We find it a bit impractical to have your university data available 24/7 online, but can only be easily accessed through big screens and decent connection, which is something that is hard to get on campus, this leads us to use notes, screenshots and other static means of capturing information to make those online data easily accessible. This, coupled with our believe that CS students should focus more on experiment and building practical software, we decided to build Portal. \n\nWhy build Portal rather than other more serious applications? Because we have zero experience in real mobile and software development, Portal is easily the most practical and impactful thing we can currently build.</string>
+    <string name="finance_upocoming">UPCOMING</string>
+    <string name="finance_passed">PASSED</string>
 </resources>

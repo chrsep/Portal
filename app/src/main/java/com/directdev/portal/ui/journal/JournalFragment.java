@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
@@ -39,8 +40,6 @@ import java.util.Locale;
 import de.greenrobot.event.EventBus;
 
 public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private static List<ScheduleData> data = new LinkedList<>();
     private List<List<ScheduleData>> nestedData = new LinkedList<>();
     private View view;
@@ -50,18 +49,6 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
     protected boolean firstRequestSent = false;
     private SharedPreferences sPref;
     private SharedPreferences.Editor edit;
-    private String mParam1;
-    private String mParam2;
-
-
-    public static JournalFragment newInstance(String param1, String param2) {
-        JournalFragment fragment = new JournalFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public JournalFragment() {}
 
@@ -70,11 +57,6 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null)
-        {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         EventBus.getDefault().register(this);
         sPref = getActivity().getSharedPreferences(getString(R.string.shared_preferences), Context.MODE_PRIVATE);
         edit = sPref.edit();
@@ -82,7 +64,7 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         Answers.getInstance().logContentView(new ContentViewEvent()
                 .putContentName("View schedule")
                 .putContentType("Activity")
-                .putContentId("activity-3"));
+                .putContentId("studentData"));
     }
 
     @Override
@@ -96,6 +78,7 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.journal_refresh);
         swipeLayout.setOnRefreshListener(this);
+
         recycler.setAdapter(adapter);
 
         if (sPref.getBoolean(getString(R.string.is_refreshing_journal_pref),false)){
@@ -181,6 +164,7 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         }
         catch (JSONException e)
         {
+            edit.putBoolean(getString(R.string.is_no_session),true).commit();
             Snackbar snackbar = Snackbar.make(view, "Refresh session to load new data", Snackbar.LENGTH_LONG)
                     .setAction("REFRESH", new View.OnClickListener() {
                         @Override

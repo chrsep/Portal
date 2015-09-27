@@ -4,23 +4,31 @@
     android:layout_height="match_parent"
     tools:context="com.directdev.portal.ui.Journal.JournalFragment"
     android:background="@color/bg_default">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/jornal_bg"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/joural_refresh_text"
         android:orientation="vertical"
-        android:visibility="gone"
-        android:background="@color/primary_light">
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp">
+        <ImageView
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:src="@drawable/ic_refresh"
+            android:tint="#727272"
+            android:layout_gravity="center"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="@string/holidayText"
-            android:textSize="80sp"
-            android:textColor="@color/white" />
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:text="Swipe down to refresh"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="And please wait a moment"/>
 
-    </RelativeLayout>
+    </LinearLayout>
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/journal_refresh"
         android:layout_width="match_parent"

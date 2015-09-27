@@ -9,6 +9,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.crashlytics.android.Crashlytics;
 import com.directdev.portal.R;
 
 
@@ -46,18 +47,23 @@ public class LoginAuthorization extends AppCompatActivity {
     private class LoginWebView extends WebViewClient{
         @Override
         public void onPageFinished(WebView webView, String url) {
-            String currUrl = webView.getUrl();
-            if (sharedPreferences.getInt("LoginAttempt", 0) == 4 && sharedPreferences.getInt(getString(R.string.login_condition_pref), 0) == 0 || currUrl.equals("http://newbinusmaya.binus.ac.id/default/login.html")) {
-                edit.putInt(getString(R.string.login_condition_pref), 0).commit();
+            try{
+                String currUrl = webView.getUrl();
+                if (sharedPreferences.getInt("LoginAttempt", 0) == 4 && sharedPreferences.getInt(getString(R.string.login_condition_pref), 0) == 0 || currUrl.equals("http://newbinusmaya.binus.ac.id/default/login.html")) {
+                    edit.putInt(getString(R.string.login_condition_pref), 0).commit();
+                    finish();
+                }
+                if (sharedPreferences.getInt("LoginAttempt", 0) < 4) {
+                    int tries = sharedPreferences.getInt("LoginAttempt", 0);
+                    tries = tries + 1;
+                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_UsernameTextBoxBM').value='" + USERNAME + "'})()");
+                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_PasswordTextBoxBM').value='" + PASSWORD + "'})()");
+                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_SubmitButtonBM').click()})()");
+                    edit.putInt("LoginAttempt", tries).commit();
+                }
+            }catch (NullPointerException e){
+                Crashlytics.logException(e);
                 finish();
-            }
-            if (sharedPreferences.getInt("LoginAttempt", 0) < 4) {
-                int tries = sharedPreferences.getInt("LoginAttempt", 0);
-                tries = tries + 1;
-                webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_UsernameTextBoxBM').value='" + USERNAME + "'})()");
-                webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_PasswordTextBoxBM').value='" + PASSWORD + "'})()");
-                webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_SubmitButtonBM').click()})()");
-                edit.putInt("LoginAttempt", tries).commit();
             }
         }
 
@@ -68,6 +74,7 @@ public class LoginAuthorization extends AppCompatActivity {
                 String cookie = android.webkit.CookieManager.getInstance().getCookie("https://newbinusmaya.binus.ac.id/student/#/index/dashboard");
                 edit.putString(getString(R.string.login_cookie_pref), cookie)
                         .putInt(getString(R.string.login_condition_pref), 1)
+                        .putBoolean(getString(R.string.is_no_session),false)
                         .commit();
                 finish();
             }

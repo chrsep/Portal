@@ -10,8 +10,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.database.CourseDB;
 import com.directdev.portal.tools.event.GradesResponseEvent;
@@ -67,6 +70,22 @@ public class MainActivity  extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.toolbar_notification:
+                Toast notif = Toast.makeText(this, "Notification is still being built", Toast.LENGTH_SHORT);
+                notif.show();
+                return true;
+            case R.id.toolbar_news:
+                Toast news = Toast.makeText(this, "News is still being built", Toast.LENGTH_SHORT);
+                news.show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         checkLogin();
@@ -77,9 +96,9 @@ public class MainActivity  extends AppCompatActivity {
         new JournalFragment();
         new ResourceFragment();
         new AccountFragment();
-        adapter.addFrag(JournalFragment.newInstance(null, null), "SCHEDULE");
-        adapter.addFrag(ResourceFragment.newInstance(null, null), "INFO");
-        adapter.addFrag(AccountFragment.newInstance(null, null), "ACCOUNT");
+        adapter.addFrag(new JournalFragment(), "SCHEDULE");
+        adapter.addFrag(new ResourceFragment(), "INFO");
+        adapter.addFrag(new AccountFragment(), "ACCOUNT");
         viewPager.setAdapter(adapter);
     }
 
@@ -103,7 +122,7 @@ public class MainActivity  extends AppCompatActivity {
                 fetch.requestScores(terms.get(i));
             }
         }catch (JSONException e){
-
+            Crashlytics.logException(e);
         }
     }
 
@@ -112,7 +131,7 @@ public class MainActivity  extends AppCompatActivity {
             JSONObject data= new JSONObject(sPref.getString(getString(R.string.resource_scores) + "_" + event.term, ""));
             db.addGrades(data,event.term);
         }catch (JSONException e){
-
+            Crashlytics.logException(e);
         }
     }
 }

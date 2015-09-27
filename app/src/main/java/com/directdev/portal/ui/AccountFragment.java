@@ -19,7 +19,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.event.AccountResponseEvent;
 import com.directdev.portal.tools.event.DataUpdateEvent;
@@ -38,24 +40,11 @@ import de.greenrobot.event.EventBus;
 
 
 public class AccountFragment extends Fragment implements View.OnClickListener {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private SharedPreferences sPref;
     private SharedPreferences settingsPref;
     private Bitmap bitmap;
-    private String mParam1;
-    private String mParam2;
     private View view;
 
-
-    public static AccountFragment newInstance(String param1, String param2) {
-        AccountFragment fragment = new AccountFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public AccountFragment() {}
 
@@ -109,7 +98,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 FileInputStream fis = getActivity().openFileInput(getString(R.string.resource_photo));
                 fis.read(toDecode, 0, toDecode.length);
                 fis.close();
-            } catch (IOException e) {}
+            } catch (IOException e) {
+                Crashlytics.logException(e);
+            }
             bitmap = decodeSampledBitmapFromResource(toDecode, 74, 74);
             if (bitmap != null) {photo.setImageBitmap(bitmap);}
         }else {photo.setImageResource(R.mipmap.ic_launcher);}
@@ -137,6 +128,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 }else{startActivity(financeIntent);}
                 break;
             case R.id.open_forum:
+                Toast toast = Toast.makeText(getActivity(), "Forum is still being built", Toast.LENGTH_SHORT);
+                toast.show();
                 break;
             case R.id.open_grades:
                 Intent gradesIntent = new Intent(getActivity(),GradesActivity.class);
@@ -205,11 +198,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 FileInputStream fis = getActivity().openFileInput(getString(R.string.resource_photo));
                 fis.read(toDecode,0,toDecode.length);
                 fis.close();
-            }catch (IOException e){}
+            }catch (IOException e){
+                Crashlytics.logException(e);
+            }
             ImageView photo = (ImageView) getActivity().findViewById(R.id.profile_image);
             bitmap = decodeSampledBitmapFromResource(toDecode,74,74);
             photo.setImageBitmap(bitmap);
-            if(bitmap == null){}
         }
     }
 
