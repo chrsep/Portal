@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.directdev.portal.R;
 import com.directdev.portal.tools.fetcher.FetchScore;
@@ -47,9 +48,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             fetchScore.requestTerm();
             finish();
         }else if(sharedPref.getInt(getResources().getString(R.string.login_data_given_pref),0) ==1){
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Wrong password or email", Snackbar.LENGTH_SHORT)
-                    .setDuration(Snackbar.LENGTH_LONG);
-            snackbar.show();
+            Toast toast = Toast.makeText(LoginActivity.this, "Wrong username or password", Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 
@@ -62,12 +62,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String passwordExtra=password.getText().toString();
 
         if(emailExtra.equals("@binus.ac.id")) {
-            Snackbar snackbar = Snackbar.make(v, "We need your email", Snackbar.LENGTH_SHORT);
-            snackbar.show();
+            Toast toast = Toast.makeText(LoginActivity.this, "Your username is important", Toast.LENGTH_SHORT);
+            toast.show();
             return;
         }else if (passwordExtra.equals("")){
-            Snackbar snackbar = Snackbar.make(v, "We need your password, sorry", Snackbar.LENGTH_SHORT);
-            snackbar.show();
+            Toast toast = Toast.makeText(LoginActivity.this, "You password is needed for login", Toast.LENGTH_SHORT);
+            toast.show();
             return;
         }
 
@@ -85,13 +85,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     .commit();
 
             Intent intent = new Intent(this, LoginAuthorization.class);
+            intent.putExtra("text","Signing you in");
             startActivity(intent);
             if(sharedPref.getInt(getString(R.string.login_condition_pref),0)!=0){
                 finish();
             }
         }else{
-            Snackbar snackbar = Snackbar.make(v, "You are currently offline, please find a connection", Snackbar.LENGTH_SHORT);
-            snackbar.show();
+            Toast toast = Toast.makeText(LoginActivity.this, "You are currently offline, please find a connection", Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 }

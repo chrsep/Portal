@@ -6,4 +6,7 @@
         android:orderInCategory="100"
         app:showAsAction="collapseActionView"
         android:icon="@drawable/ic_refresh"/>
+    <item android:id="@+id/action_finance_info" android:title="@string/action_refresh"
+        android:orderInCategory="100" app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_info_outline_white_24dp"/>
 </menu>

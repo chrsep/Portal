@@ -3,12 +3,16 @@ package com.directdev.portal.ui.access;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.directdev.portal.R;
@@ -19,10 +23,17 @@ public class LoginAuthorization extends AppCompatActivity {
     private static String PASSWORD = "b!false";
     protected SharedPreferences sharedPreferences;
     protected SharedPreferences.Editor edit;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login_authorization);
+
+        bundle = getIntent().getExtras();
+        TextView textView = (TextView) findViewById(R.id.login_authenticator_text);
+        textView.setText(bundle.getString("text"));
+
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
@@ -30,7 +41,6 @@ public class LoginAuthorization extends AppCompatActivity {
         if (!isConnected) {
             finish();
         }
-        setContentView(R.layout.activity_login_authorization);
         sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE);
         edit = sharedPreferences.edit();
         edit.putInt("LoginAttempt", 0);
@@ -49,8 +59,7 @@ public class LoginAuthorization extends AppCompatActivity {
         @Override
         public void onPageFinished(WebView webView, String url) {
             try{
-                String currUrl = webView.getUrl();
-                if (sharedPreferences.getInt("LoginAttempt", 0) == 4 && sharedPreferences.getInt(getString(R.string.login_condition_pref), 0) == 0 || currUrl.equals("http://newbinusmaya.binus.ac.id/default/login.html")) {
+                if (sharedPreferences.getInt("LoginAttempt", 0) == 4 && sharedPreferences.getInt(getString(R.string.login_condition_pref), 0) == 0) {
                     edit.putInt(getString(R.string.login_condition_pref), 0).commit();
                     finish();
                 }
@@ -63,6 +72,8 @@ public class LoginAuthorization extends AppCompatActivity {
                     edit.putInt("LoginAttempt", tries).commit();
                 }
             }catch (NullPointerException e){
+                //We detected crashes involving NullPointerException coming from this method
+                //This will catch the crash and send back crash data to us.
                 Crashlytics.logException(e);
                 finish();
             }

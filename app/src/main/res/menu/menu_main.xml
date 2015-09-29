@@ -7,8 +7,7 @@
         android:title="@string/toolbar_main_notification"
         android:orderInCategory="100"
         android:icon="@drawable/ic_notification"
-        app:showAsAction="ifRoom" />
-
+        app:showAsAction="ifRoom"/>
     <item android:id="@+id/toolbar_news"
         android:title="@string/toolbar_main_news"
         android:icon="@drawable/ic_news"

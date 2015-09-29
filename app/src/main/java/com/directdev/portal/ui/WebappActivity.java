@@ -22,6 +22,7 @@ public class WebappActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         Intent intent = new Intent(this, LoginAuthorization.class);
+        intent.putExtra("text","Accessing web-app");
         startActivity(intent);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.finance_webapp_toolbar);
@@ -30,9 +31,14 @@ public class WebappActivity extends AppCompatActivity {
         final WebView webView = (WebView) findViewById(R.id.finance_webapp_webview);
 
         webView.setWebViewClient(new WebViewClient(){
+            Boolean alreadyReload = false;
             @Override
             public void onPageFinished(WebView view, String url) {
                 webView.setVisibility(View.VISIBLE);
+                if(!alreadyReload){
+                    webView.reload();
+                    alreadyReload = true;
+                }
                 super.onPageFinished(view, url);
             }
         });

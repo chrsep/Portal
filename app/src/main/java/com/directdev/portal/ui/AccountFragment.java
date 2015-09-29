@@ -128,7 +128,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 }else{startActivity(financeIntent);}
                 break;
             case R.id.open_forum:
-                Toast toast = Toast.makeText(getActivity(), "Forum is still being built", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getActivity(), "Forum is under reconsideration", Toast.LENGTH_SHORT);
                 toast.show();
                 break;
             case R.id.open_grades:

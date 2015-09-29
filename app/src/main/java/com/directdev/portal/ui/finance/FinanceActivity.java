@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
@@ -16,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
@@ -46,7 +49,11 @@ public class FinanceActivity extends AppCompatActivity {
 
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.finance_collapsing_toolbar);
         totalCharge = NumberFormat.getNumberInstance(Locale.US).format(db.sumFinance());
-        collapsingToolbar.setTitle("Rp " + totalCharge + ".-");
+        if (totalCharge.equals("0")){
+            collapsingToolbar.setTitle("No unpaid bill");
+        }else{
+            collapsingToolbar.setTitle("Rp. " + totalCharge);
+        }
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.finance_viewpager);
         setupViewPager(viewPager);
@@ -76,10 +83,24 @@ public class FinanceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_finance_webapp:
-                Intent intent = new Intent(this, WebappActivity.class);
-                intent.putExtra("url", "https://newbinusmaya.binus.ac.id/student/#/financial/financialStatus");
-                intent.putExtra("title", "Financial Status");
-                startActivity(intent);
+                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null &&
+                        activeNetwork.isConnectedOrConnecting();
+
+                if (isConnected) {
+                    Intent intent = new Intent(this, WebappActivity.class);
+                    intent.putExtra("url", "https://newbinusmaya.binus.ac.id/student/#/financial/financialStatus");
+                    intent.putExtra("title", "Financial Status");
+                    startActivity(intent);
+                }else{
+                    Toast connection = Toast.makeText(this, "You are offline, please find a connection", Toast.LENGTH_SHORT);
+                    connection.show();
+                }
+                return true;
+            case R.id.action_finance_info:
+                Toast toast = Toast.makeText(FinanceActivity.this, "Financial data will be updated together with schedules", Toast.LENGTH_LONG);
+                toast.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

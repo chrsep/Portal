@@ -160,7 +160,6 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm",Locale.US);
             edit.putString(getString(R.string.last_update_pref),dateFormat.format(new Date()))
                     .apply();
-            EventBus.getDefault().post(new DatabaseUpdateEvent());
         }
         catch (JSONException e)
         {
@@ -171,12 +170,12 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         public void onClick(View v) {
                             firstRequestSent = false;
                             Intent intent = new Intent(getActivity(), LoginAuthorization.class);
+                            intent.putExtra("text","Refreshing session");
                             startActivity(intent);
                         }
                     })
                     .setActionTextColor(Color.YELLOW);
             snackbar.show();
-
         }
         EventBus.getDefault().post(new DatabaseUpdateEvent());
     }

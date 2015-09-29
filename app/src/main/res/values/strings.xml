@@ -65,8 +65,9 @@
     <string name="title_activity_logout">LogoutActivity</string>
 
     <string name="action_refresh">Refresh</string>
-    <string name="action_webapp">Open in web-app</string>
-    <string name="action_sched_webapp">Open schedule in web-app</string>
+    <string name="action_info">Info</string>
+    <string name="action_webapp">View in web-app</string>
+    <string name="action_sched_webapp">View schedule in web-app</string>
 
     <string name="photo_downloaded">isphotodownload</string>
     <string name="last_update_pref">last_updated</string>
@@ -82,7 +83,7 @@
     <string name="setting_auto_refresh">auto_refresh_setting</string>
 
     <string name="is_refreshing_journal_pref">isRefreshing</string>
-    <string name="is_no_session">isSession</string>
+    <string name="is_no_session">isNoSession</string>
 
     <string name="title_activity_finance">FinanceActivity</string>
 

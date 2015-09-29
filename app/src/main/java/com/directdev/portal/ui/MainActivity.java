@@ -3,6 +3,8 @@ package com.directdev.portal.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -81,10 +83,20 @@ public class MainActivity  extends AppCompatActivity {
                 news.show();
                 return true;
             case R.id.action_schedule_webapp:
-                Intent intent = new Intent(this, WebappActivity.class);
-                intent.putExtra("url","https://newbinusmaya.binus.ac.id/student/index.html#/learning/lecturing");
-                intent.putExtra("title","Schedules");
-                startActivity(intent);
+                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null &&
+                        activeNetwork.isConnectedOrConnecting();
+
+                if (isConnected) {
+                    Intent intent = new Intent(this, WebappActivity.class);
+                    intent.putExtra("url","https://newbinusmaya.binus.ac.id/student/index.html#/learning/lecturing");
+                    intent.putExtra("title","Schedules");
+                    startActivity(intent);
+                }else{
+                    Toast connection = Toast.makeText(this, "You are offline, please find a connection", Toast.LENGTH_SHORT);
+                    connection.show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
