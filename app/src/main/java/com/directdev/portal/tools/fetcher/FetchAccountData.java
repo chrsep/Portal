@@ -25,8 +25,6 @@ import org.json.JSONObject;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +37,7 @@ public class FetchAccountData {
     private SharedPreferences.Editor edit;
     private String FILENAME;
 
-    public FetchAccountData(Context context){
+    public FetchAccountData(Context context) {
         this.context = context;
         sPref = context.getSharedPreferences(
                 context.getString(R.string.shared_preferences), Context.MODE_PRIVATE
@@ -48,26 +46,25 @@ public class FetchAccountData {
         FILENAME = context.getString(R.string.resource_photo);
     }
 
-    public void requestAllData(){
-        if (sPref.getInt(context.getString(R.string.photo_downloaded), 0)==0){
+    public void requestAllData() {
+        if (sPref.getInt(context.getString(R.string.photo_downloaded), 0) == 0) {
             requestData(context.getString(R.string.request_photo), "getPhoto");
         }
         requestData(context.getString(R.string.request_student_info), "geAccountData");
         requestData(context.getString(R.string.request_dashboard), "getGpa");
     }
 
-    public void requestPhoto(){
+    public void requestPhoto() {
         requestData(context.getString(R.string.request_photo), "getPhoto");
     }
 
-    private void requestData(String url, final String dataType){
+    private void requestData(String url, final String dataType) {
         final SharedPreferences.Editor editor = sPref.edit();
         RequestQueue queue = Volley.newRequestQueue(context);
         CustomStringRequest request = new CustomStringRequest(url, sPref.getString(context.getString(R.string.login_cookie_pref), ""),
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response)
-                    {
+                    public void onResponse(String response) {
                         try {
                             switch (dataType) {
                                 case "getPhoto":
@@ -78,7 +75,7 @@ public class FetchAccountData {
                                         FileOutputStream fileOutputStream = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
                                         fileOutputStream.write(photo);
                                         fileOutputStream.close();
-                                        edit.putInt(context.getString(R.string.photo_downloaded),1).commit();
+                                        edit.putInt(context.getString(R.string.photo_downloaded), 1).commit();
                                         EventBus.getDefault().post(new PhotoResponseEvent());
                                     } catch (IOException e) {
                                         Log.d("photo", "failed");
@@ -94,8 +91,8 @@ public class FetchAccountData {
                                             .commit();
                                     JSONObject photo = data2.getJSONObject("Photo");
                                     String photodata = photo.getString("photo");
-                                    if(sPref.getString(context.getString(R.string.resource_small_photo),"").equals(photodata)){
-                                        edit.putString(context.getString(R.string.resource_small_photo),photodata)
+                                    if (sPref.getString(context.getString(R.string.resource_small_photo), "").equals(photodata)) {
+                                        edit.putString(context.getString(R.string.resource_small_photo), photodata)
                                                 .commit();
                                         EventBus.getDefault().post(new ThereIsNewPhotoEvent());
                                     }
@@ -110,9 +107,9 @@ public class FetchAccountData {
                                     String data4 = "0";
                                     try {
                                         data4 = data3.getString("GPA").substring(0, 3);
-                                    }catch (StringIndexOutOfBoundsException e){
+                                    } catch (StringIndexOutOfBoundsException e) {
                                         data4 = "N/A";
-                                    }finally {
+                                    } finally {
                                         editor.putString(context.getString(R.string.resource_gpa), data4)
                                                 .commit();
                                         EventBus.getDefault().post(new GpaResponseEvent());
@@ -120,12 +117,11 @@ public class FetchAccountData {
                                     }
                                 }
                             }
+                        } catch (JSONException e) {
                         }
-                        catch (JSONException e){}
                     }
                 },
-                new Response.ErrorListener()
-                {
+                new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("Data recieve error", error.toString());
@@ -142,6 +138,7 @@ public class FetchAccountData {
 
     private class CustomStringRequest extends StringRequest {
         private String cookie;
+
         public CustomStringRequest(String url, String cookies, Response.Listener<String> listener, Response.ErrorListener errorListener) {
             super(Method.GET, url, listener, errorListener);
             this.cookie = cookies;

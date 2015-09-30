@@ -1,46 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:orientation="horizontal"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:foreground="?android:attr/selectableItemBackground"
+    android:background="@color/bg_default"
     android:clickable="true"
     android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     android:longClickable="true"
-    android:background="@color/bg_default">
-        <RelativeLayout
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="3">
+
+        <TextView
+            android:id="@+id/course"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="3">
-            <TextView
-                android:id="@+id/course"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"/>
-            <TextView
-                android:id="@+id/mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/course"/>
-            <TextView
-                android:id="@+id/room"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/mode"
-                android:layout_toEndOf="@+id/mode"
-                android:layout_below="@+id/course"/>
-            <TextView
-                android:id="@+id/shift"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"/>
-        </RelativeLayout>
+            android:textColor="@color/black" />
+
         <TextView
-            android:id="@+id/type_identifier"
-            android:layout_width="8dp"
-            android:layout_height="60dp"
-            android:background="@color/primary"/>
+            android:id="@+id/mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/course" />
+
+        <TextView
+            android:id="@+id/room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/course"
+            android:layout_toEndOf="@+id/mode"
+            android:layout_toRightOf="@+id/mode" />
+
+        <TextView
+            android:id="@+id/shift"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/type_identifier"
+        android:layout_width="8dp"
+        android:layout_height="60dp"
+        android:background="@color/primary" />
 </LinearLayout>

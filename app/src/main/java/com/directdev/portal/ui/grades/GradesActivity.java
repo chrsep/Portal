@@ -6,11 +6,11 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -63,13 +63,13 @@ public class GradesActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.grades_toolbar);
         setSupportActionBar(toolbar);
 
-        if (getSupportActionBar()!=null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
         colToolbar.setTitle("Grades");
 
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -92,12 +92,12 @@ public class GradesActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                if (!sPref.getBoolean(getString(R.string.is_no_session),true)){
+                if (!sPref.getBoolean(getString(R.string.is_no_session), true)) {
                     fetch.requestTerm();
                 }
                 return true;
             case R.id.action_grades_webapp:
-                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
                 boolean isConnected = activeNetwork != null &&
                         activeNetwork.isConnectedOrConnecting();
@@ -107,7 +107,7 @@ public class GradesActivity extends AppCompatActivity {
                     intent.putExtra("url", "https://newbinusmaya.binus.ac.id/student/#/score/viewscore");
                     intent.putExtra("title", "View Grades");
                     startActivity(intent);
-                }else{
+                } else {
                     Toast connection = Toast.makeText(this, "You are offline, please find a connection", Toast.LENGTH_SHORT);
                     connection.show();
                 }
@@ -122,34 +122,35 @@ public class GradesActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    public void onEvent(TermResponseEvent event){
+    public void onEvent(TermResponseEvent event) {
         List<String> terms;
-        try{
-            JSONArray jArray = new JSONArray(sPref.getString(getString(R.string.resource_terms),""));
+        try {
+            JSONArray jArray = new JSONArray(sPref.getString(getString(R.string.resource_terms), ""));
             db.deleteData();
             db.addTerms(jArray);
 
             terms = db.queryTerm();
-            for (int i = 0 ; i < terms.size(); i++){
+            for (int i = 0; i < terms.size(); i++) {
                 fetch.requestScores(terms.get(i));
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
             Crashlytics.logException(e);
         }
 
     }
-    public void onEvent(GradesResponseEvent event){
+
+    public void onEvent(GradesResponseEvent event) {
         try {
-            JSONObject data= new JSONObject(sPref.getString(getString(R.string.resource_scores) + "_" + event.term, ""));
-            db.addGrades(data,event.term);
-        }catch (JSONException e){
+            JSONObject data = new JSONObject(sPref.getString(getString(R.string.resource_scores) + "_" + event.term, ""));
+            db.addGrades(data, event.term);
+        } catch (JSONException e) {
             Crashlytics.logException(e);
         }
     }
 
     private void setupViewPager(ViewPager viewPager, List<String> terms) {
         MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
-        for(int i = 0; i<terms.size(); i++){
+        for (int i = 0; i < terms.size(); i++) {
             adapter.addFrag(GradesByTermFragment.newInstance(terms.get(i)), terms.get(i));
         }
         viewPager.setAdapter(adapter);

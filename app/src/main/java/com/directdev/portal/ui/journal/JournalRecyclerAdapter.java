@@ -26,7 +26,8 @@ import java.util.Locale;
 
 public class JournalRecyclerAdapter extends RecyclerView.Adapter {
     private List<List<ScheduleData>> data;
-    public JournalRecyclerAdapter(List<List<ScheduleData>> data){
+
+    public JournalRecyclerAdapter(List<List<ScheduleData>> data) {
         this.data = data;
     }
 
@@ -38,7 +39,9 @@ public class JournalRecyclerAdapter extends RecyclerView.Adapter {
         try {
             scheduleHolder.date = scheduleHolder.dateFormat.parse(data.get(i).get(0).date);
             c.setTime(scheduleHolder.dateFormat.parse(scheduleHolder.today));
-        }catch (ParseException e){Log.d("Parse","Failed");}
+        } catch (ParseException e) {
+            Log.d("Parse", "Failed");
+        }
         scheduleHolder.calendar.setTime(scheduleHolder.date);
         scheduleHolder.adapter = new JournalNestedRecyclerAdapter(nestedData);
         scheduleHolder.nestedRecycler.setAdapter(scheduleHolder.adapter);
@@ -48,13 +51,13 @@ public class JournalRecyclerAdapter extends RecyclerView.Adapter {
 
         c.add(Calendar.DATE, 1);
         scheduleHolder.tommorow = scheduleHolder.dateFormat.format(c.getTime());
-        if(data.get(i).get(0).date.equals(scheduleHolder.today) ){
+        if (data.get(i).get(0).date.equals(scheduleHolder.today)) {
             scheduleHolder.day.setText("TODAY");
             scheduleHolder.topbar.setBackgroundColor(Color.parseColor("#00796B"));
-        }else if(data.get(i).get(0).date.equals(scheduleHolder.tommorow)){
+        } else if (data.get(i).get(0).date.equals(scheduleHolder.tommorow)) {
             scheduleHolder.day.setText("TOMMOROW");
             scheduleHolder.topbar.setBackgroundColor(Color.parseColor("#00796B"));
-        }else{
+        } else {
             scheduleHolder.topbar.setBackgroundColor(Color.parseColor("#424242"));
             switch (scheduleHolder.calendar.get(Calendar.DAY_OF_WEEK)) {
                 case Calendar.MONDAY:
@@ -86,7 +89,7 @@ public class JournalRecyclerAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         try {
             return data.size();
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return 0;
         }
     }
@@ -110,14 +113,15 @@ public class JournalRecyclerAdapter extends RecyclerView.Adapter {
         String today;
         String tommorow;
         SimpleDateFormat dateFormatChanger = new SimpleDateFormat("dd MMMM yy", Locale.getDefault());
+
         ScheduleViewHolder(View itemView) {
             super(itemView);
-            today  = dateFormat.format(new Date());
-            nestedRecycler = (RecyclerView)itemView.findViewById(R.id.nested_recycler);
+            today = dateFormat.format(new Date());
+            nestedRecycler = (RecyclerView) itemView.findViewById(R.id.nested_recycler);
             layoutManager = new LinearLayoutManager(itemView.getContext());
-            dateTextview = (TextView)itemView.findViewById(R.id.date);
-            day = (TextView)itemView.findViewById(R.id.day);
-            topbar = (RelativeLayout)itemView.findViewById(R.id.topbar);
+            dateTextview = (TextView) itemView.findViewById(R.id.date);
+            day = (TextView) itemView.findViewById(R.id.day);
+            topbar = (RelativeLayout) itemView.findViewById(R.id.topbar);
         }
     }
 

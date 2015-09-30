@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,16 +37,16 @@ public class FinanceActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.finance_toolbar);
         setSupportActionBar(toolbar);
 
-        if (getSupportActionBar()!=null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.finance_collapsing_toolbar);
         totalCharge = NumberFormat.getNumberInstance(Locale.US).format(db.sumFinance());
-        if (totalCharge.equals("0")){
+        if (totalCharge.equals("0")) {
             collapsingToolbar.setTitle("No unpaid bill");
-        }else{
+        } else {
             collapsingToolbar.setTitle("Rp. " + totalCharge);
         }
 
@@ -55,7 +55,7 @@ public class FinanceActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.finance_tab);
         tabLayout.setupWithViewPager(viewPager);
 
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -78,7 +78,7 @@ public class FinanceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_finance_webapp:
-                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
                 boolean isConnected = activeNetwork != null &&
                         activeNetwork.isConnectedOrConnecting();
@@ -88,7 +88,7 @@ public class FinanceActivity extends AppCompatActivity {
                     intent.putExtra("url", "https://newbinusmaya.binus.ac.id/student/#/financial/financialStatus");
                     intent.putExtra("title", "Financial Status");
                     startActivity(intent);
-                }else{
+                } else {
                     Toast connection = Toast.makeText(this, "You are offline, please find a connection", Toast.LENGTH_SHORT);
                     connection.show();
                 }

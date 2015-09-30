@@ -1,8 +1,8 @@
 package com.directdev.portal.ui;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
@@ -21,7 +21,7 @@ public class WebappActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         Intent intent = new Intent(this, LoginAuthorization.class);
-        intent.putExtra("text","Accessing web-app");
+        intent.putExtra("text", "Accessing web-app");
         startActivity(intent);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.finance_webapp_toolbar);
@@ -29,12 +29,13 @@ public class WebappActivity extends AppCompatActivity {
 
         final WebView webView = (WebView) findViewById(R.id.finance_webapp_webview);
 
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
             Boolean alreadyReload = false;
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 webView.setVisibility(View.VISIBLE);
-                if(!alreadyReload){
+                if (!alreadyReload) {
                     webView.reload();
                     alreadyReload = true;
                 }
@@ -46,7 +47,7 @@ public class WebappActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(bundle.getString("url"));
 
-        if (getSupportActionBar()!=null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setTitle(bundle.getString("title"));

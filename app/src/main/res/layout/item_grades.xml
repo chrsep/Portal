@@ -2,75 +2,91 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <android.support.v7.widget.CardView
-        android:id="@+id/item_grades_cardview"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/item_grades_cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="8dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        card_view:cardElevation="2dp"
-        android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:longClickable="true">
+        android:foreground="?android:attr/selectableItemBackground"
+        android:longClickable="true"
+        card_view:cardElevation="2dp">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <TextView android:id="@+id/course_name"
-                android:layout_height="wrap_content"
+
+            <TextView
+                android:id="@+id/course_name"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/inactive_white"
-                android:layout_below="@id/course_name"/>
+                android:layout_below="@id/course_name"
+                android:background="@color/inactive_white" />
+
             <LinearLayout
                 android:id="@+id/score_linear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
+                android:layout_below="@id/course_name"
                 android:orientation="vertical"
-                android:layout_below="@id/course_name">
-                <TextView android:id="@+id/assignment"
-                    android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/assignment"
                     android:layout_width="wrap_content"
-                    android:visibility="gone"
-                    android:textColor="@color/white"/>
-                <TextView android:id="@+id/laboratory"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/laboratory"
                     android:layout_width="wrap_content"
-                    android:visibility="gone"
-                    android:textColor="@color/white"/>
-                <TextView android:id="@+id/mid"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/mid"
                     android:layout_width="wrap_content"
-                    android:visibility="gone"
-                    android:textColor="@color/white"/>
-                <TextView android:id="@+id/fin"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/fin"
                     android:layout_width="wrap_content"
-                    android:visibility="gone"
-                    android:textColor="@color/white"/>
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
             </LinearLayout>
-            <TextView android:id="@+id/course_grades"
-                android:layout_height="match_parent"
+
+            <TextView
+                android:id="@+id/course_grades"
                 android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@id/score_linear"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/score_linear"
+                android:gravity="center"
                 android:paddingRight="32dp"
                 android:textColor="@color/white"
                 android:textSize="32sp"
-                android:layout_alignTop="@id/score_linear"
-                android:layout_alignBottom="@id/score_linear"
-                android:gravity="center"
-                android:layout_alignParentRight="true"
-                android:textStyle="italic"/>
+                android:textStyle="italic" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

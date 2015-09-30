@@ -1,52 +1,58 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.directdev.portal.ui.finance.FinanceActivity"
-    android:background="@color/bg_default">
+    android:background="@color/bg_default"
+    tools:context="com.directdev.portal.ui.finance.FinanceActivity">
+
     <android.support.design.widget.AppBarLayout
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/finance_collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="230dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            android:id="@+id/finance_collapsing_toolbar"
             app:contentScrim="@color/primary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:statusBarScrim="@color/primary_dark">
+
             <ImageView
+                android:id="@+id/finance_background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
                 android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
                 android:src="@drawable/material_google_optimized"
-                app:layout_collapseMode="parallax"
-                android:id="@+id/finance_background"/>
+                app:layout_collapseMode="parallax" />
+
             <android.support.v7.widget.Toolbar
-                android:layout_height="?attr/actionBarSize"
-                android:layout_width="match_parent"
-                app:layout_collapseMode="pin"
-                app:tabGravity="center"
                 android:id="@+id/finance_toolbar"
-                app:layout_scrollFlags="scroll|enterAlways"/>
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:tabGravity="center" />
         </android.support.design.widget.CollapsingToolbarLayout>
+
         <android.support.design.widget.TabLayout
             android:id="@+id/finance_tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primary"
-            app:tabIndicatorColor="#fdb965"
-            app:tabSelectedTextColor="#fdb965"
-            app:tabMode="fixed"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:layout_scrollFlags="scroll|enterAlways"
+            app:tabIndicatorColor="#fdb965"
             app:tabIndicatorHeight="2dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="#fdb965" />
     </android.support.design.widget.AppBarLayout>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/finance_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </android.support.design.widget.CoordinatorLayout>

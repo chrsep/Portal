@@ -12,7 +12,7 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
 
-    public MainViewPagerAdapter(FragmentManager fm){
+    public MainViewPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -26,10 +26,11 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
         return mFragmentList.get(position);
     }
 
-    public void addFrag(Fragment fragment, String title){
+    public void addFrag(Fragment fragment, String title) {
         mFragmentList.add(fragment);
         mFragmentTitleList.add(title);
     }
+
     @Override
     public CharSequence getPageTitle(int position) {
         return mFragmentTitleList.get(position);

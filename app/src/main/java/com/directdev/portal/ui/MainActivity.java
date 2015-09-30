@@ -32,13 +32,13 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 
 
-public class MainActivity  extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     private SharedPreferences sPref;
     private FetchScore fetch;
     private CourseDB db;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Portal");
@@ -79,17 +79,17 @@ public class MainActivity  extends AppCompatActivity {
                 news.show();
                 return true;
             case R.id.action_schedule_webapp:
-                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
                 boolean isConnected = activeNetwork != null &&
                         activeNetwork.isConnectedOrConnecting();
 
                 if (isConnected) {
                     Intent intent = new Intent(this, WebappActivity.class);
-                    intent.putExtra("url","https://newbinusmaya.binus.ac.id/student/index.html#/learning/lecturing");
-                    intent.putExtra("title","Schedules");
+                    intent.putExtra("url", "https://newbinusmaya.binus.ac.id/student/index.html#/learning/lecturing");
+                    intent.putExtra("title", "Schedules");
                     startActivity(intent);
-                }else{
+                } else {
                     Toast connection = Toast.makeText(this, "You are offline, please find a connection", Toast.LENGTH_SHORT);
                     connection.show();
                 }
@@ -116,35 +116,35 @@ public class MainActivity  extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-    public void checkLogin(){
+    public void checkLogin() {
         sPref = this.getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE);
-        if(sPref.getInt(getResources().getString(R.string.login_data_given_pref),0) !=1||sPref.getInt(getResources().getString(R.string.login_condition_pref),0) !=1) {
+        if (sPref.getInt(getResources().getString(R.string.login_data_given_pref), 0) != 1 || sPref.getInt(getResources().getString(R.string.login_condition_pref), 0) != 1) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
     }
 
-    public void onEvent(TermResponseEvent event){
+    public void onEvent(TermResponseEvent event) {
         List<String> terms;
-        try{
-            JSONArray jArray = new JSONArray(sPref.getString(getString(R.string.resource_terms),""));
+        try {
+            JSONArray jArray = new JSONArray(sPref.getString(getString(R.string.resource_terms), ""));
             db.deleteData();
             db.addTerms(jArray);
 
             terms = db.queryTerm();
-            for (int i = 0 ; i < terms.size(); i++){
+            for (int i = 0; i < terms.size(); i++) {
                 fetch.requestScores(terms.get(i));
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
             Crashlytics.logException(e);
         }
     }
 
-    public void onEvent(GradesResponseEvent event){
+    public void onEvent(GradesResponseEvent event) {
         try {
-            JSONObject data= new JSONObject(sPref.getString(getString(R.string.resource_scores) + "_" + event.term, ""));
-            db.addGrades(data,event.term);
-        }catch (JSONException e){
+            JSONObject data = new JSONObject(sPref.getString(getString(R.string.resource_scores) + "_" + event.term, ""));
+            db.addGrades(data, event.term);
+        } catch (JSONException e) {
             Crashlytics.logException(e);
         }
     }

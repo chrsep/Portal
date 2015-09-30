@@ -16,7 +16,7 @@ import com.directdev.portal.R;
 import com.directdev.portal.tools.fetcher.FetchScore;
 
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private SharedPreferences sharedPref;
 
     @Override
@@ -42,11 +42,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-        if(sharedPref.getInt(getResources().getString(R.string.login_condition_pref),0) ==1){
+        if (sharedPref.getInt(getResources().getString(R.string.login_condition_pref), 0) == 1) {
             FetchScore fetchScore = new FetchScore(this);
             fetchScore.requestTerm();
             finish();
-        }else if(sharedPref.getInt(getResources().getString(R.string.login_data_given_pref),0) ==1){
+        } else if (sharedPref.getInt(getResources().getString(R.string.login_data_given_pref), 0) == 1) {
             Toast toast = Toast.makeText(LoginActivity.this, "Wrong username or password", Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -56,15 +56,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         EditText email = (EditText) findViewById(R.id.emailLogin);
         EditText password = (EditText) findViewById(R.id.passwordLogin);
-        String emailExtra=email.getText().toString();
-        emailExtra+="@binus.ac.id";
-        String passwordExtra=password.getText().toString();
+        String emailExtra = email.getText().toString();
+        emailExtra += "@binus.ac.id";
+        String passwordExtra = password.getText().toString();
 
-        if(emailExtra.equals("@binus.ac.id")) {
+        if (emailExtra.equals("@binus.ac.id")) {
             Toast toast = Toast.makeText(LoginActivity.this, "Your username is important", Toast.LENGTH_SHORT);
             toast.show();
             return;
-        }else if (passwordExtra.equals("")){
+        } else if (passwordExtra.equals("")) {
             Toast toast = Toast.makeText(LoginActivity.this, "You password is needed for login", Toast.LENGTH_SHORT);
             toast.show();
             return;
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         SharedPreferences.Editor dtEdit = sharedPref.edit();
 
-        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
@@ -84,12 +84,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     .commit();
 
             Intent intent = new Intent(this, LoginAuthorization.class);
-            intent.putExtra("text","Signing you in");
+            intent.putExtra("text", "Signing you in");
             startActivity(intent);
-            if(sharedPref.getInt(getString(R.string.login_condition_pref),0)!=0){
+            if (sharedPref.getInt(getString(R.string.login_condition_pref), 0) != 0) {
                 finish();
             }
-        }else{
+        } else {
             Toast toast = Toast.makeText(LoginActivity.this, "You are currently offline, please find a connection", Toast.LENGTH_SHORT);
             toast.show();
         }

@@ -22,15 +22,15 @@ public class GradesByTermFragment extends Fragment {
     private String mParam1;
     private CourseDB db;
 
+    public GradesByTermFragment() {
+    }
+
     public static GradesByTermFragment newInstance(String param1) {
         GradesByTermFragment fragment = new GradesByTermFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public GradesByTermFragment() {
     }
 
     @Override
@@ -54,7 +54,7 @@ public class GradesByTermFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
-        if (term.size() == 0){
+        if (term.size() == 0) {
             CardView cardView = (CardView) view.findViewById(R.id.grades_no_data_cardview);
             cardView.setVisibility(View.VISIBLE);
         }

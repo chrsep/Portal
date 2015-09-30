@@ -2,7 +2,6 @@ package com.directdev.portal.ui.finance;
 
 
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,7 +19,8 @@ import java.util.List;
 public class PaymentFragment extends Fragment {
 
 
-    public PaymentFragment() {}
+    public PaymentFragment() {
+    }
 
 
     @Override

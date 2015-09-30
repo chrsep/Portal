@@ -13,10 +13,10 @@ import com.directdev.portal.tools.datatype.ScheduleData;
 import java.util.List;
 
 
-public class JournalNestedRecyclerAdapter extends RecyclerView.Adapter{
+public class JournalNestedRecyclerAdapter extends RecyclerView.Adapter {
     private List<ScheduleData> data;
 
-    public JournalNestedRecyclerAdapter(List<ScheduleData> data){
+    public JournalNestedRecyclerAdapter(List<ScheduleData> data) {
         this.data = data;
     }
 
@@ -25,13 +25,13 @@ public class JournalNestedRecyclerAdapter extends RecyclerView.Adapter{
         ScheduleViewHolder scheduleHolder = (ScheduleViewHolder) holder;
         scheduleHolder.course.setText(data.get(i).coursename);
         scheduleHolder.room.setText(data.get(i).room);
-        if(data.get(i).mode.equals("GSLC")){
-            scheduleHolder.mode.setText(data.get(i).mode+"   ");
+        if (data.get(i).mode.equals("GSLC")) {
+            scheduleHolder.mode.setText(data.get(i).mode + "   ");
             scheduleHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#f44336"));
             scheduleHolder.shift.setText("");
-        }else {
+        } else {
             scheduleHolder.shift.setText(data.get(i).shift[0]);
-            switch (data.get(i).type){
+            switch (data.get(i).type) {
                 case "LEC":
                     scheduleHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#ffeb3b"));
                     scheduleHolder.mode.setText(data.get(i).type + "   ");
@@ -42,11 +42,11 @@ public class JournalNestedRecyclerAdapter extends RecyclerView.Adapter{
                     break;
                 case "CL":
                     scheduleHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#00B0FF"));
-                    scheduleHolder.mode.setText(data.get(i).type+"    ");
+                    scheduleHolder.mode.setText(data.get(i).type + "    ");
                     break;
                 case "TUT":
                     scheduleHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#00E676"));
-                    scheduleHolder.mode.setText(data.get(i).type+"    ");
+                    scheduleHolder.mode.setText(data.get(i).type + "    ");
             }
         }
     }
@@ -55,7 +55,7 @@ public class JournalNestedRecyclerAdapter extends RecyclerView.Adapter{
     public int getItemCount() {
         try {
             return data.size();
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return 0;
         }
     }
@@ -75,10 +75,10 @@ public class JournalNestedRecyclerAdapter extends RecyclerView.Adapter{
 
         ScheduleViewHolder(View itemView) {
             super(itemView);
-            course = (TextView)itemView.findViewById(R.id.course);
-            room = (TextView)itemView.findViewById(R.id.room);
-            shift = (TextView)itemView.findViewById(R.id.shift);
-            mode = (TextView)itemView.findViewById(R.id.mode);
+            course = (TextView) itemView.findViewById(R.id.course);
+            room = (TextView) itemView.findViewById(R.id.room);
+            shift = (TextView) itemView.findViewById(R.id.shift);
+            mode = (TextView) itemView.findViewById(R.id.mode);
             typeIdentifier = (TextView) itemView.findViewById(R.id.type_identifier);
         }
     }

@@ -16,9 +16,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class FinanceRecyclerAdapter extends RecyclerView.Adapter{
+public class FinanceRecyclerAdapter extends RecyclerView.Adapter {
     private List<FinanceData> data;
-    public FinanceRecyclerAdapter(List<FinanceData> data){
+
+    public FinanceRecyclerAdapter(List<FinanceData> data) {
         this.data = data;
     }
 
@@ -26,28 +27,28 @@ public class FinanceRecyclerAdapter extends RecyclerView.Adapter{
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
         FinanceViewHolder FinanceViewHolder = (FinanceViewHolder) holder;
         String amount;
-        if(data.get(i).type.equals("P")){
+        if (data.get(i).type.equals("P")) {
             amount = NumberFormat.getNumberInstance(Locale.US).format(data.get(i).amount);
-            FinanceViewHolder.amount.setText("Rp. "+amount.substring(1));
-            FinanceViewHolder.date.setText("Payed: "+data.get(i).date);
-        }else{
+            FinanceViewHolder.amount.setText("Rp. " + amount.substring(1));
+            FinanceViewHolder.date.setText("Payed: " + data.get(i).date);
+        } else {
             amount = NumberFormat.getNumberInstance(Locale.US).format(data.get(i).amount);
-            FinanceViewHolder.amount.setText("Rp. "+amount);
-            FinanceViewHolder.date.setText("Due: "+data.get(i).date);
+            FinanceViewHolder.amount.setText("Rp. " + amount);
+            FinanceViewHolder.date.setText("Due: " + data.get(i).date);
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             Date dueDate;
             Date today = new Date();
-            try{
+            try {
                 dueDate = dateFormat.parse(data.get(i).date);
-                if(dueDate.after(today)){
+                if (dueDate.after(today)) {
                     FinanceViewHolder.upcoming.setVisibility(View.VISIBLE);
                     FinanceViewHolder.passed.setVisibility(View.INVISIBLE);
-                }else{
+                } else {
                     FinanceViewHolder.upcoming.setVisibility(View.INVISIBLE);
                     FinanceViewHolder.passed.setVisibility(View.VISIBLE);
                 }
-            }catch (ParseException e){
+            } catch (ParseException e) {
                 FinanceViewHolder.upcoming.setVisibility(View.INVISIBLE);
                 FinanceViewHolder.passed.setVisibility(View.INVISIBLE);
             }
@@ -59,7 +60,7 @@ public class FinanceRecyclerAdapter extends RecyclerView.Adapter{
     public int getItemCount() {
         try {
             return data.size();
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return 0;
         }
     }
@@ -76,13 +77,14 @@ public class FinanceRecyclerAdapter extends RecyclerView.Adapter{
         TextView description;
         TextView upcoming;
         TextView passed;
+
         FinanceViewHolder(View itemView) {
             super(itemView);
-            amount = (TextView)itemView.findViewById(R.id.finance_amount);
-            date = (TextView)itemView.findViewById(R.id.finance_date);
-            description = (TextView)itemView.findViewById(R.id.finance_description);
-            upcoming = (TextView)itemView.findViewById(R.id.finance_upcoming);
-            passed = (TextView)itemView.findViewById(R.id.finance_passed);
+            amount = (TextView) itemView.findViewById(R.id.finance_amount);
+            date = (TextView) itemView.findViewById(R.id.finance_date);
+            description = (TextView) itemView.findViewById(R.id.finance_description);
+            upcoming = (TextView) itemView.findViewById(R.id.finance_upcoming);
+            passed = (TextView) itemView.findViewById(R.id.finance_passed);
         }
     }
 }

@@ -1,20 +1,19 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="Behavior">
+    <PreferenceCategory android:title="Behavior">
         <SwitchPreference
+            android:defaultValue="false"
             android:key="@string/setting_photo"
-            android:title="Hide profile photo"
             android:summary="Hide your photo and show Portal logo"
-            android:defaultValue="false" />
+            android:title="Hide profile photo" />
         <SwitchPreference
+            android:defaultValue="false"
             android:key="@string/setting_gpa"
-            android:title="Hide GPA"
             android:summary="Hide your GPA and show 4.0"
-            android:defaultValue="false"/>
+            android:title="Hide GPA" />
         <SwitchPreference
+            android:defaultValue="false"
             android:key="@string/setting_auto_refresh"
-            android:title="Manual refresh only"
             android:summary="Data won't be updated when app opened"
-            android:defaultValue="false"/>
+            android:title="Manual refresh only" />
     </PreferenceCategory>
 </PreferenceScreen>

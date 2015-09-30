@@ -20,23 +20,24 @@ import java.util.Map;
 import de.greenrobot.event.EventBus;
 
 public class FetchSchedule {
-    private Context context;
-    SharedPreferences sPref;
     protected int order;
-    public FetchSchedule(Context context){
+    SharedPreferences sPref;
+    private Context context;
+
+    public FetchSchedule(Context context) {
         this.context = context;
         sPref = context.getSharedPreferences(
                 context.getString(R.string.shared_preferences), Context.MODE_PRIVATE
         );
     }
 
-    public void requestAllData(){
+    public void requestAllData() {
         order = 0;
         requestData(context.getString(R.string.request_schedule), "schedule");
         requestData(context.getString(R.string.request_finance), "finance");
     }
 
-    private void requestData(String url, final String dataType){
+    private void requestData(String url, final String dataType) {
         final SharedPreferences.Editor editor = sPref.edit();
         RequestQueue queue = Volley.newRequestQueue(context);
         CustomStringRequest request = new CustomStringRequest(url, sPref.getString(context.getString(R.string.login_cookie_pref), ""),
@@ -55,7 +56,7 @@ public class FetchSchedule {
                                 order++;
                                 break;
                         }
-                        if(order == 2){
+                        if (order == 2) {
                             EventBus.getDefault().post(new FetchResponseEvent());
                         }
                     }
@@ -76,6 +77,7 @@ public class FetchSchedule {
 
     private class CustomStringRequest extends StringRequest {
         private String cookie;
+
         public CustomStringRequest(String url, String cookies, Response.Listener<String> listener, Response.ErrorListener errorListener) {
             super(Method.GET, url, listener, errorListener);
             this.cookie = cookies;
@@ -83,7 +85,7 @@ public class FetchSchedule {
 
         @Override
         public Map<String, String> getHeaders() throws AuthFailureError {
-            HashMap<String, String> headers = new HashMap<String, String>();
+            HashMap<String, String> headers = new HashMap<>();
             headers.put("Cookie", cookie);
             return headers;
 

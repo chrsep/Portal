@@ -1,126 +1,146 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.directdev.portal.ui.ResourceFragment"
-    android:background="@color/bg_default">
+    android:background="@color/bg_default"
+    android:orientation="vertical"
+    tools:context="com.directdev.portal.ui.ResourceFragment">
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/accent_dark"
-                android:textStyle="italic"
-                android:textSize="24sp"
-                android:padding="16dp"
-                android:textColor="@color/white"
-                android:gravity="center_vertical"
-                android:elevation="1dp"
-                android:text="@string/info_what" />
-            <TextView android:layout_width="match_parent"
-                android:padding="16dp"
-                android:layout_height="wrap_content"
-                android:text="@string/info_what_description" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/accent_dark"
-                android:textStyle="italic"
-                android:textSize="24sp"
-                android:padding="16dp"
-                android:textColor="@color/white"
-                android:gravity="center_vertical"
-                android:elevation="1dp"
-                android:text="@string/info_official"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16dp"
-                android:paddingTop="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/info_official_tldr"/>
-            <TextView android:layout_width="match_parent"
-                android:padding="16dp"
-                android:layout_height="wrap_content"
-                android:textIsSelectable="true"
-                android:text="@string/info_official_description" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/accent_dark"
-                android:textStyle="italic"
-                android:textSize="24sp"
-                android:padding="16dp"
-                android:textColor="@color/white"
-                android:gravity="center_vertical"
-                android:elevation="1dp"
-                android:text="@string/info_safe"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16dp"
-                android:paddingTop="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/info_safe_tldr"/>
-            <TextView android:layout_width="match_parent"
-                android:padding="16dp"
-                android:layout_height="wrap_content"
-                android:textIsSelectable="true"
-                android:linksClickable="true"
-                android:text="@string/info_safe_description" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/accent_dark"
-                android:textStyle="italic"
-                android:textSize="24sp"
-                android:padding="16dp"
-                android:textColor="@color/white"
-                android:gravity="center_vertical"
-                android:elevation="1dp"
-                android:text="@string/info_who"
-                android:layout_marginTop="8dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16dp"
-                android:paddingTop="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/info_who_tldr"/>
-            <TextView android:layout_width="match_parent"
-                android:padding="16dp"
-                android:layout_height="wrap_content"
-                android:textIsSelectable="true"
-                android:text="@string/info_who_description" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/accent_dark"
-                android:textStyle="italic"
-                android:textSize="24sp"
-                android:padding="16dp"
-                android:textColor="@color/white"
-                android:gravity="center_vertical"
                 android:elevation="1dp"
-                android:text="@string/info_why"
-                android:layout_marginTop="8dp"/>
-            <TextView android:layout_width="match_parent"
+                android:gravity="center_vertical"
                 android:padding="16dp"
+                android:text="@string/info_what"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textIsSelectable="true"
-                android:text="@string/info_why_description"/>
+                android:padding="16dp"
+                android:text="@string/info_what_description" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/accent_dark"
+                android:elevation="1dp"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text="@string/info_official"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="16dp"
+                android:text="@string/info_official_tldr"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/info_official_description"
+                android:textIsSelectable="true" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/accent_dark"
+                android:elevation="1dp"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text="@string/info_safe"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="16dp"
+                android:text="@string/info_safe_tldr"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:linksClickable="true"
+                android:padding="16dp"
+                android:text="@string/info_safe_description"
+                android:textIsSelectable="true" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/accent_dark"
+                android:elevation="1dp"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text="@string/info_who"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="16dp"
+                android:text="@string/info_who_tldr"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/info_who_description"
+                android:textIsSelectable="true" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/accent_dark"
+                android:elevation="1dp"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text="@string/info_why"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/info_why_description"
+                android:textIsSelectable="true" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

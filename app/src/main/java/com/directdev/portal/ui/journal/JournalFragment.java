@@ -38,23 +38,23 @@ import java.util.Locale;
 
 import de.greenrobot.event.EventBus;
 
-public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private static List<ScheduleData> data = new LinkedList<>();
-    private List<List<ScheduleData>> nestedData = new LinkedList<>();
-    private View view;
     protected SwipeRefreshLayout swipeLayout;
     protected JournalRecyclerAdapter adapter;
     protected RecyclerView recycler;
     protected boolean firstRequestSent = false;
+    private List<List<ScheduleData>> nestedData = new LinkedList<>();
+    private View view;
     private SharedPreferences sPref;
     private SharedPreferences.Editor edit;
 
-    public JournalFragment() {}
+    public JournalFragment() {
+    }
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         sPref = getActivity().getSharedPreferences(getString(R.string.shared_preferences), Context.MODE_PRIVATE);
@@ -68,8 +68,7 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
+                             Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_journal, container, false);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getBaseContext());
         recycler = (RecyclerView) view.findViewById(R.id.journal_recycler);
@@ -80,7 +79,7 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         recycler.setAdapter(adapter);
 
-        if (sPref.getBoolean(getString(R.string.is_refreshing_journal_pref),false)){
+        if (sPref.getBoolean(getString(R.string.is_refreshing_journal_pref), false)) {
             swipeLayout.post(new Runnable() {
                 @Override
                 public void run() {
@@ -93,18 +92,14 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         SharedPreferences settingsPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if(!firstRequestSent)
-        {
-            if(sPref.getString(getString(R.string.resource_schedule_new_pref),null)!=null)
-            {
+        if (!firstRequestSent) {
+            if (sPref.getString(getString(R.string.resource_schedule_new_pref), null) != null) {
                 onEventMainThread(new DatabaseUpdateEvent());
             }
-            if(sPref.getInt(getString(R.string.login_data_given_pref),0)!=0&&!settingsPref.getBoolean(getString(R.string.setting_auto_refresh),false))
-            {
+            if (sPref.getInt(getString(R.string.login_data_given_pref), 0) != 0 && !settingsPref.getBoolean(getString(R.string.setting_auto_refresh), false)) {
                 swipeLayout.post(new Runnable() {
                     @Override
                     public void run() {
@@ -120,10 +115,9 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
 
     @Override
-    public void onRefresh()
-    {
+    public void onRefresh() {
         swipeLayout.setEnabled(false);
-        edit.putBoolean(getString(R.string.is_refreshing_journal_pref),true).apply();
+        edit.putBoolean(getString(R.string.is_refreshing_journal_pref), true).apply();
         FetchSchedule getSchedule = new FetchSchedule(getActivity());
         getSchedule.requestAllData();
 
@@ -132,19 +126,16 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 
-    public void onEventAsync(FetchResponseEvent event){
+    public void onEventAsync(FetchResponseEvent event) {
         JournalDB db = new JournalDB(getActivity());
-        try
-        {
-            if(!sPref.getString(getString(R.string.resource_schedule_new_pref),"").equals(sPref.getString(getString(R.string.resource_schedule_old_pref),""))||
-                    !sPref.getString(getString(R.string.resource_finance_new_pref),"").equals(sPref.getString(getString(R.string.resource_finance_old_pref),"")))
-            {
+        try {
+            if (!sPref.getString(getString(R.string.resource_schedule_new_pref), "").equals(sPref.getString(getString(R.string.resource_schedule_old_pref), "")) ||
+                    !sPref.getString(getString(R.string.resource_finance_new_pref), "").equals(sPref.getString(getString(R.string.resource_finance_old_pref), ""))) {
                 JSONArray journalData = new JSONArray(sPref.getString(getString(R.string.resource_schedule_new_pref), ""));
                 db.deleteData();
                 db.addScheduleJson(journalData);
@@ -156,20 +147,18 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 edit.putString(getString(R.string.resource_finance_old_pref), sPref.getString(getString(R.string.resource_finance_new_pref), ""));
                 edit.commit();
             }
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm",Locale.US);
-            edit.putString(getString(R.string.last_update_pref),dateFormat.format(new Date()))
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm", Locale.US);
+            edit.putString(getString(R.string.last_update_pref), dateFormat.format(new Date()))
                     .apply();
-        }
-        catch (JSONException e)
-        {
-            edit.putBoolean(getString(R.string.is_no_session),true).commit();
+        } catch (JSONException e) {
+            edit.putBoolean(getString(R.string.is_no_session), true).commit();
             Snackbar snackbar = Snackbar.make(view, "Refresh session to load new data", Snackbar.LENGTH_LONG)
                     .setAction("REFRESH", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             firstRequestSent = false;
                             Intent intent = new Intent(getActivity(), LoginAuthorization.class);
-                            intent.putExtra("text","Refreshing session");
+                            intent.putExtra("text", "Refreshing session");
                             startActivity(intent);
                         }
                     })
@@ -179,43 +168,34 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         EventBus.getDefault().post(new DatabaseUpdateEvent());
     }
 
-    public void onEventMainThread(DatabaseUpdateEvent event)
-    {
+    public void onEventMainThread(DatabaseUpdateEvent event) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String today = dateFormat.format(new Date());
         JournalDB db = new JournalDB(getActivity());
         data = db.queryJournal("date_data >= \"" + today + "\"");
-        if(data!=null)
-        {
+        if (data != null) {
             nestedData = processData();
         }
-        edit.putBoolean(getString(R.string.is_refreshing_journal_pref),false).apply();
+        edit.putBoolean(getString(R.string.is_refreshing_journal_pref), false).apply();
         swipeLayout.setRefreshing(false);
         adapter = new JournalRecyclerAdapter(nestedData);
         recycler.swapAdapter(adapter, false);
         swipeLayout.setEnabled(true);
     }
 
-    private List<List<ScheduleData>> processData(){
+    private List<List<ScheduleData>> processData() {
         List<List<ScheduleData>> nestedData = new LinkedList<>();
         List<ScheduleData> holder = new LinkedList<>();
-        for (int i = 0; i < data.size(); i++)
-        {
-            if(i+1!=data.size())
-            {
-                if (data.get(i).date.equals(data.get(i + 1).date))
-                {
+        for (int i = 0; i < data.size(); i++) {
+            if (i + 1 != data.size()) {
+                if (data.get(i).date.equals(data.get(i + 1).date)) {
                     holder.add(data.get(i));
-                }
-                else
-                {
+                } else {
                     holder.add(data.get(i));
                     nestedData.add(holder);
                     holder = new LinkedList<>();
                 }
-            }
-            else
-            {
+            } else {
                 holder.add(data.get(i));
                 nestedData.add(holder);
             }

@@ -5,7 +5,8 @@ public class FinanceData {
     public Integer amount;
     public String date;
     public String type;
-    public FinanceData(String description, Integer amount, String date, String type){
+
+    public FinanceData(String description, Integer amount, String date, String type) {
         this.description = description;
         this.amount = amount;
         this.date = date;

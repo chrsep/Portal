@@ -24,21 +24,22 @@ import de.greenrobot.event.EventBus;
 public class FetchScore {
     private Context context;
     private SharedPreferences sPref;
-    public FetchScore(Context context){
+
+    public FetchScore(Context context) {
         this.context = context;
         sPref = context.getSharedPreferences(
                 context.getString(R.string.shared_preferences), Context.MODE_PRIVATE
         );
     }
 
-    public  void requestTerm(){
+    public void requestTerm() {
         final SharedPreferences.Editor editor = sPref.edit();
         RequestQueue queue = Volley.newRequestQueue(context);
         CustomStringRequest request = new CustomStringRequest(context.getString(R.string.request_terms), sPref.getString(context.getString(R.string.login_cookie_pref), ""),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        editor.putString(context.getString(R.string.resource_terms),response).commit();
+                        editor.putString(context.getString(R.string.resource_terms), response).commit();
                         EventBus.getDefault().post(new TermResponseEvent());
                     }
                 },
@@ -56,14 +57,14 @@ public class FetchScore {
         queue.add(request);
     }
 
-    public  void requestScores(final String term){
+    public void requestScores(final String term) {
         final SharedPreferences.Editor editor = sPref.edit();
         RequestQueue queue = Volley.newRequestQueue(context);
-        CustomStringRequest request = new CustomStringRequest(context.getString(R.string.request_scores)+term, sPref.getString(context.getString(R.string.login_cookie_pref), ""),
+        CustomStringRequest request = new CustomStringRequest(context.getString(R.string.request_scores) + term, sPref.getString(context.getString(R.string.login_cookie_pref), ""),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        editor.putString(context.getString(R.string.resource_scores)+"_"+term,response).commit();
+                        editor.putString(context.getString(R.string.resource_scores) + "_" + term, response).commit();
                         EventBus.getDefault().post(new GradesResponseEvent(term));
                     }
                 },
@@ -83,6 +84,7 @@ public class FetchScore {
 
     private class CustomStringRequest extends StringRequest {
         private String cookie;
+
         public CustomStringRequest(String url, String cookies, Response.Listener<String> listener, Response.ErrorListener errorListener) {
             super(Method.GET, url, listener, errorListener);
             this.cookie = cookies;

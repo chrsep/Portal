@@ -30,7 +30,7 @@ public class LoginAuthorization extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.login_authenticator_text);
         textView.setText(bundle.getString("text"));
 
-        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
@@ -41,8 +41,8 @@ public class LoginAuthorization extends AppCompatActivity {
         edit = sharedPreferences.edit();
         edit.putInt("LoginAttempt", 0);
         edit.commit();
-        USERNAME = sharedPreferences.getString(getString(R.string.login_username_pref),"");
-        PASSWORD = sharedPreferences.getString(getString(R.string.login_password_pref),"");
+        USERNAME = sharedPreferences.getString(getString(R.string.login_username_pref), "");
+        PASSWORD = sharedPreferences.getString(getString(R.string.login_password_pref), "");
         final WebView webView = (WebView) findViewById(R.id.loginWebView);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -51,10 +51,10 @@ public class LoginAuthorization extends AppCompatActivity {
         webView.loadUrl("https://newbinusmaya.binus.ac.id/login.php");
     }
 
-    private class LoginWebView extends WebViewClient{
+    private class LoginWebView extends WebViewClient {
         @Override
         public void onPageFinished(WebView webView, String url) {
-            try{
+            try {
                 if (sharedPreferences.getInt("LoginAttempt", 0) == 4 && sharedPreferences.getInt(getString(R.string.login_condition_pref), 0) == 0) {
                     edit.putInt(getString(R.string.login_condition_pref), 0).commit();
                     finish();
@@ -67,7 +67,7 @@ public class LoginAuthorization extends AppCompatActivity {
                     webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_SubmitButtonBM').click()})()");
                     edit.putInt("LoginAttempt", tries).commit();
                 }
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 //We detected crashes involving NullPointerException coming from this method
                 //This will catch the crash and send back crash data to us.
                 Crashlytics.logException(e);
@@ -82,7 +82,7 @@ public class LoginAuthorization extends AppCompatActivity {
                 String cookie = android.webkit.CookieManager.getInstance().getCookie("https://newbinusmaya.binus.ac.id/student/#/index/dashboard");
                 edit.putString(getString(R.string.login_cookie_pref), cookie)
                         .putInt(getString(R.string.login_condition_pref), 1)
-                        .putBoolean(getString(R.string.is_no_session),false)
+                        .putBoolean(getString(R.string.is_no_session), false)
                         .commit();
                 finish();
             }

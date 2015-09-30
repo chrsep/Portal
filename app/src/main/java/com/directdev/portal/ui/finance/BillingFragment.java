@@ -19,7 +19,8 @@ import java.util.List;
 public class BillingFragment extends Fragment {
 
 
-    public BillingFragment() {}
+    public BillingFragment() {
+    }
 
 
     @Override

@@ -21,7 +21,7 @@ public class LogoutAuthorization extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
@@ -42,7 +42,7 @@ public class LogoutAuthorization extends AppCompatActivity {
         webView.loadUrl("https://newbinusmaya.binus.ac.id/services/ci/index.php/login/logout");
     }
 
-    private class LoginWebView extends WebViewClient{
+    private class LoginWebView extends WebViewClient {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
@@ -50,7 +50,7 @@ public class LogoutAuthorization extends AppCompatActivity {
                 MyApplication.getInstance().clearApplicationData();
                 edit.clear().commit();
 
-                Intent intent = new Intent(getBaseContext(),MainActivity.class);
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
