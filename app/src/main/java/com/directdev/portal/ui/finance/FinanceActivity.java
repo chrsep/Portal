@@ -1,14 +1,10 @@
 package com.directdev.portal.ui.finance;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +22,6 @@ import com.directdev.portal.R;
 import com.directdev.portal.tools.database.JournalDB;
 import com.directdev.portal.tools.uihelper.MainViewPagerAdapter;
 import com.directdev.portal.ui.WebappActivity;
-import com.directdev.portal.ui.access.LoginAuthorization;
 
 import java.text.NumberFormat;
 import java.util.Locale;
