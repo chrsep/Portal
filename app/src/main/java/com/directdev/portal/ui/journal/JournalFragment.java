@@ -134,19 +134,13 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onEventAsync(FetchResponseEvent event) {
         JournalDB db = new JournalDB(getActivity());
         try {
-            if (!sPref.getString(getString(R.string.resource_schedule_new_pref), "").equals(sPref.getString(getString(R.string.resource_schedule_old_pref), "")) ||
-                    !sPref.getString(getString(R.string.resource_finance_new_pref), "").equals(sPref.getString(getString(R.string.resource_finance_old_pref), ""))) {
-                JSONArray journalData = new JSONArray(sPref.getString(getString(R.string.resource_schedule_new_pref), ""));
-                db.deleteData();
-                db.addScheduleJson(journalData);
-                edit.putString(getString(R.string.resource_schedule_old_pref), sPref.getString(getString(R.string.resource_schedule_new_pref), ""));
-                edit.commit();
+            JSONArray scheduleData = new JSONArray(sPref.getString(getString(R.string.resource_schedule_new_pref), ""));
+            JSONObject financeData = new JSONObject(sPref.getString(getString(R.string.resource_finance_new_pref), ""));
 
-                JSONObject data = new JSONObject(sPref.getString(getString(R.string.resource_finance_new_pref), ""));
-                db.addFinanceJson(data);
-                edit.putString(getString(R.string.resource_finance_old_pref), sPref.getString(getString(R.string.resource_finance_new_pref), ""));
-                edit.commit();
-            }
+            db.deleteData();
+            db.addScheduleJson(scheduleData);
+            db.addFinanceJson(financeData);
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm", Locale.US);
             edit.putString(getString(R.string.last_update_pref), dateFormat.format(new Date()))
                     .apply();

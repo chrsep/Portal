@@ -2,6 +2,7 @@ package com.directdev.portal.tools.fetcher;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -12,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.directdev.portal.R;
+import com.directdev.portal.tools.event.DatabaseUpdateEvent;
 import com.directdev.portal.tools.event.FetchResponseEvent;
 
 import java.util.HashMap;
@@ -64,7 +66,9 @@ public class FetchSchedule {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        EventBus.getDefault().post(new FetchResponseEvent());
+                        Toast connectionFailed = Toast.makeText(context, "Cannot connect to server", Toast.LENGTH_SHORT);
+                        connectionFailed.show();
+                        EventBus.getDefault().post(new DatabaseUpdateEvent());
                     }
                 });
         int socketTimeout = 30000;

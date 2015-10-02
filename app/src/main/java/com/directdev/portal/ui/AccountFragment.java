@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -214,24 +215,24 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void onEvent(ThereIsNewPhotoEvent event) {
+    public void onEventAsync(ThereIsNewPhotoEvent event) {
         FetchAccountData fetcher = new FetchAccountData(getActivity());
         fetcher.requestPhoto();
     }
 
-    public void onEvent(DataUpdateEvent event) {
+    public void onEventAsync(DataUpdateEvent event) {
         TextView last_update = (TextView) getActivity().findViewById(R.id.last_updated);
         last_update.setText("Last updated: " + sPref.getString(getString(R.string.last_update_pref), "2012-12-21 12:12"));
     }
 
-    public void onEvent(GpaResponseEvent event) {
+    public void onEventAsync(GpaResponseEvent event) {
         if (!settingsPref.getBoolean(getString(R.string.setting_gpa), false)) {
             TextView gpa = (TextView) getActivity().findViewById(R.id.gpa_number);
             gpa.setText(sPref.getString(getString(R.string.resource_gpa), ""));
         }
     }
 
-    public void onEvent(AccountResponseEvent event) {
+    public void onEventAsync(AccountResponseEvent event) {
         TextView name = (TextView) getActivity().findViewById(R.id.account_name);
         TextView major = (TextView) getActivity().findViewById(R.id.major);
 
@@ -239,7 +240,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         major.setText(sPref.getString(getString(R.string.resource_major), ""));
     }
 
-    public void onEvent(PhotoResponseEvent event) {
+    public void onEventAsync(PhotoResponseEvent event) {
         if (!settingsPref.getBoolean(getString(R.string.setting_photo), false)) {
             byte[] toDecode = new byte[700000];
             try {
