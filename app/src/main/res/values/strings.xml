@@ -36,6 +36,7 @@
     <string name="request_photo">https://newbinusmaya.binus.ac.id/services/ci/index.php/general/getPhoto</string>
     <string name="request_terms">https://newbinusmaya.binus.ac.id/services/ci/index.php/scoring/ViewGrade/getPeriodByBinusianId</string>
     <string name="request_scores">https://newbinusmaya.binus.ac.id/services/ci/index.php/scoring/ViewGrade/getStudentScore/</string>
+    <string name="resource_exam_sched">https://newbinusmaya.binus.ac.id/services/ci/index.php/exam/Schedule/getOwnScheduleStudent</string>
 
     <string name="resource_schedule_new_pref">schedule_json</string>
     <string name="resource_finance_new_pref">finance_json</string>
@@ -107,4 +108,6 @@
     <string name="info_why_description">We find it a bit impractical to have your university data available 24/7 online, but can only be easily accessed through big screens and decent connection, which is something that is hard to get on campus, this leads us to use notes, screenshots and other static means of capturing information to make those online data easily accessible. This, coupled with our believe that CS students should focus more on experiment and building practical software, we decided to build Portal. \n\nWhy build Portal rather than other more serious applications? Because we have zero experience in real mobile and software development, Portal is easily the most practical and impactful thing we can currently build.</string>
     <string name="finance_upocoming">UPCOMING</string>
     <string name="finance_passed">PASSED</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

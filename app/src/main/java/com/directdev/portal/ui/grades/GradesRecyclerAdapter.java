@@ -58,6 +58,8 @@ public class GradesRecyclerAdapter extends RecyclerView.Adapter {
             gradesViewHolder.cardView.setCardBackgroundColor(Color.parseColor("#b71c1c"));
         } else if (data.grade.substring(0, 1).equals("E")) {
             gradesViewHolder.cardView.setCardBackgroundColor(Color.BLACK);
+        }else{
+            gradesViewHolder.cardView.setCardBackgroundColor(Color.parseColor("#795548"));
         }
     }
 

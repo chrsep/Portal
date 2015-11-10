@@ -23,8 +23,8 @@ android {
         applicationId "com.directdev.portal"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 20
-        versionName "0.1.7c"
+        versionCode 21
+        versionName "0.1.8"
     }
     buildTypes {
         release {
@@ -37,16 +37,19 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:design:23.0.1'
-    compile 'com.android.support:cardview-v7:23.0.1'
-    compile 'com.android.support:recyclerview-v7:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:design:23.1.0'
+    compile 'com.android.support:cardview-v7:23.1.0'
+    compile 'com.android.support:recyclerview-v7:23.1.0'
     compile 'org.solovyev.android.views:linear-layout-manager:0.5@aar'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.mcxiaoke.volley:library:1.0.18'
     compile 'de.hdodenhof:circleimageview:1.3.0'
-    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.android.support:support-v4:23.1.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
+        transitive = true;
+    }
+    compile('com.crashlytics.sdk.android:answers:1.3.3@aar') {
         transitive = true;
     }
 }

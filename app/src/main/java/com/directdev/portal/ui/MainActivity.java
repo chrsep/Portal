@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                 NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
                 boolean isConnected = activeNetwork != null &&
                         activeNetwork.isConnectedOrConnecting();
-
                 if (isConnected) {
                     Intent intent = new Intent(this, WebappActivity.class);
                     intent.putExtra("url", "https://newbinusmaya.binus.ac.id/student/index.html#/learning/lecturing");
