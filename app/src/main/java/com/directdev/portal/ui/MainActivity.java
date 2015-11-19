@@ -20,8 +20,11 @@ import com.directdev.portal.tools.event.GradesResponseEvent;
 import com.directdev.portal.tools.event.TermResponseEvent;
 import com.directdev.portal.tools.fetcher.FetchScore;
 import com.directdev.portal.tools.uihelper.MainViewPagerAdapter;
+import com.directdev.portal.tools.uihelper.MyApplication;
 import com.directdev.portal.ui.access.LoginActivity;
 import com.directdev.portal.ui.journal.JournalFragment;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sPref;
     private FetchScore fetch;
     private CourseDB db;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabanim_tabs);
         tabLayout.setupWithViewPager(viewPager);
         EventBus.getDefault().register(this);
+
+        MyApplication application = (MyApplication) getApplication();
+        mTracker = application.getDefaultTracker();
 
         db = new CourseDB(this);
         fetch = new FetchScore(this);
@@ -102,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         checkLogin();
+
+        mTracker.setScreenName("MainActivity");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     private void setupViewPager(ViewPager viewPager) {

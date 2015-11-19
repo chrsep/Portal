@@ -27,7 +27,10 @@ import com.directdev.portal.tools.event.GradesResponseEvent;
 import com.directdev.portal.tools.event.TermResponseEvent;
 import com.directdev.portal.tools.fetcher.FetchScore;
 import com.directdev.portal.tools.uihelper.MainViewPagerAdapter;
+import com.directdev.portal.tools.uihelper.MyApplication;
 import com.directdev.portal.ui.WebappActivity;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +44,7 @@ public class GradesActivity extends AppCompatActivity {
     private FetchScore fetch;
     private CourseDB db;
     private SharedPreferences sPref;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +83,16 @@ public class GradesActivity extends AppCompatActivity {
                 .putContentName("View grades")
                 .putContentType("Activity")
                 .putContentId("studentData"));
+
+        MyApplication application = (MyApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mTracker.setScreenName("GradesActivity");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

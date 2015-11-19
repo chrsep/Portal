@@ -14,10 +14,14 @@ import android.widget.Toast;
 
 import com.directdev.portal.R;
 import com.directdev.portal.tools.fetcher.FetchScore;
+import com.directdev.portal.tools.uihelper.MyApplication;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private SharedPreferences sharedPref;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
         sharedPref = getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE);
+        MyApplication application = (MyApplication) getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
     @Override
@@ -50,6 +56,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Toast toast = Toast.makeText(LoginActivity.this, "Wrong username or password", Toast.LENGTH_SHORT);
             toast.show();
         }
+        mTracker.setScreenName("FinanceActivity");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

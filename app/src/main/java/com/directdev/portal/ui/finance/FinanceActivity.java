@@ -21,12 +21,16 @@ import com.crashlytics.android.answers.ContentViewEvent;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.database.JournalDB;
 import com.directdev.portal.tools.uihelper.MainViewPagerAdapter;
+import com.directdev.portal.tools.uihelper.MyApplication;
 import com.directdev.portal.ui.WebappActivity;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.text.NumberFormat;
 import java.util.Locale;
 
 public class FinanceActivity extends AppCompatActivity {
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,16 @@ public class FinanceActivity extends AppCompatActivity {
                 .putContentName("View finance")
                 .putContentType("Activity")
                 .putContentId("studentData"));
+
+        MyApplication application = (MyApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mTracker.setScreenName("FinanceActivity");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

@@ -6,14 +6,21 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
 import com.directdev.portal.R;
+import com.directdev.portal.tools.uihelper.MyApplication;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 
 public class SettingsActivity extends Activity {
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingFragment()).commit();
+
+        MyApplication application = (MyApplication) getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
     public static class SettingFragment extends PreferenceFragment {
@@ -23,5 +30,12 @@ public class SettingsActivity extends Activity {
 
             addPreferencesFromResource(R.xml.pref_data);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mTracker.setScreenName("MainActivity");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 }

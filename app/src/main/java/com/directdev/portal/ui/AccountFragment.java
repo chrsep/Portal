@@ -2,18 +2,21 @@ package com.directdev.portal.ui;
 
 
 import android.app.ActivityOptions;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,6 +116,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         RelativeLayout grades = (RelativeLayout) view.findViewById(R.id.open_grades);
         RelativeLayout logout = (RelativeLayout) view.findViewById(R.id.open_logout);
         RelativeLayout settings = (RelativeLayout) view.findViewById(R.id.open_settings);
+        RelativeLayout knownBug = (RelativeLayout) view.findViewById(R.id.open_known_bugs);
 
         gpa.setOnClickListener(this);
         finance.setOnClickListener(this);
@@ -120,6 +124,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         grades.setOnClickListener(this);
         logout.setOnClickListener(this);
         settings.setOnClickListener(this);
+        knownBug.setOnClickListener(this);
         return view;
     }
 
@@ -210,6 +215,15 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                     getActivity().startActivity(settingsIntent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
                 } else {
                     startActivity(settingsIntent);
+                }
+                break;
+            case R.id.open_known_bugs:
+                try {
+                    Intent bugsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://trello.com/b/S7bIiwZS"));
+                    startActivity(bugsIntent);
+                }catch (ActivityNotFoundException e){
+                    Toast noBrowser = Toast.makeText(getActivity(), "Failed to open browser", Toast.LENGTH_SHORT);
+                    noBrowser.show();
                 }
                 break;
         }

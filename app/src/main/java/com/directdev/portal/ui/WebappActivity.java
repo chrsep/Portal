@@ -9,10 +9,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.directdev.portal.R;
+import com.directdev.portal.tools.uihelper.MyApplication;
 import com.directdev.portal.ui.access.LoginAuthorization;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 
 public class WebappActivity extends AppCompatActivity {
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,9 @@ public class WebappActivity extends AppCompatActivity {
             }
         });
 
+        MyApplication application = (MyApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(bundle.getString("url"));
@@ -52,5 +59,12 @@ public class WebappActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setTitle(bundle.getString("title"));
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mTracker.setScreenName("MainActivity");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 }

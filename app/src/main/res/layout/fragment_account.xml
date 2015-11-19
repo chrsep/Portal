@@ -15,7 +15,6 @@
             android:layout_height="110dp"
             android:background="@color/primary"
             android:clickable="true"
-            android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground">
 
             <View
@@ -42,8 +41,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="50dp"
                 android:src="@mipmap/ic_launcher"
-                app:border_color="@color/white"
-                app:border_width="0dp" />
+                app:civ_border_color="@color/white"
+                app:civ_border_width="0dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -88,6 +87,7 @@
                 android:textSize="35sp" />
         </RelativeLayout>
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -96,11 +96,10 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/open_grades"
+                android:id="@+id/open_known_bugs"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:clickable="true"
-                android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="horizontal">
 
@@ -108,6 +107,37 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_bug_report_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingStart="72dp"
+                    android:text="@string/menu_known_bugs"
+                    android:textColor="@color/primary"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black_light" />
+
+            <RelativeLayout
+                android:id="@+id/open_grades"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="8dp"
                     android:layout_marginLeft="16dp"
                     android:src="@drawable/ic_grades" />
 
@@ -126,7 +156,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:clickable="true"
-                android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="horizontal">
 
@@ -152,7 +181,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:clickable="true"
-                android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="horizontal">
 
@@ -184,7 +212,6 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="8dp"
                 android:clickable="true"
-                android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="horizontal">
 
@@ -210,7 +237,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:clickable="true"
-                android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="horizontal">
 
@@ -230,6 +256,7 @@
                     android:textColor="@color/primary"
                     android:textStyle="bold" />
             </RelativeLayout>
+
         </LinearLayout>
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

@@ -73,6 +73,7 @@
     <string name="photo_downloaded">isphotodownload</string>
     <string name="last_update_pref">last_updated</string>
 
+    <string name="menu_known_bugs">Known Bugs</string>
     <string name="menu_grades">Grades</string>
     <string name="menu_finance">Finance</string>
     <string name="menu_forum">Forum</string>
