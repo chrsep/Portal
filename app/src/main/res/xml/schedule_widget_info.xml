@@ -4,4 +4,6 @@
     android:previewImage="@drawable/example_appwidget_preview"
     android:initialLayout="@layout/schedule_widget" android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen|keyguard"
-    android:initialKeyguardLayout="@layout/schedule_widget"></appwidget-provider>
+    android:initialKeyguardLayout="@layout/schedule_widget">
+
+</appwidget-provider>

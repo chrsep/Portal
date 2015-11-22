@@ -35,16 +35,18 @@
     <string name="request_dashboard">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/init/dashboard</string>
     <string name="request_photo">https://newbinusmaya.binus.ac.id/services/ci/index.php/general/getPhoto</string>
     <string name="request_terms">https://newbinusmaya.binus.ac.id/services/ci/index.php/scoring/ViewGrade/getPeriodByBinusianId</string>
-    <string name="request_scores">https://newbinusmaya.binus.ac.id/services/ci/index.php/scoring/ViewGrade/getStudentScore/</string>
-    <string name="resource_exam_sched">https://newbinusmaya.binus.ac.id/services/ci/index.php/exam/Schedule/getOwnScheduleStudent</string>
-
-    <string name="resource_schedule_new_pref">schedule_json</string>
-    <string name="resource_finance_new_pref">finance_json</string>
-    <string name="resource_exam_new_pref">exam_json</string>
-
-    <string name="resource_schedule_old_pref">schedule_old_json</string>
-    <string name="resource_finance_old_pref">finance_old_json</string>
-    <string name="resource_exam_old_pref">exam_old_json</string>
+    <string name="request_grades">https://newbinusmaya.binus.ac.id/services/ci/index.php/scoring/ViewGrade/getStudentScore/</string>
+    <string name="request_exam">https://newbinusmaya.binus.ac.id/services/ci/index.php/exam/Schedule/getOwnScheduleStudent</string>
+    <string name="request_course">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/init/getCoursesBySTRMAndAcad/</string>
+    //Artificial Inteligence
+    <string name="request_people">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/classes/people/**010548/1510/11160**</string>
+    <string name="request_attendance">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/learning/attendanceInformation</string>
+    <string name="request_resources">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/classes/resources/**COMP6065/010548/1510/LEC/11160**</string>
+    <string name="request_textbook">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/classes/getTextbook/COMP6065/010548/1510/LEC/11160</string>
+    <string name="request_learning_outcome">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/classes/getLearningOutcomes/COMP6065/010548/1510/LEC/11160</string>
+    <string name="request_assignment_alone">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/classes/assignmentType/CHAR6015/010614/1510/LEC/10210/01</string>
+    <string name="request_assignment_group">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/classes/assignmentType/CHAR6015/010614/1510/LEC/10210/02</string>
+    <string name="request_assigments_download">https://newbinusmaya.binus.ac.id/useruploads/</string>
 
     <string name="resource_photo">acc_photo</string>
     <string name="resource_account_name">account_name</string>
@@ -54,6 +56,7 @@
     <string name="resource_terms">terms</string>
     <string name="resource_scores">grades</string>
     <string name="resource_scores_new">grades_new</string>
+    <string name="resource_update_count">counter</string>
 
     <string name="account_name_placeholder">JONATHAN DOE</string>
     <string name="major_placeholder">Biomedical Engineering</string>

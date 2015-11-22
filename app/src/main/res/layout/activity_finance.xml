@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_default"
-    tools:context="com.directdev.portal.ui.finance.FinanceActivity">
+    tools:context=".ui.main.account.finance.FinanceActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

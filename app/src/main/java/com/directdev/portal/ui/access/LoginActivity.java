@@ -13,8 +13,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.directdev.portal.R;
-import com.directdev.portal.tools.fetcher.FetchScore;
-import com.directdev.portal.tools.uihelper.MyApplication;
+import com.directdev.portal.tools.helper.Portal;
+import com.directdev.portal.tools.services.UpdateService;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
         sharedPref = getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE);
-        MyApplication application = (MyApplication) getApplication();
+        Portal application = (Portal) getApplication();
         mTracker = application.getDefaultTracker();
     }
 
@@ -49,8 +49,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
         if (sharedPref.getInt(getResources().getString(R.string.login_condition_pref), 0) == 1) {
-            FetchScore fetchScore = new FetchScore(this);
-            fetchScore.requestTerm();
+            UpdateService.all(this);
             finish();
         } else if (sharedPref.getInt(getResources().getString(R.string.login_data_given_pref), 0) == 1) {
             Toast toast = Toast.makeText(LoginActivity.this, "Wrong username or password", Toast.LENGTH_SHORT);

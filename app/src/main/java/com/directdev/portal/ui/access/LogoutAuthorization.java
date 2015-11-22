@@ -11,8 +11,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.directdev.portal.R;
-import com.directdev.portal.tools.uihelper.MyApplication;
-import com.directdev.portal.ui.MainActivity;
+import com.directdev.portal.tools.helper.Portal;
+import com.directdev.portal.ui.main.MainActivity;
 
 
 public class LogoutAuthorization extends AppCompatActivity {
@@ -47,7 +47,7 @@ public class LogoutAuthorization extends AppCompatActivity {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             if (url.equals("https://newbinusmaya.binus.ac.id/default/login.html")) {
-                MyApplication.getInstance().clearApplicationData();
+                Portal.getInstance().clearApplicationData();
                 edit.clear().commit();
 
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);

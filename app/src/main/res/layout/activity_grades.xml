@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.directdev.portal.ui.grades.GradesActivity">
+    tools:context=".ui.main.account.grades.GradesActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

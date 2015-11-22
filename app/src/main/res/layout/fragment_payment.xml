@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.directdev.portal.ui.finance.PaymentFragment">
+    tools:context=".ui.main.account.finance.PaymentFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/payment_recycler"

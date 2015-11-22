@@ -16,11 +16,12 @@
         android:textColor="@color/black"
         android:layout_margin="16dp"
         android:textSize="12sp"
-        android:text="No activity"/>
+        android:text="No activity"
+        android:id="@+id/widget_empty"/>
     <ListView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:id="@+id/widget_recycler_one"/>
+        android:id="@+id/widget_listview_one"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="42dp"
@@ -39,5 +40,5 @@
     <ListView
         android:layout_height="24dp"
         android:layout_width="match_parent"
-        android:id="@+id/widget_recycler_two" />
+        android:id="@+id/widget_listview_two" />
 </LinearLayout>
