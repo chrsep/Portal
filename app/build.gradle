@@ -18,14 +18,14 @@ repositories {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion '23.0.2'
 
     defaultConfig {
         applicationId "com.directdev.portal"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 23
-        versionName "0.2.0"
+        versionCode 25
+        versionName "0.2.1b"
     }
     buildTypes {
         release {
@@ -33,7 +33,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug{
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -55,6 +55,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-analytics:8.3.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.github.thorbenprimke:realm-recyclerview:0.9.5'
+    compile 'com.flipboard:bottomsheet-core:1.4.3'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.3@aar') {
         transitive = true;
     }

@@ -38,10 +38,12 @@
     <string name="request_grades">https://newbinusmaya.binus.ac.id/services/ci/index.php/scoring/ViewGrade/getStudentScore/</string>
     <string name="request_exam">https://newbinusmaya.binus.ac.id/services/ci/index.php/exam/Schedule/getOwnScheduleStudent</string>
     <string name="request_course">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/init/getCoursesBySTRMAndAcad/</string>
+    <string name="request_current_terms">https://newbinusmaya.binus.ac.id/services/ci/index.php/general/getCurrentPeriod</string>
+
     //Artificial Inteligence
     <string name="request_people">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/classes/people/**010548/1510/11160**</string>
     <string name="request_attendance">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/learning/attendanceInformation</string>
-    <string name="request_resources">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/classes/resources/**COMP6065/010548/1510/LEC/11160**</string>
+    <string name="request_resources">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/classes/resources/</string>
     <string name="request_textbook">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/classes/getTextbook/COMP6065/010548/1510/LEC/11160</string>
     <string name="request_learning_outcome">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/classes/getLearningOutcomes/COMP6065/010548/1510/LEC/11160</string>
     <string name="request_assignment_alone">https://newbinusmaya.binus.ac.id/services/ci/index.php/student/classes/assignmentType/CHAR6015/010614/1510/LEC/10210/01</string>

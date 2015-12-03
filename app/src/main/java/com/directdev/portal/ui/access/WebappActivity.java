@@ -16,7 +16,6 @@ import com.google.android.gms.analytics.Tracker;
 
 
 public class WebappActivity extends AppCompatActivity {
-    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +47,6 @@ public class WebappActivity extends AppCompatActivity {
         });
 
         Portal application = (Portal) getApplication();
-        mTracker = application.getDefaultTracker();
 
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -64,7 +62,5 @@ public class WebappActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mTracker.setScreenName("MainActivity");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 }

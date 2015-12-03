@@ -18,15 +18,23 @@ import io.realm.RealmResults;
 
 public class GradesRecyclerAdapter extends RecyclerView.Adapter {
     private RealmResults<GradesCourse> courses;
+    private Realm realm;
 
     public GradesRecyclerAdapter(RealmResults<GradesCourse> courses) {
         this.courses = courses;
     }
 
     @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+
+        realm = Realm.getDefaultInstance();
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
         GradesCourse course = courses.get(i);
-        Realm realm = Realm.getDefaultInstance();
+
         RealmResults<Grades> data = realm.where(Grades.class).equalTo("kodemtk", course.getKodemtk()).findAll();
         GradesViewHolder gradesViewHolder = (GradesViewHolder) holder;
         gradesViewHolder.courseName.setText(data.get(0).getCourse());
@@ -72,7 +80,7 @@ public class GradesRecyclerAdapter extends RecyclerView.Adapter {
                 gradesViewHolder.cardView.setCardBackgroundColor(Color.parseColor("#795548"));
             }
         }catch (ArrayIndexOutOfBoundsException e){gradesViewHolder.cardView.setCardBackgroundColor(Color.parseColor("#795548"));}
-        realm.close();
+
     }
 
     @Override
@@ -111,5 +119,11 @@ public class GradesRecyclerAdapter extends RecyclerView.Adapter {
 
             cardView = (CardView) itemView.findViewById(R.id.item_grades_cardview);
         }
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        realm.close();
+        super.onDetachedFromRecyclerView(recyclerView);
     }
 }

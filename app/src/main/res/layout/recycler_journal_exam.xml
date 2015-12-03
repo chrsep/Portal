@@ -24,7 +24,7 @@
         android:textColor="@color/secondary_white"/>
 
     <TextView
-        android:id="@+id/journal_exam_time"
+        android:id="@+id/journal_exam_room"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -34,7 +34,7 @@
         android:textColor="@color/secondary_white"/>
 
     <TextView
-        android:id="@+id/journal_exam_room"
+        android:id="@+id/journal_exam_shift"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

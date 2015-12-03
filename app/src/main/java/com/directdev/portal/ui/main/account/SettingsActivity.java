@@ -12,7 +12,6 @@ import com.google.android.gms.analytics.Tracker;
 
 
 public class SettingsActivity extends Activity {
-    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +19,6 @@ public class SettingsActivity extends Activity {
         getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingFragment()).commit();
 
         Portal application = (Portal) getApplication();
-        mTracker = application.getDefaultTracker();
     }
 
     public static class SettingFragment extends PreferenceFragment {
@@ -35,7 +33,5 @@ public class SettingsActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        mTracker.setScreenName("MainActivity");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 }

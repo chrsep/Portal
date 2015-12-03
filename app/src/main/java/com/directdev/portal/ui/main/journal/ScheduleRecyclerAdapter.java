@@ -22,31 +22,31 @@ public class ScheduleRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
-        ScheduleViewHolder scheduleHolder = (ScheduleViewHolder) holder;
-        scheduleHolder.course.setText(data.get(i).getCourseName());
-        scheduleHolder.room.setText(data.get(i).getRoom());
+        ViewHolder viewHolder = (ViewHolder) holder;
+        viewHolder.course.setText(data.get(i).getCourseName());
+        viewHolder.room.setText(data.get(i).getRoom());
         if (data.get(i).getMode().equals("GSLC")) {
-            scheduleHolder.mode.setText(data.get(i).getMode() + "   ");
-            scheduleHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#f44336"));
-            scheduleHolder.shift.setText("");
+            viewHolder.mode.setText(data.get(i).getMode() + "   ");
+            viewHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#f44336"));
+            viewHolder.shift.setText("");
         } else {
-            scheduleHolder.shift.setText(data.get(i).getShift().substring(0,5));
+            viewHolder.shift.setText(data.get(i).getShift().substring(0,5));
             switch (data.get(i).getType()) {
                 case "LEC":
-                    scheduleHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#ffeb3b"));
-                    scheduleHolder.mode.setText(data.get(i).getType() + "   ");
+                    viewHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#ffeb3b"));
+                    viewHolder.mode.setText(data.get(i).getType() + "   ");
                     break;
                 case "LAB":
-                    scheduleHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#4caf50"));
-                    scheduleHolder.mode.setText(data.get(i).getType() + "   ");
+                    viewHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#4caf50"));
+                    viewHolder.mode.setText(data.get(i).getType() + "   ");
                     break;
                 case "CL":
-                    scheduleHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#00B0FF"));
-                    scheduleHolder.mode.setText(data.get(i).getType() + "    ");
+                    viewHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#00B0FF"));
+                    viewHolder.mode.setText(data.get(i).getType() + "    ");
                     break;
                 case "TUT":
-                    scheduleHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#00E676"));
-                    scheduleHolder.mode.setText(data.get(i).getType() + "    ");
+                    viewHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#00E676"));
+                    viewHolder.mode.setText(data.get(i).getType() + "    ");
             }
         }
     }
@@ -61,19 +61,19 @@ public class ScheduleRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public ScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_journal_schedule, parent, false);
-        return new ScheduleViewHolder(v);
+        return new ViewHolder(v);
     }
 
-    public static class ScheduleViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView course;
         TextView room;
         TextView mode;
         TextView shift;
         TextView typeIdentifier;
 
-        ScheduleViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             course = (TextView) itemView.findViewById(R.id.course);
             room = (TextView) itemView.findViewById(R.id.room);
@@ -82,4 +82,5 @@ public class ScheduleRecyclerAdapter extends RecyclerView.Adapter {
             typeIdentifier = (TextView) itemView.findViewById(R.id.type_identifier);
         }
     }
+
 }

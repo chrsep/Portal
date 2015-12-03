@@ -12,6 +12,10 @@ import com.directdev.portal.tools.model.Exam;
 
 import io.realm.RealmResults;
 
+/**
+ *  This is a recyclerView Adapter, it's job is to bind data to the views in the recyclerView
+ *  this specific adapter is used to display the exam data inside Journal tab
+ */
 
 public class ExamRecyclerAdapter extends RecyclerView.Adapter {
     private RealmResults<Exam> data;
@@ -20,6 +24,7 @@ public class ExamRecyclerAdapter extends RecyclerView.Adapter {
         this.data = data;
     }
 
+    //This binds data to the view
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
         ScheduleViewHolder viewHolder = (ScheduleViewHolder) holder;
@@ -46,6 +51,7 @@ public class ExamRecyclerAdapter extends RecyclerView.Adapter {
         return new ScheduleViewHolder(v);
     }
 
+    //This to holds all the view
     public static class ScheduleViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         TextView chair;
@@ -56,8 +62,8 @@ public class ExamRecyclerAdapter extends RecyclerView.Adapter {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.journal_exam_name);
             chair = (TextView) itemView.findViewById(R.id.journal_exam_chair);
-            time = (TextView) itemView.findViewById(R.id.journal_exam_room);
-            room = (TextView) itemView.findViewById(R.id.journal_exam_time);
+            time = (TextView) itemView.findViewById(R.id.journal_exam_shift);
+            room = (TextView) itemView.findViewById(R.id.journal_exam_room);
         }
     }
 }

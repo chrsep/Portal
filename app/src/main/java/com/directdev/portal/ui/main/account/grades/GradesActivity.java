@@ -30,7 +30,6 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class GradesActivity extends AppCompatActivity {
-    private Tracker mTracker;
     private Realm realm;
 
     @Override
@@ -67,14 +66,11 @@ public class GradesActivity extends AppCompatActivity {
                 .putContentId("studentData"));
 
         Portal application = (Portal) getApplication();
-        mTracker = application.getDefaultTracker();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mTracker.setScreenName("GradesActivity");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

@@ -33,7 +33,6 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class FinanceActivity extends AppCompatActivity {
-    private Tracker mTracker;
     private Realm realm;
 
     @Override
@@ -77,14 +76,11 @@ public class FinanceActivity extends AppCompatActivity {
                 .putContentId("studentData"));
 
         Portal application = (Portal) getApplication();
-        mTracker = application.getDefaultTracker();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mTracker.setScreenName("FinanceActivity");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.directdev.portal.R;
+import com.directdev.portal.tools.event.RecyclerClickEvent;
+import com.directdev.portal.tools.helper.RecyclerItemClickListener;
 import com.directdev.portal.tools.model.Exam;
 import com.directdev.portal.tools.model.Finance;
 import com.directdev.portal.tools.model.Schedule;
@@ -25,6 +27,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
+import de.greenrobot.event.EventBus;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -32,6 +35,7 @@ import io.realm.RealmResults;
 public class JournalRecyclerAdapter extends RecyclerView.Adapter {
     private List<Date> data;
     private Context ctx;
+    private Realm realm;
 
     public JournalRecyclerAdapter(Context ctx, List<Date> data) {
         this.data = data;
@@ -39,13 +43,17 @@ public class JournalRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        realm = Realm.getDefaultInstance();
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
         ScheduleViewHolder scheduleHolder = (ScheduleViewHolder) holder;
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<Schedule> schedules = realm.where(Schedule.class).equalTo("Date", data.get(i)).findAll();
+        final RealmResults<Schedule> schedules = realm.where(Schedule.class).equalTo("Date", data.get(i)).findAll();
         RealmResults<Exam> exams = realm.where(Exam.class).equalTo("ExamDate", data.get(i)).findAll();
-        RealmResults<Finance> finance = realm.where(Finance.class).equalTo("ITEM_EFFECTIVE_DT", data.get(i)).equalTo("ITEM_TYPE_CD","C").findAll();
-
+        RealmResults<Finance> finance = realm.where(Finance.class).equalTo("ITEM_EFFECTIVE_DT", data.get(i)).findAll();
 
         SimpleDateFormat toDay = new SimpleDateFormat("EEEE",Locale.US);
         SimpleDateFormat date = new SimpleDateFormat("dd MMM yyyy",Locale.US);
@@ -73,16 +81,33 @@ public class JournalRecyclerAdapter extends RecyclerView.Adapter {
         }
 
         ScheduleRecyclerAdapter scheduleAdapter = new ScheduleRecyclerAdapter(schedules);
-        scheduleHolder.scheduleRecycler.setLayoutManager(new LinearLayoutManager(ctx));
+        if(!schedules.isEmpty()){
+            scheduleHolder.scheduleRecycler.setLayoutManager(new LinearLayoutManager(ctx));
+        }
         scheduleHolder.scheduleRecycler.setAdapter(scheduleAdapter);
 
         ExamRecyclerAdapter examRecyclerAdapter = new ExamRecyclerAdapter(exams);
-        scheduleHolder.examRecycler.setLayoutManager(new LinearLayoutManager(ctx));
+        if(!exams.isEmpty()){
+            scheduleHolder.examRecycler.setLayoutManager(new LinearLayoutManager(ctx));
+        }
+
         scheduleHolder.examRecycler.setAdapter(examRecyclerAdapter);
 
+        FinanceRecyclerAdapter financeRecyclerAdapter = new FinanceRecyclerAdapter(finance);
+        if(!finance.isEmpty()){
+            scheduleHolder.financeRecycler.setLayoutManager(new LinearLayoutManager(ctx));
+        }
+        scheduleHolder.financeRecycler.setAdapter(financeRecyclerAdapter);
+
+        scheduleHolder.financeRecycler.setNestedScrollingEnabled(false);
         scheduleHolder.scheduleRecycler.setNestedScrollingEnabled(false);
         scheduleHolder.examRecycler.setNestedScrollingEnabled(false);
-        realm.close();
+
+    }
+
+    @Override
+    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
     }
 
     @Override
@@ -100,7 +125,7 @@ public class JournalRecyclerAdapter extends RecyclerView.Adapter {
         return new ScheduleViewHolder(v);
     }
 
-    public static class ScheduleViewHolder extends RecyclerView.ViewHolder {
+    public class ScheduleViewHolder extends RecyclerView.ViewHolder {
         TextView dateTextView;
         TextView dayTextView;
         RelativeLayout topBarBg;
@@ -108,7 +133,7 @@ public class JournalRecyclerAdapter extends RecyclerView.Adapter {
         RecyclerView scheduleRecycler;
         RecyclerView financeRecycler;
         RecyclerView examRecycler;
-        ScheduleViewHolder(View itemView) {
+        ScheduleViewHolder(final View itemView) {
             super(itemView);
             dateTextView = (TextView) itemView.findViewById(R.id.date);
             dayTextView = (TextView) itemView.findViewById(R.id.day);
@@ -118,7 +143,21 @@ public class JournalRecyclerAdapter extends RecyclerView.Adapter {
             scheduleRecycler = (RecyclerView) itemView.findViewById(R.id.schedule_journal_recycler);
             financeRecycler = (RecyclerView) itemView.findViewById(R.id.finance_journal_recycler);
             examRecycler = (RecyclerView) itemView.findViewById(R.id.exam_journal_recycler);
+
+            scheduleRecycler.addOnItemTouchListener(new RecyclerItemClickListener(ctx, new RecyclerItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    RealmResults<Schedule> schedules = realm.where(Schedule.class).equalTo("Date", data.get(getAdapterPosition())).findAll();
+                    EventBus.getDefault().post(new RecyclerClickEvent(schedules.get(position)));
+                }
+            }));
         }
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        realm.close();
+        super.onDetachedFromRecyclerView(recyclerView);
     }
 
 }

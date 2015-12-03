@@ -4,10 +4,14 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.RequestFuture;
 import com.directdev.portal.R;
+import com.directdev.portal.tools.event.UpdateErrorEvent;
 import com.directdev.portal.tools.fetcher.FetchAccountData;
 import com.directdev.portal.tools.helper.Pref;
 import com.directdev.portal.tools.model.Course;
@@ -16,6 +20,7 @@ import com.directdev.portal.tools.model.Exam;
 import com.directdev.portal.tools.model.Finance;
 import com.directdev.portal.tools.model.Grades;
 import com.directdev.portal.tools.model.GradesCourse;
+import com.directdev.portal.tools.model.Resource;
 import com.directdev.portal.tools.model.Schedule;
 import com.directdev.portal.tools.model.Terms;
 import com.directdev.portal.tools.event.UpdateFailedEvent;
@@ -23,6 +28,7 @@ import com.directdev.portal.tools.event.UpdateFinishEvent;
 import com.directdev.portal.tools.helper.Request;
 import com.directdev.portal.tools.helper.VolleySingleton;
 import com.directdev.portal.tools.helper.GsonHelper;
+import com.directdev.portal.ui.main.MainActivity;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
@@ -78,6 +84,7 @@ public class UpdateService extends IntentService {
     private static final String TERMS = "com.directdev.portal.tools.services.action.TERMS";
     private static final String COURSE = "com.directdev.portal.tools.services.action.COURSE";
     private static final String ACCOUNT = "com.directdev.portal.tools.services.action.ACCOUNT";
+    private static final String RESOURCES = "com.directdev.portal.tools.services.action.RESOURCES";
     public static boolean isActive = false;
 
     public UpdateService() {
@@ -87,13 +94,15 @@ public class UpdateService extends IntentService {
     // Below are helper methods to prepare intents to start this UpdateService service.
     public static void all(Context ctx){
         if(!isActive) {
-            UpdateService.terms(ctx);
             UpdateService.exam(ctx);
             UpdateService.schedule(ctx);
+            UpdateService.terms(ctx);
             UpdateService.finance(ctx);
             UpdateService.grades(ctx);
-            UpdateService.course(ctx);
             UpdateService.account(ctx);
+
+            UpdateService.course(ctx);
+            UpdateService.resources(ctx);
         }
     }
 
@@ -139,6 +148,12 @@ public class UpdateService extends IntentService {
         ctx.startService(intent);
     }
 
+    public static void resources(Context ctx) {
+        Intent intent = new Intent(ctx, UpdateService.class);
+        intent.setAction(RESOURCES);
+        ctx.startService(intent);
+    }
+
     @Override
     public void onCreate() {
         isActive = true;
@@ -146,6 +161,7 @@ public class UpdateService extends IntentService {
         super.onCreate();
     }
 
+    //This get called when startService is called
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
@@ -164,9 +180,12 @@ public class UpdateService extends IntentService {
                 handleCourse();
             }else if (ACCOUNT.equals(action)) {
                 handleAccount();
+            }else if (RESOURCES.equals(action)) {
+                handleResource();
             }
         }
     }
+
     //Everything below handles the data request and Manipulation
     private void handleSchedule() {
 
@@ -178,13 +197,21 @@ public class UpdateService extends IntentService {
         RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
 
         //Add a new request to the RequestQueue
-        queue.add(Request.create(this, getString(R.string.request_schedule), future, future));
+        queue.add(Request.create(this, getString(R.string.request_schedule), future, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                EventBus.getDefault().post(new UpdateErrorEvent(error.toString()));
+                stopSelf();
+            }
+        }));
         String response = "";
         try{
+
             //Get the response from future.
             response = future.get();
         } catch (Exception e) {}
         try{
+
             //Turns the response(Which is a JSONArray) to a list of object(Here is Schedule and Dates Objects)
             List<Schedule> schedules = GsonHelper.create().fromJson(response, new TypeToken<List<Schedule>>() {
             }.getType());
@@ -200,8 +227,11 @@ public class UpdateService extends IntentService {
             realm.commitTransaction();
             realm.close();
         }catch (JsonSyntaxException e) {
+
             //Called when request fails
             stopSelf();
+
+            //Post the updateFailedEvent to eventBus when update failed
             EventBus.getDefault().post(new UpdateFailedEvent());
         }
     }
@@ -209,7 +239,13 @@ public class UpdateService extends IntentService {
     private void handleExam() {
         RequestFuture<String> future = RequestFuture.newFuture();
         RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
-        queue.add(Request.create(this, getString(R.string.request_exam), future,future));
+        queue.add(Request.create(this, getString(R.string.request_exam), future,new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                EventBus.getDefault().post(new UpdateErrorEvent(error.toString()));
+                stopSelf();
+            }
+        }));
         String response = "";
         try{
             response = future.get();
@@ -236,7 +272,13 @@ public class UpdateService extends IntentService {
     private void handleFinance() {
         RequestFuture<String> future = RequestFuture.newFuture();
         RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
-        queue.add(Request.create(this, getString(R.string.request_finance),future, future));
+        queue.add(Request.create(this, getString(R.string.request_finance),future,new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                EventBus.getDefault().post(error.toString());
+                stopSelf();
+            }
+        }));
         String data;
         String response = "";
         try{
@@ -301,7 +343,13 @@ public class UpdateService extends IntentService {
             for (Terms term:terms) {
                 RequestFuture<String> future = RequestFuture.newFuture();
                 RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
-                queue.add(Request.create(this, getString(R.string.request_grades) + term.getValue(), future,future));
+                queue.add(Request.create(this, getString(R.string.request_grades) + term.getValue(), future,new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        EventBus.getDefault().post(error.toString());
+                        stopSelf();
+                    }
+                }));
                 String data;
                 String response = "";
                 Log.d("handleGrades", "Called !!!!!!"+term);
@@ -333,7 +381,13 @@ public class UpdateService extends IntentService {
     private void handleTerms() {
         RequestFuture<String> future = RequestFuture.newFuture();
         RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
-        queue.add(Request.create(this, getString(R.string.request_terms), future, future));
+        queue.add(Request.create(this, getString(R.string.request_terms), future, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                EventBus.getDefault().post(error.toString());
+                stopSelf();
+            }
+        }));
         String response = "";
         try{
             response = future.get();
@@ -358,24 +412,33 @@ public class UpdateService extends IntentService {
             RealmResults<Terms> terms = realm.where(Terms.class).findAll();
             realm.beginTransaction();
             for (Terms term:terms) {
-                RequestFuture<String> future = RequestFuture.newFuture();
-                RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
-                queue.add(Request.create(this, getString(R.string.request_course) + term.getValue(), future,future));
-                String data;
-                String response = "";
-                Log.d("handleCourse", "Called !!!!!!"+term);
-                try{
-                    response = future.get();
-                } catch (Exception e) {}
-                JSONObject grade = new JSONObject(response);
-                JSONArray arrays = grade.getJSONArray("Courses");
-                for(int j = 0 ; j < arrays.length() ; j++){
-                    arrays.getJSONObject(j).put("STRM",term.getValue());
+                RealmResults<Course> course = realm.where(Course.class).equalTo("STRM",term.getValue()).findAll();
+                if(course.isEmpty()){
+                    RequestFuture<String> future = RequestFuture.newFuture();
+                    RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
+                    queue.add(Request.create(this, getString(R.string.request_course) + term.getValue(), future,new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            EventBus.getDefault().post(error.toString());
+                            stopSelf();
+                        }
+                    }));
+                    String data;
+                    String response = "";
+                    Log.d("handleCourse", "Called !!!!!!"+term);
+                    try{
+                        response = future.get();
+                    } catch (Exception e) {}
+                    JSONObject grade = new JSONObject(response);
+                    JSONArray arrays = grade.getJSONArray("Courses");
+                    for(int j = 0 ; j < arrays.length() ; j++){
+                        arrays.getJSONObject(j).put("STRM",term.getValue());
+                    }
+                    data = arrays.toString();
+                    List<Course> courses = GsonHelper.create().fromJson(data, new TypeToken<List<Course>>() {
+                    }.getType());
+                    realm.copyToRealmOrUpdate(courses);
                 }
-                data = arrays.toString();
-                List<Course> courses = GsonHelper.create().fromJson(data, new TypeToken<List<Course>>() {
-                }.getType());
-                realm.copyToRealmOrUpdate(courses);
             }
             realm.commitTransaction();
         } catch (JSONException e) {
@@ -390,10 +453,89 @@ public class UpdateService extends IntentService {
         //TODO Migrate FetchAccountData to update service
     }
 
+    private void handleResource(){
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Course> courses = realm.where(Course.class).findAll();
+        boolean shouldUpdate = false;
+        for (Course course:courses) {
+            RealmResults<Resource> resources = realm.where(Resource.class).equalTo("description",course.getCOURSEID()).findAll();
+            if(resources.isEmpty()){
+                shouldUpdate = true;
+                break;
+            }
+        }
+        if(shouldUpdate){
+            try {
+                realm.beginTransaction();
+                realm.clear(Resource.class);
+                for (Course course:courses) {
+                    RequestFuture<String> future = RequestFuture.newFuture();
+                    RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
+                    queue.add(Request.create(this, getString(R.string.request_resources)
+                            + course.getCOURSEID() + "/"
+                            + course.getCRSE_ID() + "/"
+                            + course.getSTRM() + "/"
+                            + course.getSSR_COMPONENT() + "/"
+                            + course.getCLASS_NBR(), future, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            EventBus.getDefault().post(error.toString());
+                            stopSelf();
+                        }
+                    }));
+                    String data;
+                    String response = "";
+                    try{
+                        response = future.get();
+                    } catch (Exception e) {}
+                    JSONObject object = new JSONObject(response);
+                    JSONArray pathArray = object.getJSONArray("Path");
+                    if(pathArray.length() != 0){
+                        JSONArray sessionArray = object.getJSONArray("Resources");
+                        for (int i = 0 ; i < pathArray.length() ; i++){
+                            pathArray.getJSONObject(i).put("description",course.getCOURSEID());
+                            for (int j = 0; j < sessionArray.length(); j++){
+                                if(sessionArray.getJSONObject(j).getInt("courseOutlineTopicID") == pathArray.getJSONObject(i).getInt("courseOutlineTopicID")){
+                                    pathArray.getJSONObject(i).put("courseOutlineTopicID",sessionArray.getJSONObject(j).getString("sessionIDNUM"));
+                                    break;
+                                }
+                            }
+                        }
+                        data = pathArray.toString();
+                        List<Resource> resources = GsonHelper.create().fromJson(data, new TypeToken<List<Resource>>() {
+                        }.getType());
+                        Log.d("handleResource: ", data);
+                        realm.copyToRealm(resources);
+                    }else {
+                        Resource resource = new Resource();
+                        resource.setDescription(course.getCOURSEID());
+                        resource.setCourseOutlineTopicID("N/A");
+                        resource.setFilename("N/A");
+                        resource.setLocation("N/A");
+                        resource.setMediaType("N/A");
+                        resource.setMediaTypeId(5);
+                        resource.setPath("N/A");
+                        resource.setPathid("N/A");
+                        resource.setTitle("N/A");
+                        realm.copyToRealm(resource);
+                    }
+                }
+                realm.commitTransaction();
+            } catch(JSONException e){
+                stopSelf();
+                EventBus.getDefault().post(new UpdateFailedEvent());
+            }finally {
+                realm.close();
+            }
+        }
+    }
+
     @Override
     public void onDestroy() {
         isActive = false;
         Log.d("Ondestroy", "Called !!!!!!");
+
+        //Post the UpdateFinishEvent to eventbus when update finish and service is destroyed
         EventBus.getDefault().post(new UpdateFinishEvent());
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
         Pref.save(getApplication(),getString(R.string.last_update_pref),sdf.format(new Date()));
