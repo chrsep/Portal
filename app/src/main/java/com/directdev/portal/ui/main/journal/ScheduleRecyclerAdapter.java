@@ -30,7 +30,11 @@ public class ScheduleRecyclerAdapter extends RecyclerView.Adapter {
             viewHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#f44336"));
             viewHolder.shift.setText("");
         } else {
-            viewHolder.shift.setText(data.get(i).getShift().substring(0,5));
+            try {
+                viewHolder.shift.setText(data.get(i).getShift().substring(0, 5));
+            }catch (StringIndexOutOfBoundsException e){
+                viewHolder.shift.setText("N/A");
+            }
             switch (data.get(i).getType()) {
                 case "LEC":
                     viewHolder.typeIdentifier.setBackgroundColor(Color.parseColor("#ffeb3b"));
