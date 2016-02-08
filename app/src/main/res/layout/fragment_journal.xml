@@ -1,9 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_layout_journal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_default"
-    tools:context="com.directdev.portal.ui.Journal.JournalFragment">
+    android:background="@color/bg_default">
 
     <LinearLayout
         android:id="@+id/joural_refresh_text"
@@ -18,19 +17,23 @@
             android:layout_height="42dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_refresh"
-            android:tint="#727272" />
+            android:tint="@color/secondary_white" />
 
         <TextView
+            android:id="@+id/journal_background_one"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="We are getting your data"
+            android:text="No activity to see yet"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/secondary_white"/>
 
         <TextView
+            android:id="@+id/journal_background_two"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pull down if we are not getting your data" />
+            android:text="Refresh to load and see new data"
+            android:textColor="@color/secondary_white"/>
 
     </LinearLayout>
 

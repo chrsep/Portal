@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.directdev.portal">
+    package="com.directdev.portal" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".tools.helper.Portal"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/title_activity_main"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,7 +37,7 @@
             android:name=".ui.main.account.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/SettingsTheme">
+            android:theme="@style/SettingsTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
@@ -47,7 +47,7 @@
             android:label="@string/title_activity_finance"
             android:launchMode="singleTop"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/FinanceTheme">
+            android:theme="@style/FinanceTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
@@ -57,7 +57,7 @@
             android:label="@string/title_activity_grades"
             android:launchMode="singleTop"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/GradesTheme">
+            android:theme="@style/GradesTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
@@ -70,13 +70,13 @@
         <activity
             android:name=".ui.access.WebappActivity"
             android:label="@string/title_activity_finance_webapp"
-            android:parentActivityName=".ui.main.account.finance.FinanceActivity">
+            android:parentActivityName=".ui.main.account.finance.FinanceActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.account.finance.FinanceActivity" />
         </activity>
 
-        <receiver android:name=".ui.widget.ScheduleWidget">
+        <receiver android:name=".ui.widget.ScheduleWidget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -94,25 +94,28 @@
         <receiver
             android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
         <receiver
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
-            android:enabled="true">
+            android:enabled="true" >
             <intent-filter>
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
         </receiver>
+
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
         <service
             android:name=".tools.services.UpdateService"
-            android:exported="false">
-
+            android:exported="false" >
         </service>
 
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

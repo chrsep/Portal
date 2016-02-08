@@ -8,19 +8,23 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
 import com.directdev.portal.R;
-import com.directdev.portal.tools.fetcher.FetchAccountData;
-import com.directdev.portal.tools.model.Dates;
 import com.directdev.portal.tools.event.UpdateFailedEvent;
 import com.directdev.portal.tools.event.UpdateFinishEvent;
+import com.directdev.portal.tools.fetcher.FetchAccountData;
+import com.directdev.portal.tools.model.Dates;
 import com.directdev.portal.tools.services.UpdateService;
 import com.directdev.portal.ui.access.LoginAuthorization;
 
@@ -95,9 +99,20 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         //We setup the date that are going to be displayed
         dateSetup();
+
+        if(dates.isEmpty()){
+            RelativeLayout background = (RelativeLayout) view.findViewById(R.id.parent_layout_journal);
+            background.setBackgroundColor(ContextCompat.getColor(getActivity(),R.color.primary_light));
+
+        }else {
+            TextView backgroundTextOne = (TextView) view.findViewById(R.id.journal_background_one);
+            TextView backgroundTextTwo = (TextView) view.findViewById(R.id.journal_background_two);
+            backgroundTextOne.setVisibility(View.GONE);
+            backgroundTextTwo.setVisibility(View.GONE);
+        }
+        recycler = (RecyclerView) view.findViewById(R.id.journal_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getBaseContext());
         adapter = new JournalRecyclerAdapter(getActivity(),dates);
-        recycler = (RecyclerView) view.findViewById(R.id.journal_recycler);
         recycler.setLayoutManager(layoutManager);
         recycler.setAdapter(adapter);
         super.onStart();
@@ -181,24 +196,36 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
      *  to display that list.
      */
     private void dateSetup(){
-
         //Set the date collection to use
         dates = new LinkedList<>();
-
+        String tempHolder;
         //Get today's date
         Date today = new Date();
         Date tested = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
         RealmResults<Dates> dateData = realm.where(Dates.class).findAll();
-        try {
-            if (!dateData.isEmpty()) {
-                dates.add(sdf.parse(sdf.format(tested)));
-            }
-        }catch (ParseException e){}
+
+        tempHolder = sdf.format(today);
+
         for (int i = 0 ; i < dateData.size() ; i++){
-            try{tested = sdf.parse(dateData.get(i).getDatePK());}catch (ParseException e){}
-            if(tested.after(today)) dates.add(tested);
+            try{
+                today =sdf.parse(tempHolder);
+                tested = sdf.parse(dateData.get(i).getDatePK());
+            }catch (ParseException e){}
+            if(tested.after(today)||tested.equals(today)) {
+                dates.add(tested);
+                Log.d("isEqualWorking", "yes");
+            }
         }
+        if (!dates.isEmpty()&&!dates.get(0).equals(today)){
+            try {
+                if (!dateData.isEmpty()) {
+                    dates.add(sdf.parse(sdf.format(today)));
+                }
+            }catch (ParseException e){}
+            Log.d("called","yes");
+        }else {Log.d("called","no");}
         Collections.sort(dates);
+
     }
 }

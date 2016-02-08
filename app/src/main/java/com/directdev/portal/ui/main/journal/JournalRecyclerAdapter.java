@@ -51,7 +51,7 @@ public class JournalRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
         ScheduleViewHolder scheduleHolder = (ScheduleViewHolder) holder;
-        final RealmResults<Schedule> schedules = realm.where(Schedule.class).equalTo("Date", data.get(i)).findAll();
+        RealmResults<Schedule> schedules = realm.where(Schedule.class).equalTo("Date", data.get(i)).findAll();
         RealmResults<Exam> exams = realm.where(Exam.class).equalTo("ExamDate", data.get(i)).findAll();
         RealmResults<Finance> finance = realm.where(Finance.class).equalTo("ITEM_EFFECTIVE_DT", data.get(i)).findAll();
 

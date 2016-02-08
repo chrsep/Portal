@@ -32,7 +32,6 @@ import com.crashlytics.android.answers.ContentViewEvent;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.event.RecyclerClickEvent;
 import com.directdev.portal.tools.event.UpdateErrorEvent;
-import com.directdev.portal.tools.event.UpdateFinishEvent;
 import com.directdev.portal.tools.helper.MainViewPagerAdapter;
 import com.directdev.portal.tools.helper.Portal;
 import com.directdev.portal.tools.helper.Pref;
@@ -43,11 +42,6 @@ import com.directdev.portal.ui.main.account.AccountFragment;
 import com.directdev.portal.ui.main.journal.JournalFragment;
 import com.directdev.portal.ui.main.resource.ResourceFragment;
 import com.flipboard.bottomsheet.BottomSheetLayout;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
-import java.io.File;
-import java.util.Collections;
 
 import de.greenrobot.event.EventBus;
 import io.realm.Realm;
@@ -190,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
                             new AlertDialog.Builder(MainActivity.this)
                                     .setMessage("We need write access to download the file")
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             ActivityCompat.requestPermissions(MainActivity.this,
@@ -248,90 +242,43 @@ public class MainActivity extends AppCompatActivity {
     public void onEventMainThread(final UpdateErrorEvent event) {
         switch (textToShow){
             case 0:{
-                Toast.makeText(this,"Failed to connect, just ain't your day",Toast.LENGTH_SHORT).show();
-                Toast.makeText(this,"Sorry...",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Failed to connect, Sorry...",Toast.LENGTH_SHORT).show();
                 textToShow++;
-                // TODO: Use your own attributes to track content views in your app
-                Answers.getInstance().logContentView(new ContentViewEvent()
-                        .putContentName("See Toast")
-                        .putContentType("Toast")
-                        .putContentId("0"));
-
                 break;
             }
             case 1:{
                 Toast.makeText(this,"Still failed to connect, i feel you man",Toast.LENGTH_SHORT).show();
-                Toast.makeText(this,"keep trying",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Try again later",Toast.LENGTH_SHORT).show();
                 Toast.makeText(this,"Sorry...",Toast.LENGTH_SHORT).show();
                 textToShow++;
-                Answers.getInstance().logContentView(new ContentViewEvent()
-                        .putContentName("See Toast")
-                        .putContentType("Toast")
-                        .putContentId("1"));
                 break;
             }case 2:{
-                Toast.makeText(this,"Fails again and again",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"Still fails to connect",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"Sorry...",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Fails again, Sorry...",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"",Toast.LENGTH_SHORT).show();
                 textToShow++;
-                Answers.getInstance().logContentView(new ContentViewEvent()
-                        .putContentName("See Toast")
-                        .putContentType("Toast")
-                        .putContentId("2"));
                 break;
             }case 3:{
                 Toast.makeText(this,"Failure is the beginning of success",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"At least that's what people says",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"We still fails to connect to server",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"Sorry...",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Still fails to connect, Sorry...",Toast.LENGTH_LONG).show();
                 textToShow++;
-                Answers.getInstance().logContentView(new ContentViewEvent()
-                        .putContentName("See Toast")
-                        .putContentType("Toast")
-                        .putContentId("3"));
                 break;
             }case 4:{
                 Toast.makeText(this,"Failed to connect, maybe you should stop",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"There doesn't seems to be many hope left",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"Failed to connect to server.... again",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"Sorry...",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"The server might be down, Sorry...",Toast.LENGTH_LONG).show();
                 textToShow++;
-                Answers.getInstance().logContentView(new ContentViewEvent()
-                        .putContentName("See Toast")
-                        .putContentType("Toast")
-                        .putContentId("4"));
                 break;
             }
             case 5:{
                 Toast.makeText(this,"Looks like the server hates you...",Toast.LENGTH_LONG).show();
                 Toast.makeText(this,"Or maybe it's your phone that hates you....",Toast.LENGTH_LONG).show();
                 Toast.makeText(this,"Either way,",Toast.LENGTH_SHORT).show();
-                Toast.makeText(this,"failed to connect to server",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"Sorry...",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Failed to connect to server, Sorry...",Toast.LENGTH_LONG).show();
                 textToShow++;
-                Answers.getInstance().logContentView(new ContentViewEvent()
-                        .putContentName("See Toast")
-                        .putContentType("Toast")
-                        .putContentId("5"));
                 break;
             }case 6:{
-                Toast.makeText(this,"Let me tell you something",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"Why did the chicken cross the road?",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"Because.....",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"The chicken...",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"Can't connect to the server",Toast.LENGTH_SHORT).show();
-                Toast.makeText(this,"So he search for some signal",Toast.LENGTH_SHORT).show();
-                Toast.makeText(this,"because there is no signal",Toast.LENGTH_SHORT).show();
-                Toast.makeText(this,"Just like your condition",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"So, find a road...",Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"And cross it",Toast.LENGTH_SHORT).show();
-                Toast.makeText(this,"Then you probably will find some hope",Toast.LENGTH_LONG).show();
                 Toast.makeText(this,"Still can't connect, Sorry...",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Try looking for a better connection ",Toast.LENGTH_LONG).show();
                 textToShow = 0;
-                Answers.getInstance().logContentView(new ContentViewEvent()
-                        .putContentName("See Toast")
-                        .putContentType("Toast")
-                        .putContentId("6"));
                 break;
             }
         }
