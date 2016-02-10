@@ -19,15 +19,13 @@ import android.widget.Toast;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
 import com.directdev.portal.R;
-import com.directdev.portal.tools.model.Terms;
 import com.directdev.portal.tools.helper.MainViewPagerAdapter;
-import com.directdev.portal.tools.helper.Portal;
+import com.directdev.portal.tools.model.Terms;
 import com.directdev.portal.ui.access.WebappActivity;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class GradesActivity extends AppCompatActivity {
     private Realm realm;
@@ -39,7 +37,7 @@ public class GradesActivity extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
         TabLayout tabLayout = (TabLayout) findViewById(R.id.grades_tab);
         ViewPager viewPager = (ViewPager) findViewById(R.id.grades_viewpager);
-        RealmResults<Terms> terms = realm.where(Terms.class).findAll();
+        RealmResults<Terms> terms = realm.where(Terms.class).findAllSorted("value", Sort.DESCENDING);
         setupViewPager(viewPager, terms);
 
         tabLayout.setupWithViewPager(viewPager);
@@ -64,8 +62,6 @@ public class GradesActivity extends AppCompatActivity {
                 .putContentName("View grades")
                 .putContentType("Activity")
                 .putContentId("studentData"));
-
-        Portal application = (Portal) getApplication();
     }
 
     @Override

@@ -32,7 +32,6 @@ import com.directdev.portal.tools.event.PhotoResponseEvent;
 import com.directdev.portal.tools.event.ThereIsNewPhotoEvent;
 import com.directdev.portal.tools.fetcher.FetchAccountData;
 import com.directdev.portal.ui.access.LogoutAuthorization;
-import com.directdev.portal.ui.main.account.SettingsActivity;
 import com.directdev.portal.ui.main.account.finance.FinanceActivity;
 import com.directdev.portal.ui.main.account.grades.GradesActivity;
 

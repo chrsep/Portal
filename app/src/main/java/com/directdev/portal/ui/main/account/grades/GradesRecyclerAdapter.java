@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.directdev.portal.R;
-import com.directdev.portal.tools.model.Course;
 import com.directdev.portal.tools.model.Grades;
 import com.directdev.portal.tools.model.GradesCourse;
 
@@ -41,26 +40,45 @@ public class GradesRecyclerAdapter extends RecyclerView.Adapter {
         try{
             gradesViewHolder.courseGrade.setText(data.get(0).getCourse_grade());
         }catch (ArrayIndexOutOfBoundsException e){
-            gradesViewHolder.courseGrade.setText("N/A");
+            gradesViewHolder.courseGrade.setText("-");
         }
 
         for (Grades grade: data) {
             switch (grade.getLam()) {
                 case "MID EXAM":
                     gradesViewHolder.mid.setVisibility(View.VISIBLE);
-                    gradesViewHolder.mid.setText("Mid Exam    \t: " + grade.getScore());
+                    if(grade.getScore().equals("N/A")){
+                        gradesViewHolder.mid.setText("Mid Exam    \t: -");
+                    }else{
+                        gradesViewHolder.mid.setText("Mid Exam    \t: " + grade.getScore());
+                    }
                     break;
                 case "FINAL EXAM":
-                    gradesViewHolder.fin.setVisibility(View.VISIBLE);
-                    gradesViewHolder.fin.setText("Final Exam  \t: " + grade.getScore());
+                    if(grade.getScore().equals("N/A")){
+                        gradesViewHolder.fin.setVisibility(View.VISIBLE);
+                        gradesViewHolder.fin.setText("Final Exam  \t: -");
+                    }else{
+                        gradesViewHolder.fin.setVisibility(View.VISIBLE);
+                        gradesViewHolder.fin.setText("Final Exam  \t: " + grade.getScore());
+                    }
                     break;
                 case "LABORATORY":
-                    gradesViewHolder.lab.setVisibility(View.VISIBLE);
-                    gradesViewHolder.lab.setText("Laboratory  \t: " + grade.getScore());
+                    if(grade.getScore().equals("N/A")){
+                        gradesViewHolder.lab.setVisibility(View.VISIBLE);
+                        gradesViewHolder.lab.setText("Laboratory  \t: -");
+                    }else{
+                        gradesViewHolder.lab.setVisibility(View.VISIBLE);
+                        gradesViewHolder.lab.setText("Laboratory  \t: " + grade.getScore());
+                    }
                     break;
                 case "ASSIGNMENT":
-                    gradesViewHolder.assignment.setVisibility(View.VISIBLE);
-                    gradesViewHolder.assignment.setText("Assignment\t: " + grade.getScore());
+                    if(grade.getScore().equals("N/A")){
+                        gradesViewHolder.assignment.setVisibility(View.VISIBLE);
+                        gradesViewHolder.assignment.setText("Assignment\t: -");
+                    }else{
+                        gradesViewHolder.assignment.setVisibility(View.VISIBLE);
+                        gradesViewHolder.assignment.setText("Assignment\t: " + grade.getScore());
+                    }
                     break;
             }
         }

@@ -19,12 +19,9 @@ import android.widget.Toast;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
 import com.directdev.portal.R;
-import com.directdev.portal.tools.model.Finance;
 import com.directdev.portal.tools.helper.MainViewPagerAdapter;
-import com.directdev.portal.tools.helper.Portal;
+import com.directdev.portal.tools.model.Finance;
 import com.directdev.portal.ui.access.WebappActivity;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -74,8 +71,6 @@ public class FinanceActivity extends AppCompatActivity {
                 .putContentName("View Finance")
                 .putContentType("Activity")
                 .putContentId("studentData"));
-
-        Portal application = (Portal) getApplication();
     }
 
     @Override

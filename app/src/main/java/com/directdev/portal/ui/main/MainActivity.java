@@ -33,14 +33,12 @@ import com.directdev.portal.R;
 import com.directdev.portal.tools.event.RecyclerClickEvent;
 import com.directdev.portal.tools.event.UpdateErrorEvent;
 import com.directdev.portal.tools.helper.MainViewPagerAdapter;
-import com.directdev.portal.tools.helper.Portal;
 import com.directdev.portal.tools.helper.Pref;
 import com.directdev.portal.tools.model.Resource;
 import com.directdev.portal.ui.access.LoginActivity;
 import com.directdev.portal.ui.access.WebappActivity;
 import com.directdev.portal.ui.main.account.AccountFragment;
 import com.directdev.portal.ui.main.journal.JournalFragment;
-import com.directdev.portal.ui.main.resource.ResourceFragment;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 
 import de.greenrobot.event.EventBus;
@@ -74,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         // Analytics to track crashes, user growth and so on
-        Portal application = (Portal) getApplication();
         EventBus.getDefault().register(this);
         realm = Realm.getDefaultInstance();
         textToShow = 0;
@@ -97,15 +94,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.toolbar_notification:
-                //Show toast (the writing that pops up on the bottom) when notification clicked
-                Toast notif = Toast.makeText(this, "Notification is still being built", Toast.LENGTH_SHORT);
-                notif.show();
-                return true;
-            case R.id.toolbar_news:
-                //Show toast (the writing that pops up on the bottom) when news clicked
-                Toast news = Toast.makeText(this, "News is still being built", Toast.LENGTH_SHORT);
-                news.show();
+            case R.id.action_info:
                 return true;
             case R.id.action_schedule_webapp:
                 //Launched the activity to open webapp when "open in webapp" clicked
@@ -131,10 +120,8 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
         new JournalFragment();
-        new ResourceFragment();
         new AccountFragment();
         adapter.addFrag(new JournalFragment(), "JOURNAL");
-        adapter.addFrag(new ResourceFragment(), "INFO");
         adapter.addFrag(new AccountFragment(), "ACCOUNT");
         viewPager.setAdapter(adapter);
     }

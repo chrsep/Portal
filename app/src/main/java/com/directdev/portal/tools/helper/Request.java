@@ -5,7 +5,6 @@ import android.content.Context;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
-import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.directdev.portal.R;
 
@@ -23,7 +22,7 @@ public class Request extends StringRequest {
 
     public static Request create(Context ctx, String url, Response.Listener<String> listener, Response.ErrorListener error) {
         Request request =  new Request(ctx, url, listener,error);
-        request.setRetryPolicy(new DefaultRetryPolicy(15000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setRetryPolicy(new DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
 

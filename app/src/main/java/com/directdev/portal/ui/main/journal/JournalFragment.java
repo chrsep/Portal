@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,6 +140,14 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }
             });
             swipeLayout.setEnabled(false);
+        }else{
+            swipeLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeLayout.setRefreshing(false);
+                }
+            });
+            swipeLayout.setEnabled(true);
         }
         super.onResume();
     }
@@ -214,7 +221,6 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }catch (ParseException e){}
             if(tested.after(today)||tested.equals(today)) {
                 dates.add(tested);
-                Log.d("isEqualWorking", "yes");
             }
         }
         if (!dates.isEmpty()&&!dates.get(0).equals(today)){
@@ -223,8 +229,7 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     dates.add(sdf.parse(sdf.format(today)));
                 }
             }catch (ParseException e){}
-            Log.d("called","yes");
-        }else {Log.d("called","no");}
+        }
         Collections.sort(dates);
 
     }
