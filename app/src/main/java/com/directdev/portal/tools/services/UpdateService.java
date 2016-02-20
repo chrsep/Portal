@@ -1,10 +1,8 @@
 package com.directdev.portal.tools.services;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
+import android.content.Intent;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -12,8 +10,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.RequestFuture;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.event.UpdateErrorEvent;
-import com.directdev.portal.tools.fetcher.FetchAccountData;
+import com.directdev.portal.tools.event.UpdateFailedEvent;
+import com.directdev.portal.tools.event.UpdateFinishEvent;
+import com.directdev.portal.tools.helper.GsonHelper;
 import com.directdev.portal.tools.helper.Pref;
+import com.directdev.portal.tools.helper.Request;
+import com.directdev.portal.tools.helper.VolleySingleton;
 import com.directdev.portal.tools.model.Course;
 import com.directdev.portal.tools.model.Dates;
 import com.directdev.portal.tools.model.Exam;
@@ -23,12 +25,6 @@ import com.directdev.portal.tools.model.GradesCourse;
 import com.directdev.portal.tools.model.Resource;
 import com.directdev.portal.tools.model.Schedule;
 import com.directdev.portal.tools.model.Terms;
-import com.directdev.portal.tools.event.UpdateFailedEvent;
-import com.directdev.portal.tools.event.UpdateFinishEvent;
-import com.directdev.portal.tools.helper.Request;
-import com.directdev.portal.tools.helper.VolleySingleton;
-import com.directdev.portal.tools.helper.GsonHelper;
-import com.directdev.portal.ui.main.MainActivity;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
@@ -77,6 +73,7 @@ import io.realm.RealmResults;
  */
 
 public class UpdateService extends IntentService {
+    private static final String TAG = "UpdateService";
     private static final String SCHEDULE = "com.directdev.portal.tools.services.action.SCHEDULE";
     private static final String EXAM = "com.directdev.portal.tools.services.action.EXAM";
     private static final String FINANCE = "com.directdev.portal.tools.services.action.FINANCE";
@@ -157,7 +154,6 @@ public class UpdateService extends IntentService {
     @Override
     public void onCreate() {
         isActive = true;
-        Log.d("onCreate", "Called !!!!!!");
         super.onCreate();
     }
 
@@ -188,7 +184,6 @@ public class UpdateService extends IntentService {
 
     //Everything below handles the data request and Manipulation
     private void handleSchedule() {
-
         //Creates a future, volley usually request data Asynchronously, we use future to make volley
         //do some sort of Synchronous request.
         RequestFuture<String> future = RequestFuture.newFuture();
@@ -210,29 +205,31 @@ public class UpdateService extends IntentService {
             //Get the response from future.
             response = future.get();
         } catch (Exception e) {}
-        try{
+        if(!response.equals("[]")) {
+            try {
 
-            //Turns the response(Which is a JSONArray) to a list of object(Here is Schedule and Dates Objects)
-            List<Schedule> schedules = GsonHelper.create().fromJson(response, new TypeToken<List<Schedule>>() {
-            }.getType());
-            List<Dates> dates = GsonHelper.create().fromJson(response, new TypeToken<List<Dates>>() {
-            }.getType());
+                //Turns the response(Which is a JSONArray) to a list of object(Here is Schedule and Dates Objects)
+                List<Schedule> schedules = GsonHelper.create().fromJson(response, new TypeToken<List<Schedule>>() {
+                }.getType());
+                List<Dates> dates = GsonHelper.create().fromJson(response, new TypeToken<List<Dates>>() {
+                }.getType());
 
-            //Save the objects that is return by Gson to realm
-            Realm realm = Realm.getDefaultInstance();
-            realm.beginTransaction();
-            realm.clear(Schedule.class);
-            realm.copyToRealm(schedules);
-            realm.copyToRealmOrUpdate(dates);
-            realm.commitTransaction();
-            realm.close();
-        }catch (JsonSyntaxException e) {
+                //Save the objects that is return by Gson to realm
+                Realm realm = Realm.getDefaultInstance();
+                realm.beginTransaction();
+                realm.clear(Schedule.class);
+                realm.copyToRealm(schedules);
+                realm.copyToRealmOrUpdate(dates);
+                realm.commitTransaction();
+                realm.close();
+            } catch (JsonSyntaxException e) {
 
-            //Called when request fails
-            stopSelf();
+                //Called when request fails
+                stopSelf();
 
-            //Post the updateFailedEvent to eventBus when update failed
-            EventBus.getDefault().post(new UpdateFailedEvent());
+                //Post the updateFailedEvent to eventBus when update failed
+                EventBus.getDefault().post(new UpdateFailedEvent());
+            }
         }
     }
 
@@ -288,8 +285,8 @@ public class UpdateService extends IntentService {
 
             /**
              * Finance data is structured like this {"Status":[*Data that we want*]}. The GSON requires
-             * JSONArray to turn it into a List of object(List<Finance>). So we have to get the JSONArray
-             * out of the "status" property of the JSONObject
+             * the JSONArray of the *Data that we want* to turn it into a List of object(List<Finance>).
+             * So we have to get the JSONArray out of the "Status" property of the JSONObject
              */
             JSONObject finance = new JSONObject(response);
             data = finance.getJSONArray("Status").toString();
@@ -352,7 +349,6 @@ public class UpdateService extends IntentService {
                 }));
                 String data;
                 String response = "";
-                Log.d("handleGrades", "Called !!!!!!"+term);
                 try{
                     response = future.get();
                 } catch (Exception e) {}
@@ -425,7 +421,6 @@ public class UpdateService extends IntentService {
                     }));
                     String data;
                     String response = "";
-                    Log.d("handleCourse", "Called !!!!!!"+term);
                     try{
                         response = future.get();
                     } catch (Exception e) {}
@@ -504,7 +499,6 @@ public class UpdateService extends IntentService {
                         data = pathArray.toString();
                         List<Resource> resources = GsonHelper.create().fromJson(data, new TypeToken<List<Resource>>() {
                         }.getType());
-                        Log.d("handleResource: ", data);
                         realm.copyToRealm(resources);
                     }else {
                         Resource resource = new Resource();
@@ -533,7 +527,6 @@ public class UpdateService extends IntentService {
     @Override
     public void onDestroy() {
         isActive = false;
-        Log.d("Ondestroy", "Called !!!!!!");
 
         //Post the UpdateFinishEvent to eventbus when update finish and service is destroyed
         EventBus.getDefault().post(new UpdateFinishEvent());

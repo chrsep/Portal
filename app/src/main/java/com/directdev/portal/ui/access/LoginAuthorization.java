@@ -62,9 +62,9 @@ public class LoginAuthorization extends AppCompatActivity {
                 if (sharedPreferences.getInt("LoginAttempt", 0) < 4) {
                     int tries = sharedPreferences.getInt("LoginAttempt", 0);
                     tries = tries + 1;
-                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_UsernameTextBoxBM').value='" + USERNAME + "'})()");
-                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_PasswordTextBoxBM').value='" + PASSWORD + "'})()");
-                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_SubmitButtonBM').click()})()");
+                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_UsernameTextBoxBMNew').value='" + USERNAME + "'})()");
+                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_PasswordTextBoxBMNew').value='" + PASSWORD + "'})()");
+                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_SubmitButtonBMNew').click()})()");
                     edit.putInt("LoginAttempt", tries).commit();
                 }
             } catch (NullPointerException e) {
@@ -77,7 +77,7 @@ public class LoginAuthorization extends AppCompatActivity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (url.equals("https://newbinusmaya.binus.ac.id/student/")) {
+            if (url.equals("https://newbinusmaya.binus.ac.id/Student/")) {
                 view.stopLoading();
                 String cookie = android.webkit.CookieManager.getInstance().getCookie("https://newbinusmaya.binus.ac.id/student/#/index/dashboard");
                 edit.putString(getString(R.string.login_cookie_pref), cookie)

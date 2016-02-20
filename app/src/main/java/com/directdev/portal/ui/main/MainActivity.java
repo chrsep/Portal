@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_info:
                 return true;
             case R.id.action_schedule_webapp:
-                //Launched the activity to open webapp when "open in webapp" clicked
+                //Launched the activity to open webapp when "open in webapp" is clicked
                 ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
                 boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
@@ -218,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }else {
+                     /*Just some unimportant stuff i add*/
                     Toast.makeText(MainActivity.this,"Don't be silly",Toast.LENGTH_SHORT).show();
                     Toast.makeText(MainActivity.this,"You have no internet connection",Toast.LENGTH_SHORT).show();
                     Toast.makeText(MainActivity.this,"You can only download when there is a connection",Toast.LENGTH_LONG).show();
@@ -226,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /*And some more unimportant stuff*/
     public void onEventMainThread(final UpdateErrorEvent event) {
         switch (textToShow){
             case 0:{

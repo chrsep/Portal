@@ -140,14 +140,6 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }
             });
             swipeLayout.setEnabled(false);
-        }else{
-            swipeLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeLayout.setRefreshing(false);
-                }
-            });
-            swipeLayout.setEnabled(true);
         }
         super.onResume();
     }
