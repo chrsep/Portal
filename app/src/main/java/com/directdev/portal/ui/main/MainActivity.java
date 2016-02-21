@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_info:
+                Toast.makeText(this, "No more refresh session popup, everything is now automated :D !", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.action_schedule_webapp:
                 //Launched the activity to open webapp when "open in webapp" is clicked
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
                 if (isConnected) {
                     Intent intent = new Intent(this, WebappActivity.class);
-                    intent.putExtra("url", "https://newbinusmaya.binus.ac.id/student/index.html#/learning/lecturing");
+                    intent.putExtra("url", "https://newbinusmaya.binus.ac.id/newStudent/index.html#/learning/lecturing");
                     intent.putExtra("title", "Schedules");
                     startActivity(intent);
                 } else {
@@ -209,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
                                 DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                                 dm.enqueue(request);
                             }else{
-                                Toast updating = Toast.makeText(MainActivity.this, "No data found, try to refresh your data", Toast.LENGTH_SHORT);
+                                Toast updating = Toast.makeText(MainActivity.this, "Course material not found, try again after refresh data", Toast.LENGTH_LONG);
                                 updating.show();
                             }
                         }catch (IllegalStateException e){
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }else {
-                     /*Just some unimportant stuff i add*/
+                     /*Just some unimportant stuff*/
                     Toast.makeText(MainActivity.this,"Don't be silly",Toast.LENGTH_SHORT).show();
                     Toast.makeText(MainActivity.this,"You have no internet connection",Toast.LENGTH_SHORT).show();
                     Toast.makeText(MainActivity.this,"You can only download when there is a connection",Toast.LENGTH_LONG).show();

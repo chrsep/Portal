@@ -15,8 +15,6 @@ import android.widget.Toast;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.helper.Portal;
 import com.directdev.portal.tools.services.UpdateService;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {

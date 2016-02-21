@@ -3,12 +3,14 @@ package com.directdev.portal.tools.services;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Base64;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.RequestFuture;
 import com.directdev.portal.R;
+import com.directdev.portal.tools.event.PhotoResponseEvent;
 import com.directdev.portal.tools.event.UpdateErrorEvent;
 import com.directdev.portal.tools.event.UpdateFailedEvent;
 import com.directdev.portal.tools.event.UpdateFinishEvent;
@@ -32,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +42,7 @@ import java.util.Locale;
 
 import de.greenrobot.event.EventBus;
 import io.realm.Realm;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
 
 /**  All data and api request to the server are handled by this service, to update all data we can call
@@ -82,7 +86,12 @@ public class UpdateService extends IntentService {
     private static final String COURSE = "com.directdev.portal.tools.services.action.COURSE";
     private static final String ACCOUNT = "com.directdev.portal.tools.services.action.ACCOUNT";
     private static final String RESOURCES = "com.directdev.portal.tools.services.action.RESOURCES";
+    private static final String PHOTO = "com.directdev.portal.tools.services.action.PHOTO";
+    private static final String GPA = "com.directdev.portal.tools.services.action.GPA";
     public static boolean isActive = false;
+    public static boolean existNewPhoto = false;
+    public String photo = " ";
+
 
     public UpdateService() {
         super("UpdateService");
@@ -91,13 +100,14 @@ public class UpdateService extends IntentService {
     // Below are helper methods to prepare intents to start this UpdateService service.
     public static void all(Context ctx){
         if(!isActive) {
+            UpdateService.account(ctx);
+            UpdateService.gpa(ctx);
             UpdateService.exam(ctx);
             UpdateService.schedule(ctx);
             UpdateService.terms(ctx);
             UpdateService.finance(ctx);
             UpdateService.grades(ctx);
-            UpdateService.account(ctx);
-
+            UpdateService.photo(ctx);
             UpdateService.course(ctx);
             UpdateService.resources(ctx);
         }
@@ -151,6 +161,18 @@ public class UpdateService extends IntentService {
         ctx.startService(intent);
     }
 
+    public static void photo(Context ctx) {
+        Intent intent = new Intent(ctx, UpdateService.class);
+        intent.setAction(PHOTO);
+        ctx.startService(intent);
+    }
+
+    public static void gpa(Context ctx) {
+        Intent intent = new Intent(ctx, UpdateService.class);
+        intent.setAction(GPA);
+        ctx.startService(intent);
+    }
+
     @Override
     public void onCreate() {
         isActive = true;
@@ -178,111 +200,70 @@ public class UpdateService extends IntentService {
                 handleAccount();
             }else if (RESOURCES.equals(action)) {
                 handleResource();
+            }else if (PHOTO.equals(action)) {
+                handlePhoto();
+            }else if (GPA.equals(action)) {
+                handleGPA();
             }
         }
     }
 
-    //Everything below handles the data request and Manipulation
+    /**
+     * Everything below handles the data request and Manipulation
+     *
+     * ==================================================================================================================================
+     * ===========================================Retrieves Schedules Data===============================================================
+     * ==================================================================================================================================
+     * **/
+
     private void handleSchedule() {
-        //Creates a future, volley usually request data Asynchronously, we use future to make volley
-        //do some sort of Synchronous request.
-        RequestFuture<String> future = RequestFuture.newFuture();
+        String response = bimayApiCall(getString(R.string.request_schedule));
 
-        //We make the requestQueue.
-        RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
-
-        //Add a new request to the RequestQueue
-        queue.add(Request.create(this, getString(R.string.request_schedule), future, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                EventBus.getDefault().post(new UpdateErrorEvent(error.toString()));
-                stopSelf();
-            }
-        }));
-        String response = "";
-        try{
-
-            //Get the response from future.
-            response = future.get();
-        } catch (Exception e) {}
         if(!response.equals("[]")) {
             try {
-
                 //Turns the response(Which is a JSONArray) to a list of object(Here is Schedule and Dates Objects)
                 List<Schedule> schedules = GsonHelper.create().fromJson(response, new TypeToken<List<Schedule>>() {
                 }.getType());
+
+                //makeList(response, List<Schedule>);
                 List<Dates> dates = GsonHelper.create().fromJson(response, new TypeToken<List<Dates>>() {
                 }.getType());
 
                 //Save the objects that is return by Gson to realm
-                Realm realm = Realm.getDefaultInstance();
-                realm.beginTransaction();
-                realm.clear(Schedule.class);
-                realm.copyToRealm(schedules);
-                realm.copyToRealmOrUpdate(dates);
-                realm.commitTransaction();
-                realm.close();
-            } catch (JsonSyntaxException e) {
+                insertToRealm(Schedule.class, schedules, dates);
 
-                //Called when request fails
-                stopSelf();
 
-                //Post the updateFailedEvent to eventBus when update failed
-                EventBus.getDefault().post(new UpdateFailedEvent());
-            }
+            } catch (JsonSyntaxException e) {dataParsingError();}
         }
     }
 
+    /**==================================================================================================================================
+     * ===========================================Retrieves Exam Date data===============================================================
+     * ==================================================================================================================================**/
+
     private void handleExam() {
-        RequestFuture<String> future = RequestFuture.newFuture();
-        RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
-        queue.add(Request.create(this, getString(R.string.request_exam), future,new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                EventBus.getDefault().post(new UpdateErrorEvent(error.toString()));
-                stopSelf();
-            }
-        }));
-        String response = "";
-        try{
-            response = future.get();
-        } catch (Exception e) {}
+        String response = bimayApiCall(getString(R.string.request_exam));
 
         try{
             List<Exam> exams = GsonHelper.create().fromJson(response, new TypeToken<List<Exam>>() {
             }.getType());
             List<Dates> dates = GsonHelper.create().fromJson(response, new TypeToken<List<Dates>>() {
             }.getType());
-            Realm realm = Realm.getDefaultInstance();
-            realm.beginTransaction();
-            realm.clear(Exam.class);
-            realm.copyToRealm(exams);
-            realm.copyToRealmOrUpdate(dates);
-            realm.commitTransaction();
-            realm.close();
-        }catch (JsonSyntaxException e){
-            stopSelf();
-            EventBus.getDefault().post(new UpdateFailedEvent());
-        }
+
+            insertToRealm(Schedule.class, exams, dates);
+        }catch (JsonSyntaxException e){dataParsingError();}
     }
 
-    private void handleFinance() {
-        RequestFuture<String> future = RequestFuture.newFuture();
-        RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
-        queue.add(Request.create(this, getString(R.string.request_finance),future,new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                EventBus.getDefault().post(error.toString());
-                stopSelf();
-            }
-        }));
-        String data;
-        String response = "";
-        try{
-            response = future.get();
-        } catch (Exception e) {}
-        try {
 
+    /**==================================================================================================================================
+     * ===========================================Retrieves Billing Information==========================================================
+     * ==================================================================================================================================**/
+
+    private void handleFinance() {
+        String data;
+        String response = bimayApiCall(getString(R.string.request_finance));
+
+        try {
             /**
              * Finance data is structured like this {"Status":[*Data that we want*]}. The GSON requires
              * the JSONArray of the *Data that we want* to turn it into a List of object(List<Finance>).
@@ -291,25 +272,22 @@ public class UpdateService extends IntentService {
             JSONObject finance = new JSONObject(response);
             data = finance.getJSONArray("Status").toString();
 
-            //Then we do the usual
             List<Finance> finances = GsonHelper.create().fromJson(data, new TypeToken<List<Finance>>() {
             }.getType());
             List<Dates> dates = GsonHelper.create().fromJson(data, new TypeToken<List<Dates>>() {
             }.getType());
-            Realm realm = Realm.getDefaultInstance();
-            realm.beginTransaction();
-            realm.clear(Finance.class);
-            realm.copyToRealm(finances);
-            realm.copyToRealmOrUpdate(dates);
-            realm.commitTransaction();
-            realm.close();
-        } catch (JSONException e) {
-            stopSelf();
-            EventBus.getDefault().post(new UpdateFailedEvent());
-        }
+
+            insertToRealm(Finance.class,finances,dates );
+
+        } catch (JSONException e) {dataParsingError();}
     }
 
-    /**
+
+    /**==================================================================================================================================
+     * ===========================================Retrieves Grades & Scores==============================================================
+     * ==================================================================================================================================
+     *
+     *
      * Requesting grades is a bit more complicated, there are one link for each terms, to
      * build the links, we takes the prefix(request_grades string) and add to it the term names. That's
      * why this requires parameter while others doesn't
@@ -338,22 +316,10 @@ public class UpdateService extends IntentService {
             realm.clear(Grades.class);
             realm.clear(GradesCourse.class);
             for (Terms term:terms) {
-                RequestFuture<String> future = RequestFuture.newFuture();
-                RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
-                queue.add(Request.create(this, getString(R.string.request_grades) + term.getValue(), future,new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        EventBus.getDefault().post(error.toString());
-                        stopSelf();
-                    }
-                }));
                 String data;
-                String response = "";
-                try{
-                    response = future.get();
-                } catch (Exception e) {}
-                JSONObject grade = new JSONObject(response);
-                JSONArray arrays = grade.getJSONArray("score");
+                String response = bimayApiCall(getString(R.string.request_grades) + term.getValue());
+
+                JSONArray arrays = new JSONObject(response).getJSONArray("score");
                 for(int j = 0 ; j < arrays.length() ; j++){
                     arrays.getJSONObject(j).put("STRM",term.getValue());
                 }
@@ -362,32 +328,24 @@ public class UpdateService extends IntentService {
                 }.getType());
                 List<GradesCourse> course = GsonHelper.create().fromJson(data, new TypeToken<List<GradesCourse>>() {
                 }.getType());
+
                 realm.copyToRealm(grades);
                 realm.copyToRealmOrUpdate(course);
             }
             realm.commitTransaction();
-        } catch (JSONException e) {
-            stopSelf();
-            EventBus.getDefault().post(new UpdateFailedEvent());
-        }finally {
-            realm.close();
-        }
+
+
+        } catch (JSONException e) {dataParsingError();}finally {realm.close();}
     }
 
+
+    /**==================================================================================================================================
+     * ===========================================Retrieves Semesters data===============================================================
+     * ==================================================================================================================================**/
+
     private void handleTerms() {
-        RequestFuture<String> future = RequestFuture.newFuture();
-        RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
-        queue.add(Request.create(this, getString(R.string.request_terms), future, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                EventBus.getDefault().post(error.toString());
-                stopSelf();
-            }
-        }));
-        String response = "";
-        try{
-            response = future.get();
-        } catch (Exception e) {}
+        String response = bimayApiCall(getString(R.string.request_terms));
+
         try {
             List<Terms> terms = GsonHelper.create().fromJson(response, new TypeToken<List<Terms>>() {
             }.getType());
@@ -396,11 +354,13 @@ public class UpdateService extends IntentService {
             realm.copyToRealmOrUpdate(terms);
             realm.commitTransaction();
             realm.close();
-        } catch (JsonSyntaxException e) {
-            stopSelf();
-            EventBus.getDefault().post(new UpdateFailedEvent());
-        }
+        } catch (JsonSyntaxException e) {dataParsingError();}
     }
+
+
+    /**==================================================================================================================================
+     * ===========================================Retrieves Course Data==================================================================
+     * ==================================================================================================================================**/
 
     private void handleCourse() {
         Realm realm = Realm.getDefaultInstance();
@@ -410,43 +370,107 @@ public class UpdateService extends IntentService {
             for (Terms term:terms) {
                 RealmResults<Course> course = realm.where(Course.class).equalTo("STRM",term.getValue()).findAll();
                 if(course.isEmpty()){
-                    RequestFuture<String> future = RequestFuture.newFuture();
-                    RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
-                    queue.add(Request.create(this, getString(R.string.request_course) + term.getValue(), future,new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            EventBus.getDefault().post(error.toString());
-                            stopSelf();
-                        }
-                    }));
                     String data;
-                    String response = "";
-                    try{
-                        response = future.get();
-                    } catch (Exception e) {}
-                    JSONObject grade = new JSONObject(response);
-                    JSONArray arrays = grade.getJSONArray("Courses");
+                    String response = bimayApiCall(getString(R.string.request_course) + term.getValue());
+
+                    JSONArray arrays = new JSONObject(response).getJSONArray("Courses");
                     for(int j = 0 ; j < arrays.length() ; j++){
                         arrays.getJSONObject(j).put("STRM",term.getValue());
                     }
                     data = arrays.toString();
+
                     List<Course> courses = GsonHelper.create().fromJson(data, new TypeToken<List<Course>>() {
                     }.getType());
+
                     realm.copyToRealmOrUpdate(courses);
                 }
             }
             realm.commitTransaction();
         } catch (JSONException e) {
-            stopSelf();
-            EventBus.getDefault().post(new UpdateFailedEvent());
+            dataParsingError();
         }finally {
             realm.close();
         }
     }
 
+
+    /**==================================================================================================================================
+     * ===========================================Retrieves Name and Major Data==========================================================
+     * ==================================================================================================================================**/
+
     private void handleAccount(){
-        //TODO Migrate FetchAccountData to update service
+        String response = bimayApiCall(getString(R.string.request_student_info));
+
+        try {
+            JSONObject data1 = new JSONObject(response);
+            String name = data1.getJSONObject("Student").getString("Name");
+            String major = data1.getJSONObject("Student").getString("Major");
+
+            Pref.save(this,getString(R.string.resource_account_name), name);
+            Pref.save(this,getString(R.string.resource_major), major);
+
+            String photo = data1.getJSONObject("Photo").getString("photo");
+            if (!Pref.read(this, getString(R.string.resource_small_photo), "").equals(photo)) {
+                existNewPhoto = true;
+                this.photo = photo;
+            }
+        }catch (JSONException e){
+            dataParsingError();
+        }
     }
+
+
+    /**==================================================================================================================================
+     * ===========================================Retrieves Profile Pic data=============================================================
+     * ==================================================================================================================================**/
+
+    private void handlePhoto(){
+        if (existNewPhoto){
+            String response = bimayApiCall(getString(R.string.request_photo));
+            try {
+                JSONObject data = new JSONObject(response);
+                String toDecode = data.getString("photo");
+                byte[] photo = Base64.decode(toDecode, Base64.DEFAULT);
+                FileOutputStream fileOutputStream = openFileOutput("acc_photo", Context.MODE_PRIVATE);
+                fileOutputStream.write(photo);
+                fileOutputStream.close();
+                Pref.save(this, getString(R.string.photo_downloaded), 1);
+                EventBus.getDefault().post(new PhotoResponseEvent());
+                Pref.save(this,getString(R.string.resource_small_photo), this.photo);
+            } catch (Exception e) {
+            }
+        }
+    }
+
+
+    /**==================================================================================================================================
+     * ===========================================Retrieves Main GPA=====================================================================
+     * ==================================================================================================================================**/
+    private void handleGPA(){
+        String response = bimayApiCall(getString(R.string.request_dashboard));
+
+        try {
+            String data4 = "-.-";
+            try {
+                data4 = new JSONObject(response)
+                        .getJSONObject("WidgetData")
+                        .getJSONArray("GPA")
+                        .getJSONObject(0)
+                        .getString("GPA")
+                        .substring(0, 3);
+            } catch (StringIndexOutOfBoundsException e) {
+                data4 = "N/A";
+            } finally {
+                Pref.save(this, getString(R.string.resource_gpa), data4);
+            }
+        } catch (JSONException e) {
+        }
+    }
+
+
+    /**==================================================================================================================================
+     * ===========================================Retrieves Course Resources data========================================================
+     * ==================================================================================================================================**/
 
     private void handleResource(){
         Realm realm = Realm.getDefaultInstance();
@@ -464,25 +488,14 @@ public class UpdateService extends IntentService {
                 realm.beginTransaction();
                 realm.clear(Resource.class);
                 for (Course course:courses) {
-                    RequestFuture<String> future = RequestFuture.newFuture();
-                    RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
-                    queue.add(Request.create(this, getString(R.string.request_resources)
+                    String data;
+                    String url = getString(R.string.request_resources)
                             + course.getCOURSEID() + "/"
                             + course.getCRSE_ID() + "/"
                             + course.getSTRM() + "/"
                             + course.getSSR_COMPONENT() + "/"
-                            + course.getCLASS_NBR(), future, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            EventBus.getDefault().post(error.toString());
-                            stopSelf();
-                        }
-                    }));
-                    String data;
-                    String response = "";
-                    try{
-                        response = future.get();
-                    } catch (Exception e) {}
+                            + course.getCLASS_NBR();
+                    String response = bimayApiCall(url);
                     JSONObject object = new JSONObject(response);
                     JSONArray pathArray = object.getJSONArray("Path");
                     if(pathArray.length() != 0){
@@ -516,13 +529,15 @@ public class UpdateService extends IntentService {
                 }
                 realm.commitTransaction();
             } catch(JSONException e){
-                stopSelf();
-                EventBus.getDefault().post(new UpdateFailedEvent());
-            }finally {
-                realm.close();
-            }
+                dataParsingError();
+            }finally {realm.close();}
         }
     }
+
+
+    /**==================================================================================================================================
+     * ================================== Cleans Up everything When this service is destroyed ===========================================
+     * ==================================================================================================================================**/
 
     @Override
     public void onDestroy() {
@@ -533,5 +548,46 @@ public class UpdateService extends IntentService {
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
         Pref.save(getApplication(),getString(R.string.last_update_pref),sdf.format(new Date()));
         super.onDestroy();
+    }
+
+
+
+    /**==================================================================================================================================
+     * ================================================= Helper Functions ===============================================================
+     * ==================================================================================================================================**/
+
+    private String bimayApiCall(String url){
+        RequestFuture<String> future = RequestFuture.newFuture();
+        RequestQueue queue = VolleySingleton.getInstance(this).getQueue();
+        queue.add(Request.create(this, url, future, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                EventBus.getDefault().post(new UpdateErrorEvent(error.toString()));
+                stopSelf();
+            }
+        }));
+        try{
+            return future.get();
+        }catch (Exception e){
+            return "";
+        }
+    }
+
+    private void dataParsingError(){
+        //Called when request fails
+        stopSelf();
+
+        //Post the updateFailedEvent to eventBus when update failed
+        EventBus.getDefault().post(new UpdateFailedEvent());
+    }
+
+    private <E extends RealmObject> void insertToRealm(Class<? extends RealmObject> clazz, Iterable<E> objects, List<Dates> date){
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.clear(clazz);
+        realm.copyToRealm(objects);
+        realm.copyToRealmOrUpdate(date);
+        realm.commitTransaction();
+        realm.close();
     }
 }

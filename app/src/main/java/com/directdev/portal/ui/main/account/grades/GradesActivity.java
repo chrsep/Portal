@@ -91,7 +91,7 @@ public class GradesActivity extends AppCompatActivity {
 
                 if (isConnected) {
                     Intent intent = new Intent(this, WebappActivity.class);
-                    intent.putExtra("url", "https://newbinusmaya.binus.ac.id/student/#/score/viewscore");
+                    intent.putExtra("url", "https://newbinusmaya.binus.ac.id/newStudent/#/score/viewscore");
                     intent.putExtra("title", "View Grades");
                     startActivity(intent);
                 } else {

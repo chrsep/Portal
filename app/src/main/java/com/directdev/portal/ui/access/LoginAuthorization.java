@@ -1,10 +1,12 @@
 package com.directdev.portal.ui.access;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -15,6 +17,7 @@ import com.directdev.portal.R;
 
 
 public class LoginAuthorization extends AppCompatActivity {
+    private static final String TAG = "LoginAuthorization";
     private static String USERNAME = "false";
     private static String PASSWORD = "b!false";
     protected SharedPreferences sharedPreferences;
@@ -76,8 +79,14 @@ public class LoginAuthorization extends AppCompatActivity {
         }
 
         @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            Log.d(TAG, "onPageStarted: "+url);
+            super.onPageStarted(view, url, favicon);
+        }
+
+        @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (url.equals("https://newbinusmaya.binus.ac.id/Student/")) {
+            if (url.equals("https://newbinusmaya.binus.ac.id/newStudent/")) {
                 view.stopLoading();
                 String cookie = android.webkit.CookieManager.getInstance().getCookie("https://newbinusmaya.binus.ac.id/student/#/index/dashboard");
                 edit.putString(getString(R.string.login_cookie_pref), cookie)

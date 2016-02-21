@@ -96,7 +96,7 @@ public class FinanceActivity extends AppCompatActivity {
 
                 if (isConnected) {
                     Intent intent = new Intent(this, WebappActivity.class);
-                    intent.putExtra("url", "https://newbinusmaya.binus.ac.id/student/#/financial/financialStatus");
+                    intent.putExtra("url", "https://newbinusmaya.binus.ac.id/newStudent/#/financial/financialStatus");
                     intent.putExtra("title", "Financial Status");
                     startActivity(intent);
                 } else {

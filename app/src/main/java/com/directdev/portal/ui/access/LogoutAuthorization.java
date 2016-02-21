@@ -46,7 +46,7 @@ public class LogoutAuthorization extends AppCompatActivity {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            if (url.equals("https://newbinusmaya.binus.ac.id/default/login.html")) {
+            if (url.equals("https://newbinusmaya.binus.ac.id/newDefault/login.html")) {
                 Portal.getInstance().clearApplicationData();
                 edit.clear().commit();
 

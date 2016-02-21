@@ -3,20 +3,16 @@ package com.directdev.portal.ui.main.account.grades;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.directdev.portal.R;
-import com.directdev.portal.tools.model.Course;
 import com.directdev.portal.tools.model.Grades;
 import com.directdev.portal.tools.model.GradesCourse;
-
-import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -62,8 +58,8 @@ public class GradesByTermFragment extends Fragment {
         try {
             RealmResults<Grades> grades = realm.where(Grades.class).equalTo("kodemtk", courses.get(0).getKodemtk()).findAll();
         }catch (ArrayIndexOutOfBoundsException e){
-            CardView cardView = (CardView) view.findViewById(R.id.grades_no_data_cardview);
-            cardView.setVisibility(View.VISIBLE);
+            RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.grades_no_data_cardview);
+            relativeLayout.setVisibility(View.VISIBLE);
         }
         return view;
     }

@@ -9,10 +9,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.directdev.portal.R;
-import com.directdev.portal.tools.helper.Portal;
-import com.directdev.portal.ui.access.LoginAuthorization;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 
 public class WebappActivity extends AppCompatActivity {
@@ -46,7 +42,6 @@ public class WebappActivity extends AppCompatActivity {
             }
         });
 
-        Portal application = (Portal) getApplication();
 
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setJavaScriptEnabled(true);

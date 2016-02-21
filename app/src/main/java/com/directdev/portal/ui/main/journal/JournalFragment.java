@@ -1,12 +1,10 @@
 package com.directdev.portal.ui.main.journal;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,18 +12,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
 import com.directdev.portal.R;
+import com.directdev.portal.tools.event.CantConnectEvent;
 import com.directdev.portal.tools.event.UpdateFailedEvent;
 import com.directdev.portal.tools.event.UpdateFinishEvent;
-import com.directdev.portal.tools.fetcher.FetchAccountData;
+import com.directdev.portal.tools.helper.Pref;
 import com.directdev.portal.tools.model.Dates;
 import com.directdev.portal.tools.services.UpdateService;
-import com.directdev.portal.ui.access.LoginAuthorization;
 
 import org.solovyev.android.views.llm.LinearLayoutManager;
 
@@ -50,6 +53,7 @@ import io.realm.RealmResults;
  */
 
 public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+    private static final String TAG = "JournalFragment";
     protected SwipeRefreshLayout swipeLayout;
     protected JournalRecyclerAdapter adapter;
     protected RecyclerView recycler;
@@ -59,6 +63,7 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private SharedPreferences.Editor edit;
     private List<Date> dates;
     private Realm realm;
+    private WebView webView;
 
     public JournalFragment() {}
 
@@ -84,6 +89,12 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         //swipeLayout is the one that is responsible for the pull down to refresh action
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.journal_refresh);
         swipeLayout.setOnRefreshListener(this);
+
+        webView = (WebView) view.findViewById(R.id.refresh_webView);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        LoginWebView browser = new LoginWebView();
+        webView.setWebViewClient(browser);
 
         return view;
     }
@@ -157,9 +168,7 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onRefresh() {
         swipeLayout.setEnabled(false);
         edit.putBoolean(getString(R.string.is_refreshing_journal_pref), true).apply();
-        UpdateService.all(getActivity());
-        FetchAccountData fetch = new FetchAccountData(getActivity());
-        fetch.requestAllData();
+        webView.loadUrl("https://newbinusmaya.binus.ac.id/login.php");
     }
 
     //Method that is called when EventBus post the UpdateFinishEvent, see UpdateService.java
@@ -173,20 +182,12 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     //Method that is called when EventBus post the UpdateFailedEvent, see tools.services.UpdateService.java to see
     //how the event get posted
-    public void onEventAsync(UpdateFailedEvent event) {
-        edit.putBoolean(getString(R.string.is_no_session), true).commit();
-        Snackbar snackbar = Snackbar.make(view, "Refresh session to load new data", Snackbar.LENGTH_INDEFINITE)
-                .setAction("REFRESH", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        firstRequestSent = false;
-                        Intent intent = new Intent(getActivity(), LoginAuthorization.class);
-                        intent.putExtra("text", "Refreshing session");
-                        startActivity(intent);
-                    }
-                })
-                .setActionTextColor(Color.YELLOW);
-        snackbar.show();
+    public void onEventMainThread(UpdateFailedEvent event) {
+        Toast.makeText(getActivity(), "Some data fails to load, try to refresh again later", Toast.LENGTH_LONG).show();
+    }
+
+    public void onEventMainThread(CantConnectEvent event) {
+        Toast.makeText(getActivity(), "Failed to connect, try again later", Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -198,6 +199,7 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         //Set the date collection to use
         dates = new LinkedList<>();
         String tempHolder;
+        boolean noToday = true;
         //Get today's date
         Date today = new Date();
         Date tested = new Date();
@@ -205,24 +207,69 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         RealmResults<Dates> dateData = realm.where(Dates.class).findAll();
 
         tempHolder = sdf.format(today);
-
-        for (int i = 0 ; i < dateData.size() ; i++){
-            try{
-                today =sdf.parse(tempHolder);
+        try{
+            today =sdf.parse(tempHolder);
+            for (int i = 0 ; i < dateData.size() ; i++){
                 tested = sdf.parse(dateData.get(i).getDatePK());
-            }catch (ParseException e){}
-            if(tested.after(today)||tested.equals(today)) {
-                dates.add(tested);
-            }
-        }
-        if (!dates.isEmpty()&&!dates.get(0).equals(today)){
-            try {
-                if (!dateData.isEmpty()) {
-                    dates.add(sdf.parse(sdf.format(today)));
+                if(tested.after(today)||tested.equals(today)) {
+                    dates.add(tested);
                 }
-            }catch (ParseException e){}
-        }
+            }
+            for (Date date:dates) {
+                if(date.equals(today)){
+                    noToday = false;
+                }
+            }
+            if (noToday && !dates.isEmpty()){
+                dates.add(sdf.parse(sdf.format(today)));
+            }
+        }catch (ParseException e){}
         Collections.sort(dates);
 
+    }
+
+    private class LoginWebView extends WebViewClient {
+        private String USERNAME = Pref.read(getActivity(),getString(R.string.login_username_pref), "");
+        private String PASSWORD = Pref.read(getActivity(),getString(R.string.login_password_pref), "");
+        private Context ctx = getActivity();
+
+        @Override
+        public void onPageFinished(WebView webView, final String url) {
+            try {
+                if (Pref.read(getActivity(),"LoginAttempt", 0) == 4 && Pref.read(ctx,getString(R.string.login_condition_pref), 0) == 0) {
+                    Pref.save(ctx,getString(R.string.login_condition_pref), 0);
+                }
+                if (Pref.read(getActivity(),"LoginAttempt", 0) < 4) {
+                    int tries = Pref.read(ctx,"LoginAttempt", 0);
+                    tries = tries + 1;
+                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_UsernameTextBoxBMNew').value='" + USERNAME + "'})()");
+                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_PasswordTextBoxBMNew').value='" + PASSWORD + "'})()");
+                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_SubmitButtonBMNew').click()})()");
+                    Pref.save(ctx, "LoginAttempt", tries);
+                }
+            } catch (NullPointerException e) {
+                //We detected crashes involving NullPointerException coming from this method
+                //This will catch the crash and send back crash data to us.
+                Crashlytics.logException(e);
+            }
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            if (url.equals("https://newbinusmaya.binus.ac.id/newStudent/")) {
+                view.stopLoading();
+                String cookie = android.webkit.CookieManager.getInstance().getCookie("https://newbinusmaya.binus.ac.id/student/#/index/dashboard");
+                Pref.save(ctx, getString(R.string.login_cookie_pref), cookie);
+                Pref.save(ctx, getString(R.string.login_condition_pref), 1);
+                Pref.save(ctx, getString(R.string.is_no_session), false);
+                UpdateService.all(getActivity());
+            }
+            return super.shouldOverrideUrlLoading(view, url);
+        }
     }
 }

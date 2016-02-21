@@ -25,12 +25,8 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.directdev.portal.R;
-import com.directdev.portal.tools.event.AccountResponseEvent;
-import com.directdev.portal.tools.event.DataUpdateEvent;
-import com.directdev.portal.tools.event.GpaResponseEvent;
-import com.directdev.portal.tools.event.PhotoResponseEvent;
-import com.directdev.portal.tools.event.ThereIsNewPhotoEvent;
-import com.directdev.portal.tools.fetcher.FetchAccountData;
+import com.directdev.portal.tools.event.UpdateFinishEvent;
+import com.directdev.portal.tools.services.UpdateService;
 import com.directdev.portal.ui.access.LogoutAuthorization;
 import com.directdev.portal.ui.main.account.finance.FinanceActivity;
 import com.directdev.portal.ui.main.account.grades.GradesActivity;
@@ -98,9 +94,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onResume() {
-        super.onResume();
         ImageView photo = (ImageView) view.findViewById(R.id.profile_image);
         TextView gpa = (TextView) view.findViewById(R.id.gpa_number);
+        TextView name = (TextView) view.findViewById(R.id.account_name);
+        TextView major = (TextView) view.findViewById(R.id.major);
 
         if (!settingsPref.getBoolean(getString(R.string.setting_photo), false)) {
             byte[] toDecode = new byte[700000];
@@ -124,6 +121,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         } else {
             gpa.setText("4.0");
         }
+        
+        name.setText(sPref.getString(getString(R.string.resource_account_name), ""));
+        major.setText(sPref.getString(getString(R.string.resource_major), ""));
+        super.onResume();
     }
 
     @Override
@@ -162,6 +163,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
+                                getActivity().stopService(new Intent(getActivity(), UpdateService.class));
                                 Intent intent = new Intent(getActivity(), LogoutAuthorization.class);
                                 startActivity(intent);
                                 break;
@@ -185,32 +187,21 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         super.onStop();
     }
 
-    public void onEvent(ThereIsNewPhotoEvent event) {
-        FetchAccountData fetcher = new FetchAccountData(getActivity());
-        fetcher.requestPhoto();
-    }
-
-    public void onEvent(DataUpdateEvent event) {
+    public void onEvent(UpdateFinishEvent event) {
         TextView last_update = (TextView) getActivity().findViewById(R.id.last_updated);
         last_update.setText("Last updated: " + sPref.getString(getString(R.string.last_update_pref), "2012-12-21 12:12"));
-    }
 
-    public void onEvent(GpaResponseEvent event) {
         if (!settingsPref.getBoolean(getString(R.string.setting_gpa), false)) {
             TextView gpa = (TextView) getActivity().findViewById(R.id.gpa_number);
             gpa.setText(sPref.getString(getString(R.string.resource_gpa), ""));
         }
-    }
 
-    public void onEvent(AccountResponseEvent event) {
         TextView name = (TextView) getActivity().findViewById(R.id.account_name);
         TextView major = (TextView) getActivity().findViewById(R.id.major);
 
         name.setText(sPref.getString(getString(R.string.resource_account_name), ""));
         major.setText(sPref.getString(getString(R.string.resource_major), ""));
-    }
 
-    public void onEventAsync(PhotoResponseEvent event) {
         if (!settingsPref.getBoolean(getString(R.string.setting_photo), false)) {
             byte[] toDecode = new byte[700000];
             try {
@@ -225,6 +216,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             photo.setImageBitmap(bitmap);
         }
     }
+
 
     private void launchIntent(Intent intent){
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

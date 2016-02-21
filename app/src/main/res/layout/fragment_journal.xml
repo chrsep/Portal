@@ -4,6 +4,12 @@
     android:layout_height="match_parent"
     android:background="@color/bg_default">
 
+    <WebView
+        android:id="@+id/refresh_webView"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:visibility="invisible"/>
+
     <LinearLayout
         android:id="@+id/joural_refresh_text"
         android:layout_width="wrap_content"

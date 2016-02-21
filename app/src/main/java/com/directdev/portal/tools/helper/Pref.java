@@ -49,4 +49,16 @@ public class Pref {
         SharedPreferences sp = ctx.getSharedPreferences(ctx.getString(R.string.shared_preferences), Context.MODE_PRIVATE);
         return sp.getString(key, defaultValue);
     }
+
+    public static int read(Context ctx, String key, int defaultValue){
+        SharedPreferences sp = ctx.getSharedPreferences(ctx.getString(R.string.shared_preferences), Context.MODE_PRIVATE);
+        return sp.getInt(key, defaultValue);
+    }
+
+    public static void save(Context ctx, String string, boolean b) {
+        SharedPreferences sp = ctx.getSharedPreferences(ctx.getString(R.string.shared_preferences), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(string, b);
+        editor.commit();
+    }
 }
