@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.directdev.portal.R;
-import com.directdev.portal.tools.helper.Portal;
 import com.directdev.portal.tools.services.UpdateService;
 
 
@@ -38,7 +37,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
         sharedPref = getSharedPreferences(getString(R.string.shared_preferences), MODE_PRIVATE);
-        Portal application = (Portal) getApplication();
     }
 
     @Override

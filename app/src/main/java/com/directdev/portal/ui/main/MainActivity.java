@@ -131,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
     public void checkLogin() {
         if (Pref.read(this, R.string.login_data_given_pref, 0) != 1 || Pref.read(this, R.string.login_condition_pref, 0) != 1) {
             Intent intent = new Intent(this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
     }
