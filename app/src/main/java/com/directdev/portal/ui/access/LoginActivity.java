@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.directdev.portal.R;
 import com.directdev.portal.tools.services.UpdateService;
+import com.directdev.portal.ui.main.MainActivity;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -44,7 +45,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onResume();
         if (sharedPref.getInt(getResources().getString(R.string.login_condition_pref), 0) == 1) {
             UpdateService.all(this);
-            finish();
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         } else if (sharedPref.getInt(getResources().getString(R.string.login_data_given_pref), 0) == 1) {
             Toast toast = Toast.makeText(LoginActivity.this, "Wrong username or password", Toast.LENGTH_SHORT);
             toast.show();
@@ -85,9 +89,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Intent intent = new Intent(this, LoginAuthorization.class);
             intent.putExtra("text", "Signing you in");
             startActivity(intent);
-            if (sharedPref.getInt(getString(R.string.login_condition_pref), 0) != 0) {
-                finish();
-            }
         } else {
             Toast toast = Toast.makeText(LoginActivity.this, "You are currently offline, please find a connection", Toast.LENGTH_SHORT);
             toast.show();
