@@ -53,26 +53,25 @@ import io.realm.RealmResults;
  *  1. We call either the all() function or specific functions(schedule(),exam()...). These are
  *     helper functions.
  *
- *  2. The helper function that is called will prepare the intent and set the action(SCHEDULE, EXAM)
- *     and then call startService() which will launch the service. Service is a singleton, only one
- *     instance of this service will be created, if service already exist and startService is called
- *     the startService() call will be queued. When the service is launched, static field isActive will
- *     be set to true.
+ *  2. The helper function that is called will prepare the intent and set the action(SCHEDULE, EXAM, etc)
+ *     and then call startService() which will launch the service according to the action specified.
+ *     A IntentService is a singleton, only one instance of this service will be created, if service already exist
+ *     and startService() is called, it will be queued. When the service is launched, static field isActive will be
+ *     set to true.
  *
- *  3. startService() will start this service and the trigger onHandleIntent(). onHandleIntent() will
- *     then look and the action that is set on step 2, check which on it's and launch the appropriate
- *     function(handleSchedule(), handleExam())
+ *  3. startService() will start this service and then trigger onHandleIntent(). onHandleIntent() will
+ *     then look at the action that is set on step 2, and launch the appropriate function(handleSchedule(), handleExam())
  *
  *  4. The handle functions(handleExam(), handleSchedule()) will request the data and returns it using
- *     future, the data then will be saved into a realm database, if the data failed to be saved(because
- *     session expired and other things were sent to us), using EventBus, we send an UpdateFailedEvent
- *    which then will be captured by our activity to display the please refresh message.
+ *     future, the data then will be saved into a realm database, if the data failed to be saved (because
+ *     session expired or other things that is not the data were sent to us), using EventBus, we send an
+ *     UpdateFailedEvent which then will be captured by our activity to launch a function that handles this error.
  *
- *  5. When onHandleIntent() finished (choosing which handle function to run, run it, receive data,
- *     save data to Realm DB), the service will be closed and onDestroy() is called, but if multiple
- *     startService() was called, onHandleIntent() will be called again to serve the queued startService()
+ *  5. When everything finished (onHandleIntent()chose which handle function to run, run it, receive data,
+ *     save data to Realm DB), the service will be destroyed by calling onDestroy(), if multiple call to
+ *     startService() were made, onHandleIntent() will be called again to serve the queued startService()
  *     calls until all call is served, and then onDestroy() is called. onDestroy will call EventBus and
- *     sent and UpdateFinishEvent, which will then be used to refresh data on the views. Also isActive
+ *     sent and UpdateFinishEvent, which will then be used to refresh data on the views. Also, isActive
  *     will be set to false.
  */
 
@@ -217,21 +216,20 @@ public class UpdateService extends IntentService {
      * **/
 
     private void handleSchedule() {
+        //Call the API url, and receives the data as string
         String response = bimayApiCall(getString(R.string.request_schedule));
 
+        //if data returned is not empty
         if(!response.equals("[]")) {
             try {
-                //Turns the response(Which is a JSONArray) to a list of object(Here is Schedule and Dates Objects)
+                //Turn the response(Which is a JSONArray) to a list of object(Here is Schedule and Dates Objects)
                 List<Schedule> schedules = GsonHelper.create().fromJson(response, new TypeToken<List<Schedule>>() {
                 }.getType());
-
-                //makeList(response, List<Schedule>);
                 List<Dates> dates = GsonHelper.create().fromJson(response, new TypeToken<List<Dates>>() {
                 }.getType());
 
-                //Save the objects that is return by Gson to realm
+                //And save the list objects that is return by Gson to realm
                 insertToRealm(Schedule.class, schedules, dates);
-
 
             } catch (JsonSyntaxException e) {dataParsingError();}
         }
@@ -239,7 +237,8 @@ public class UpdateService extends IntentService {
 
     /**==================================================================================================================================
      * ===========================================Retrieves Exam Date data===============================================================
-     * ==================================================================================================================================**/
+     * ==================================================================================================================================
+     * **/
 
     private void handleExam() {
         String response = bimayApiCall(getString(R.string.request_exam));
@@ -257,7 +256,8 @@ public class UpdateService extends IntentService {
 
     /**==================================================================================================================================
      * ===========================================Retrieves Billing Information==========================================================
-     * ==================================================================================================================================**/
+     * ==================================================================================================================================
+     * **/
 
     private void handleFinance() {
         String data;
@@ -278,7 +278,6 @@ public class UpdateService extends IntentService {
             }.getType());
 
             insertToRealm(Finance.class,finances,dates );
-
         } catch (JSONException e) {dataParsingError();}
     }
 
@@ -341,7 +340,8 @@ public class UpdateService extends IntentService {
 
     /**==================================================================================================================================
      * ===========================================Retrieves Semesters data===============================================================
-     * ==================================================================================================================================**/
+     * ==================================================================================================================================
+     * **/
 
     private void handleTerms() {
         String response = bimayApiCall(getString(R.string.request_terms));
@@ -360,7 +360,8 @@ public class UpdateService extends IntentService {
 
     /**==================================================================================================================================
      * ===========================================Retrieves Course Data==================================================================
-     * ==================================================================================================================================**/
+     * ==================================================================================================================================
+     * **/
 
     private void handleCourse() {
         Realm realm = Realm.getDefaultInstance();
@@ -396,7 +397,8 @@ public class UpdateService extends IntentService {
 
     /**==================================================================================================================================
      * ===========================================Retrieves Name and Major Data==========================================================
-     * ==================================================================================================================================**/
+     * ==================================================================================================================================
+     * **/
 
     private void handleAccount(){
         String response = bimayApiCall(getString(R.string.request_student_info));
@@ -422,7 +424,8 @@ public class UpdateService extends IntentService {
 
     /**==================================================================================================================================
      * ===========================================Retrieves Profile Pic data=============================================================
-     * ==================================================================================================================================**/
+     * ==================================================================================================================================
+     * **/
 
     private void handlePhoto(){
         if (existNewPhoto){
@@ -445,7 +448,8 @@ public class UpdateService extends IntentService {
 
     /**==================================================================================================================================
      * ===========================================Retrieves Main GPA=====================================================================
-     * ==================================================================================================================================**/
+     * ==================================================================================================================================
+     * **/
     private void handleGPA(){
         String response = bimayApiCall(getString(R.string.request_dashboard));
 
@@ -470,7 +474,8 @@ public class UpdateService extends IntentService {
 
     /**==================================================================================================================================
      * ===========================================Retrieves Course Resources data========================================================
-     * ==================================================================================================================================**/
+     * ==================================================================================================================================
+     * **/
 
     private void handleResource(){
         Realm realm = Realm.getDefaultInstance();
@@ -537,7 +542,8 @@ public class UpdateService extends IntentService {
 
     /**==================================================================================================================================
      * ================================== Cleans Up everything When this service is destroyed ===========================================
-     * ==================================================================================================================================**/
+     * ==================================================================================================================================
+     * **/
 
     @Override
     public void onDestroy() {
@@ -554,7 +560,8 @@ public class UpdateService extends IntentService {
 
     /**==================================================================================================================================
      * ================================================= Helper Functions ===============================================================
-     * ==================================================================================================================================**/
+     * ==================================================================================================================================
+     * **/
 
     private String bimayApiCall(String url){
         RequestFuture<String> future = RequestFuture.newFuture();
@@ -576,7 +583,6 @@ public class UpdateService extends IntentService {
     private void dataParsingError(){
         //Called when request fails
         stopSelf();
-
         //Post the updateFailedEvent to eventBus when update failed
         EventBus.getDefault().post(new UpdateFailedEvent());
     }

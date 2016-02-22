@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_info:
-                Toast.makeText(this, "No more refresh session popup, everything is now automated :D !", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "No more refresh session popup, everything is now automated :D ! If you encounter a problem, please check known bugs on account for guidance", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.action_schedule_webapp:
                 //Launched the activity to open webapp when "open in webapp" is clicked
