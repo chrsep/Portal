@@ -23,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.event.UpdateFinishEvent;
 import com.directdev.portal.tools.services.UpdateService;
@@ -106,7 +105,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 fis.read(toDecode, 0, toDecode.length);
                 fis.close();
             } catch (IOException e) {
-                Crashlytics.logException(e);
+
             }
             bitmap = decodeSampledBitmapFromResource(toDecode, 74, 74);
             if (bitmap != null) {
@@ -209,7 +208,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 fis.read(toDecode, 0, toDecode.length);
                 fis.close();
             } catch (IOException e) {
-                Crashlytics.logException(e);
+
             }
             ImageView photo = (ImageView) getActivity().findViewById(R.id.profile_image);
             bitmap = decodeSampledBitmapFromResource(toDecode, 74, 74);

@@ -19,7 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
 import com.directdev.portal.R;
@@ -248,9 +247,7 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     Pref.save(ctx, "LoginAttempt", tries);
                 }
             } catch (NullPointerException e) {
-                //We detected crashes involving NullPointerException coming from this method
-                //This will catch the crash and send back crash data to us.
-                Crashlytics.logException(e);
+
             }
         }
 

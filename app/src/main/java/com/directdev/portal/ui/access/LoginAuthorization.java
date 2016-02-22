@@ -12,7 +12,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
 import com.directdev.portal.R;
 
 
@@ -73,7 +72,6 @@ public class LoginAuthorization extends AppCompatActivity {
             } catch (NullPointerException e) {
                 //We detected crashes involving NullPointerException coming from this method
                 //This will catch the crash and send back crash data to us.
-                Crashlytics.logException(e);
                 finish();
             }
         }
