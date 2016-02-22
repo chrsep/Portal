@@ -60,10 +60,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         EditText email = (EditText) findViewById(R.id.emailLogin);
         EditText password = (EditText) findViewById(R.id.passwordLogin);
         String emailExtra = email.getText().toString();
-        emailExtra += "@binus.ac.id";
         String passwordExtra = password.getText().toString();
 
-        if (emailExtra.equals("@binus.ac.id")) {
+        if (emailExtra.equals("")) {
             Toast toast = Toast.makeText(LoginActivity.this, "Your username is important", Toast.LENGTH_SHORT);
             toast.show();
             return;

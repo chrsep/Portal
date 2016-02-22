@@ -16,36 +16,24 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/login_input_username"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/imageView"
         android:paddingTop="30dp"
-        android:textColorHint="@color/inactive_white"
-        android:layout_toLeftOf="@+id/binus_email">
+        android:textColorHint="@color/inactive_white">
 
         <EditText
             android:id="@+id/emailLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="24dp"
             android:ems="10"
             android:hint="@string/login_username_pref"
             android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
             android:textColor="@color/white" />
     </android.support.design.widget.TextInputLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/imageView"
-        android:paddingTop="51dp"
-        android:text="@string/login_email_ending"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:id="@+id/binus_email"/>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/login_input_password"

@@ -202,7 +202,7 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         boolean noToday = true;
         //Get today's date
         Date today = new Date();
-        Date tested = new Date();
+        Date tested;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
         RealmResults<Dates> dateData = realm.where(Dates.class).findAll();
 
