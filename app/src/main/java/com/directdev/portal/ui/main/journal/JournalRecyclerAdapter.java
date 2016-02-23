@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.event.RecyclerClickEvent;
 import com.directdev.portal.tools.helper.RecyclerItemClickListener;
@@ -147,8 +149,13 @@ public class JournalRecyclerAdapter extends RecyclerView.Adapter {
             scheduleRecycler.addOnItemTouchListener(new RecyclerItemClickListener(ctx, new RecyclerItemClickListener.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    RealmResults<Schedule> schedules = realm.where(Schedule.class).equalTo("Date", data.get(getAdapterPosition())).findAll();
-                    EventBus.getDefault().post(new RecyclerClickEvent(schedules.get(position)));
+                    try {
+                        RealmResults<Schedule> schedules = realm.where(Schedule.class).equalTo("Date", data.get(getAdapterPosition())).findAll();
+                        EventBus.getDefault().post(new RecyclerClickEvent(schedules.get(position)));
+                    }catch (ArrayIndexOutOfBoundsException e){
+                        Toast.makeText(ctx, "Data not available, try refreshing the data",Toast.LENGTH_SHORT).show();
+                        Crashlytics.log(e.getMessage());
+                    }
                 }
             }));
         }

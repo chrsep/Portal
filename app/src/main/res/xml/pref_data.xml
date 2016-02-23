@@ -10,10 +10,5 @@
             android:key="@string/setting_gpa"
             android:summary="Hide your GPA and show 4.0"
             android:title="Hide GPA" />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="@string/setting_auto_refresh"
-            android:summary="Data won't be updated when app opened"
-            android:title="Manual refresh only" />
     </PreferenceCategory>
 </PreferenceScreen>

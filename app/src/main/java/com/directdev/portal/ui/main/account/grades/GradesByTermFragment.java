@@ -22,7 +22,6 @@ public class GradesByTermFragment extends Fragment {
 
     private String mParam1;
     private Realm realm;
-    private RealmResults<GradesCourse> courses;
 
     public GradesByTermFragment() {
     }
@@ -47,7 +46,7 @@ public class GradesByTermFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         realm = Realm.getDefaultInstance();
-        courses = realm.where(GradesCourse.class).equalTo("STRM",mParam1).findAll();
+        RealmResults<GradesCourse> courses = realm.where(GradesCourse.class).equalTo("STRM", mParam1).findAll();
         View view = inflater.inflate(R.layout.fragment_grades_by_term, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.grades_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -65,8 +64,8 @@ public class GradesByTermFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
+    public void onDestroyView() {
         realm.close();
-        super.onStop();
+        super.onDestroyView();
     }
 }

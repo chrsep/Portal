@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Base64;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -174,6 +175,7 @@ public class UpdateService extends IntentService {
 
     @Override
     public void onCreate() {
+        Log.d(TAG, "onCreate: called");
         isActive = true;
         super.onCreate();
     }
@@ -551,7 +553,7 @@ public class UpdateService extends IntentService {
 
         //Post the UpdateFinishEvent to eventbus when update finish and service is destroyed
         EventBus.getDefault().post(new UpdateFinishEvent());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.getDefault());
         Pref.save(getApplication(),getString(R.string.last_update_pref),sdf.format(new Date()));
         super.onDestroy();
     }

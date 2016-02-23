@@ -1,14 +1,14 @@
 package com.directdev.portal.ui.main.journal;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
+import com.crashlytics.android.Crashlytics;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.event.CantConnectEvent;
 import com.directdev.portal.tools.event.UpdateFailedEvent;
@@ -38,6 +37,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import de.greenrobot.event.EventBus;
 import io.realm.Realm;
@@ -56,35 +56,19 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
     protected SwipeRefreshLayout swipeLayout;
     protected JournalRecyclerAdapter adapter;
     protected RecyclerView recycler;
-    protected boolean firstRequestSent = false;
     private View view;
-    private SharedPreferences sPref;
-    private SharedPreferences.Editor edit;
     private List<Date> dates;
     private Realm realm;
     private WebView webView;
+    protected boolean isWebLoading = false;
 
     public JournalFragment() {}
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        sPref = getActivity().getSharedPreferences(getString(R.string.shared_preferences), Context.MODE_PRIVATE);
-        edit = sPref.edit();
-
-        //Analytics
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("View schedule")
-                .putContentType("Activity")
-                .putContentId("studentData"));
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_journal, container, false);
-
         //swipeLayout is the one that is responsible for the pull down to refresh action
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.journal_refresh);
         swipeLayout.setOnRefreshListener(this);
@@ -95,6 +79,10 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         LoginWebView browser = new LoginWebView();
         webView.setWebViewClient(browser);
 
+        if(savedInstanceState != null){
+            isWebLoading = savedInstanceState.getBoolean("isWebLoading");
+            webView.restoreState(savedInstanceState);
+        }
         return view;
     }
 
@@ -129,20 +117,10 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onResume() {
-        SharedPreferences settingsPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        //This is to refresh every time Portal is opened
-        if (sPref.getInt(getString(R.string.login_data_given_pref), 0) != 0 && !settingsPref.getBoolean(getString(R.string.setting_auto_refresh), false ) && !firstRequestSent) {
-            swipeLayout.post(new Runnable() {
-                @Override
-                public void run() {swipeLayout.setRefreshing(true);}});
-            swipeLayout.setEnabled(false);
-            firstRequestSent = true;
-            onRefresh();
-        }
-
         //This is to show the circling refresh icon when refresh is happening (UpdateService is running)
-        if (UpdateService.isActive){
+        Log.d(TAG, "onResume: called" + isWebLoading);
+        if (UpdateService.isActive || isWebLoading){
+            Log.d(TAG, "onResume: if one called");
             swipeLayout.post(new Runnable() {
                 @Override
                 public void run() {
@@ -150,7 +128,31 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }
             });
             swipeLayout.setEnabled(false);
+        }else {
+            swipeLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeLayout.setRefreshing(false);
+                }
+            });
+            swipeLayout.setEnabled(true);
         }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.getDefault());
+        Date startDate = new Date();
+        try{
+            startDate = sdf.parse(Pref.read(getActivity(), getActivity().getString(R.string.last_update_pref), " "));
+        }catch (ParseException e){}
+
+        Date endDate   = new Date();
+        long duration  = endDate.getTime() - startDate.getTime();
+        long diffInHours = TimeUnit.MILLISECONDS.toHours(duration);
+
+        if(diffInHours > 24){
+            Snackbar snackbar = Snackbar.make(view, "Your data is outdated, last updated "+diffInHours+" hours ago", Snackbar.LENGTH_INDEFINITE);
+            snackbar.show();
+        }
+
+
         super.onResume();
     }
 
@@ -162,11 +164,17 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         super.onStop();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("isWebLoading", isWebLoading);
+        webView.saveState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
     //This is called when pull down to refresh is triggered by user
     @Override
     public void onRefresh() {
-        swipeLayout.setEnabled(false);
-        edit.putBoolean(getString(R.string.is_refreshing_journal_pref), true).apply();
+        isWebLoading = true;
         webView.loadUrl("https://newbinusmaya.binus.ac.id/login.php");
     }
 
@@ -224,7 +232,6 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
         }catch (ParseException e){}
         Collections.sort(dates);
-
     }
 
     private class LoginWebView extends WebViewClient {
@@ -235,9 +242,6 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         @Override
         public void onPageFinished(WebView webView, final String url) {
             try {
-                if (Pref.read(getActivity(),"LoginAttempt", 0) == 4 && Pref.read(ctx,getString(R.string.login_condition_pref), 0) == 0) {
-                    Pref.save(ctx,getString(R.string.login_condition_pref), 0);
-                }
                 if (Pref.read(getActivity(),"LoginAttempt", 0) < 4) {
                     int tries = Pref.read(ctx,"LoginAttempt", 0);
                     tries = tries + 1;
@@ -252,19 +256,28 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         }
 
         @Override
+        public void onLoadResource(WebView view, String url) {
+            super.onLoadResource(view, url);
+        }
+
+        @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            Log.d(TAG, "onPageStarted: "+ url);
             super.onPageStarted(view, url, favicon);
         }
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (url.equals("https://newbinusmaya.binus.ac.id/newStudent/")) {
-                view.stopLoading();
-                String cookie = android.webkit.CookieManager.getInstance().getCookie("https://newbinusmaya.binus.ac.id/student/#/index/dashboard");
-                Pref.save(ctx, getString(R.string.login_cookie_pref), cookie);
-                Pref.save(ctx, getString(R.string.login_condition_pref), 1);
-                Pref.save(ctx, getString(R.string.is_no_session), false);
-                UpdateService.all(getActivity());
+            try {
+                if (url.equals("https://newbinusmaya.binus.ac.id/newStudent/")) {
+                    view.stopLoading();
+                    isWebLoading = false;
+                    String cookie = android.webkit.CookieManager.getInstance().getCookie("https://newbinusmaya.binus.ac.id/student/#/index/dashboard");
+                    Pref.save(ctx, getString(R.string.login_cookie_pref), cookie);
+                    UpdateService.all(getActivity());
+                }
+            }catch (IllegalStateException e){
+                Crashlytics.log(e.getMessage());
             }
             return super.shouldOverrideUrlLoading(view, url);
         }
