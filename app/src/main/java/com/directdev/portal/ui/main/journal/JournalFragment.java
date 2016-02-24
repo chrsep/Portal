@@ -1,12 +1,15 @@
 package com.directdev.portal.ui.main.journal;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,11 +25,13 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 import com.directdev.portal.R;
 import com.directdev.portal.tools.event.CantConnectEvent;
+import com.directdev.portal.tools.event.NotSignedInEvent;
 import com.directdev.portal.tools.event.UpdateFailedEvent;
 import com.directdev.portal.tools.event.UpdateFinishEvent;
 import com.directdev.portal.tools.helper.Pref;
 import com.directdev.portal.tools.model.Dates;
 import com.directdev.portal.tools.services.UpdateService;
+import com.directdev.portal.ui.access.LogoutAuthorization;
 
 import org.solovyev.android.views.llm.LinearLayoutManager;
 
@@ -197,6 +202,36 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         Toast.makeText(getActivity(), "Failed to connect, try again later", Toast.LENGTH_LONG).show();
     }
 
+    public void onEventMainThread(NotSignedInEvent event){
+        Snackbar.make(view, "Your password changed", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Relogin", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        getActivity().stopService(new Intent(getActivity(), UpdateService.class));
+                                        Intent intent = new Intent(getActivity(), LogoutAuthorization.class);
+                                        startActivity(intent);
+                                        break;
+
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        break;
+                                }
+                            }
+                        };
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                                .setNegativeButton("No", dialogClickListener)
+                                .show();
+                    }
+                })
+                .setActionTextColor(Color.YELLOW)
+                .show();
+    }
+
     /**
      *  This method is used to generate the list of dates that have an event(Exam, finance, schedules),
      *  this date is used to display the Journal list, we are using a nested recyclerView to display
@@ -238,21 +273,15 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         private String USERNAME = Pref.read(getActivity(),getString(R.string.login_username_pref), "");
         private String PASSWORD = Pref.read(getActivity(),getString(R.string.login_password_pref), "");
         private Context ctx = getActivity();
+        private int loginFailedCounter = 0;
 
         @Override
         public void onPageFinished(WebView webView, final String url) {
-            try {
-                if (Pref.read(getActivity(),"LoginAttempt", 0) < 4) {
-                    int tries = Pref.read(ctx,"LoginAttempt", 0);
-                    tries = tries + 1;
-                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_UsernameTextBoxBMNew').value='" + USERNAME + "'})()");
-                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_PasswordTextBoxBMNew').value='" + PASSWORD + "'})()");
-                    webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_SubmitButtonBMNew').click()})()");
-                    Pref.save(ctx, "LoginAttempt", tries);
-                }
-            } catch (NullPointerException e) {
-
-            }
+            super.onPageFinished(webView, url);
+            webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_UsernameTextBoxBMNew').value='" + USERNAME + "'})()");
+            webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_PasswordTextBoxBMNew').value='" + PASSWORD + "'})()");
+            webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_SubmitButtonBMNew').click()})()");
+            loginFailedCounter += 1;
         }
 
         @Override
@@ -261,20 +290,22 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         }
 
         @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            Log.d(TAG, "onPageStarted: "+ url);
-            super.onPageStarted(view, url, favicon);
-        }
-
-        @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             try {
                 if (url.equals("https://newbinusmaya.binus.ac.id/newStudent/")) {
+                    loginFailedCounter = 0;
+                    webView.loadUrl("http://example.com/");
                     view.stopLoading();
                     isWebLoading = false;
                     String cookie = android.webkit.CookieManager.getInstance().getCookie("https://newbinusmaya.binus.ac.id/student/#/index/dashboard");
                     Pref.save(ctx, getString(R.string.login_cookie_pref), cookie);
                     UpdateService.all(getActivity());
+                }else if(loginFailedCounter > 6){
+                    loginFailedCounter = 0;
+                    webView.loadUrl("http://example.com/");
+                    view.stopLoading();
+                    isWebLoading = false;
+                    onEventMainThread(new NotSignedInEvent());
                 }
             }catch (IllegalStateException e){
                 Crashlytics.log(e.getMessage());

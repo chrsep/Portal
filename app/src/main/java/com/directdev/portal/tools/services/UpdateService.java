@@ -390,7 +390,7 @@ public class UpdateService extends IntentService {
             }
             realm.commitTransaction();
         } catch (JSONException e) {
-            dataParsingError();
+
         }finally {
             realm.close();
         }

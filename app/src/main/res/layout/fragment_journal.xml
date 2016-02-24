@@ -8,7 +8,7 @@
         android:id="@+id/refresh_webView"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:visibility="invisible"/>
+        android:visibility="visible"/>
 
     <LinearLayout
         android:id="@+id/joural_refresh_text"
