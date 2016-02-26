@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -66,7 +68,7 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private Realm realm;
     private WebView webView;
     protected boolean isWebLoading = false;
-
+    private Snackbar snackbar;
     public JournalFragment() {}
 
     @Override
@@ -153,7 +155,7 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         long diffInHours = TimeUnit.MILLISECONDS.toHours(duration);
 
         if(diffInHours > 24){
-            Snackbar snackbar = Snackbar.make(view, "Your data is outdated, last updated "+diffInHours+" hours ago", Snackbar.LENGTH_INDEFINITE);
+            snackbar = Snackbar.make(view, "Your data is outdated, last updated "+diffInHours+" hours ago", Snackbar.LENGTH_INDEFINITE);
             snackbar.show();
         }
 
@@ -179,8 +181,12 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
     //This is called when pull down to refresh is triggered by user
     @Override
     public void onRefresh() {
-        isWebLoading = true;
-        webView.loadUrl("https://newbinusmaya.binus.ac.id/login.php");
+        if (isNetworkAvailable()) {
+            isWebLoading = true;
+            webView.loadUrl("https://newbinusmaya.binus.ac.id/login.php");
+        }else {
+            swipeLayout.setRefreshing(false);
+        }
     }
 
     //Method that is called when EventBus post the UpdateFinishEvent, see UpdateService.java
@@ -190,12 +196,14 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         recycler.swapAdapter(adapter, false);
         swipeLayout.setRefreshing(false);
         swipeLayout.setEnabled(true);
+        snackbar.dismiss();
     }
 
     //Method that is called when EventBus post the UpdateFailedEvent, see tools.services.UpdateService.java to see
     //how the event get posted
     public void onEventMainThread(UpdateFailedEvent event) {
-        Toast.makeText(getActivity(), "Some data fails to load, try to refresh again later", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), event.name + " data not available to load, try to refresh again later", Toast.LENGTH_SHORT).show();
+        snackbar.dismiss();
     }
 
     public void onEventMainThread(CantConnectEvent event) {
@@ -312,5 +320,12 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
             return super.shouldOverrideUrlLoading(view, url);
         }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

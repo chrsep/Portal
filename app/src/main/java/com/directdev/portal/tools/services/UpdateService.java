@@ -233,7 +233,7 @@ public class UpdateService extends IntentService {
                 //And save the list objects that is return by Gson to realm
                 insertToRealm(Schedule.class, schedules, dates);
 
-            } catch (JsonSyntaxException e) {dataParsingError();}
+            } catch (JsonSyntaxException e) {dataParsingError("Schedule");}
         }
     }
 
@@ -252,7 +252,7 @@ public class UpdateService extends IntentService {
             }.getType());
 
             insertToRealm(Schedule.class, exams, dates);
-        }catch (JsonSyntaxException e){dataParsingError();}
+        }catch (JsonSyntaxException e){dataParsingError("Exam");}
     }
 
 
@@ -280,7 +280,7 @@ public class UpdateService extends IntentService {
             }.getType());
 
             insertToRealm(Finance.class,finances,dates );
-        } catch (JSONException e) {dataParsingError();}
+        } catch (JSONException e) {dataParsingError("Finance");}
     }
 
 
@@ -336,7 +336,7 @@ public class UpdateService extends IntentService {
             realm.commitTransaction();
 
 
-        } catch (JSONException e) {dataParsingError();}finally {realm.close();}
+        } catch (JSONException e) {dataParsingError("Grades");}finally {realm.close();}
     }
 
 
@@ -356,7 +356,7 @@ public class UpdateService extends IntentService {
             realm.copyToRealmOrUpdate(terms);
             realm.commitTransaction();
             realm.close();
-        } catch (JsonSyntaxException e) {dataParsingError();}
+        } catch (JsonSyntaxException e) {dataParsingError("Terms");}
     }
 
 
@@ -390,7 +390,7 @@ public class UpdateService extends IntentService {
             }
             realm.commitTransaction();
         } catch (JSONException e) {
-
+            dataParsingError("Course");
         }finally {
             realm.close();
         }
@@ -419,7 +419,7 @@ public class UpdateService extends IntentService {
                 this.photo = photo;
             }
         }catch (JSONException e){
-            dataParsingError();
+            dataParsingError("Account");
         }
     }
 
@@ -443,6 +443,7 @@ public class UpdateService extends IntentService {
                 EventBus.getDefault().post(new PhotoResponseEvent());
                 Pref.save(this,getString(R.string.resource_small_photo), this.photo);
             } catch (Exception e) {
+                dataParsingError("Photo");
             }
         }
     }
@@ -470,6 +471,7 @@ public class UpdateService extends IntentService {
                 Pref.save(this, getString(R.string.resource_gpa), data4);
             }
         } catch (JSONException e) {
+            dataParsingError("GPA");
         }
     }
 
@@ -536,7 +538,7 @@ public class UpdateService extends IntentService {
                 }
                 realm.commitTransaction();
             } catch(JSONException e){
-                dataParsingError();
+                dataParsingError("Resource & material");
             }finally {realm.close();}
         }
     }
@@ -582,11 +584,9 @@ public class UpdateService extends IntentService {
         }
     }
 
-    private void dataParsingError(){
-        //Called when request fails
-        stopSelf();
+    private void dataParsingError(String name){
         //Post the updateFailedEvent to eventBus when update failed
-        EventBus.getDefault().post(new UpdateFailedEvent());
+        EventBus.getDefault().post(new UpdateFailedEvent(name));
     }
 
     private <E extends RealmObject> void insertToRealm(Class<? extends RealmObject> clazz, Iterable<E> objects, List<Dates> date){
