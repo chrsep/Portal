@@ -88,6 +88,7 @@ public class UpdateService extends IntentService {
     private static final String RESOURCES = "com.directdev.portal.tools.services.action.RESOURCES";
     private static final String PHOTO = "com.directdev.portal.tools.services.action.PHOTO";
     private static final String GPA = "com.directdev.portal.tools.services.action.GPA";
+    private static boolean isSuccess = true;
     public static boolean isActive = false;
     public static boolean existNewPhoto = false;
     public String photo = " ";
@@ -233,7 +234,10 @@ public class UpdateService extends IntentService {
                 //And save the list objects that is return by Gson to realm
                 insertToRealm(Schedule.class, schedules, dates);
 
-            } catch (JsonSyntaxException e) {dataParsingError("Schedule");}
+            } catch (JsonSyntaxException e) {
+                isSuccess = false;
+                dataParsingError("Schedule");
+            }
         }
     }
 
@@ -555,8 +559,10 @@ public class UpdateService extends IntentService {
 
         //Post the UpdateFinishEvent to eventbus when update finish and service is destroyed
         EventBus.getDefault().post(new UpdateFinishEvent());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.getDefault());
-        Pref.save(getApplication(),getString(R.string.last_update_pref),sdf.format(new Date()));
+        if (isSuccess){
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.getDefault());
+            Pref.save(getApplication(),getString(R.string.last_update_pref),sdf.format(new Date()));
+        }
         super.onDestroy();
     }
 
