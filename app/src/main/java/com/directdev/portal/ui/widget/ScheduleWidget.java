@@ -3,9 +3,6 @@ package com.directdev.portal.ui.widget;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
-import android.widget.RemoteViews;
-
-import io.realm.Realm;
 
 public class ScheduleWidget extends AppWidgetProvider {
     @Override

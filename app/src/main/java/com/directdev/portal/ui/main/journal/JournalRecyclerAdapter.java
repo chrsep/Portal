@@ -55,7 +55,7 @@ public class JournalRecyclerAdapter extends RecyclerView.Adapter {
         ScheduleViewHolder scheduleHolder = (ScheduleViewHolder) holder;
         RealmResults<Schedule> schedules = realm.where(Schedule.class).equalTo("Date", data.get(i)).findAll();
         RealmResults<Exam> exams = realm.where(Exam.class).equalTo("ExamDate", data.get(i)).findAll();
-        RealmResults<Finance> finance = realm.where(Finance.class).equalTo("ITEM_EFFECTIVE_DT", data.get(i)).findAll();
+        RealmResults<Finance> finance = realm.where(Finance.class).equalTo("DUE_DT", data.get(i)).findAll();
 
         SimpleDateFormat toDay = new SimpleDateFormat("EEEE",Locale.US);
         SimpleDateFormat date = new SimpleDateFormat("dd MMM yyyy",Locale.US);

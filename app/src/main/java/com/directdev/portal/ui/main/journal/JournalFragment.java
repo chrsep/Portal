@@ -126,7 +126,7 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onResume() {
         //This is to show the circling refresh icon when refresh is happening (UpdateService is running)
         Log.d(TAG, "onResume: called" + isWebLoading);
-        if (UpdateService.isActive || isWebLoading){
+        if (UpdateService.Companion.isActive() || isWebLoading){
             Log.d(TAG, "onResume: if one called");
             swipeLayout.post(new Runnable() {
                 @Override
@@ -211,6 +211,8 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     public void onEventMainThread(NotSignedInEvent event){
+        swipeLayout.setRefreshing(false);
+        swipeLayout.setEnabled(true);
         Snackbar.make(view, "Your password changed", Snackbar.LENGTH_INDEFINITE)
                 .setAction("Relogin", new View.OnClickListener() {
                     @Override
@@ -286,10 +288,18 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         @Override
         public void onPageFinished(WebView webView, final String url) {
             super.onPageFinished(webView, url);
-            webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_UsernameTextBoxBMNew').value='" + USERNAME + "'})()");
-            webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_PasswordTextBoxBMNew').value='" + PASSWORD + "'})()");
-            webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_SubmitButtonBMNew').click()})()");
-            loginFailedCounter += 1;
+            if(loginFailedCounter > 4){
+                loginFailedCounter = 0;
+                webView.loadUrl("http://example.com/");
+                isWebLoading = false;
+                onEventMainThread(new NotSignedInEvent());
+            }else {
+                webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_UsernameTextBoxBMNew').value='" + USERNAME + "'})()");
+                webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_PasswordTextBoxBMNew').value='" + PASSWORD + "'})()");
+                webView.loadUrl("javascript:(function () {document.getElementById('ctl00_ContentPlaceHolder1_SubmitButtonBMNew').click()})()");
+                loginFailedCounter += 1;
+            }
+            Log.d(TAG, "onPageFinished: "+loginFailedCounter);
         }
 
         @Override
@@ -301,19 +311,15 @@ public class JournalFragment extends Fragment implements SwipeRefreshLayout.OnRe
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             try {
                 if (url.equals("https://newbinusmaya.binus.ac.id/newStudent/")) {
+                    Log.d(TAG, "shouldOverrideUrlLoading: "+ loginFailedCounter);
                     loginFailedCounter = 0;
                     webView.loadUrl("http://example.com/");
                     view.stopLoading();
                     isWebLoading = false;
                     String cookie = android.webkit.CookieManager.getInstance().getCookie("https://newbinusmaya.binus.ac.id/student/#/index/dashboard");
                     Pref.save(ctx, getString(R.string.login_cookie_pref), cookie);
-                    UpdateService.all(getActivity());
-                }else if(loginFailedCounter > 6){
-                    loginFailedCounter = 0;
-                    webView.loadUrl("http://example.com/");
-                    view.stopLoading();
-                    isWebLoading = false;
-                    onEventMainThread(new NotSignedInEvent());
+                    UpdateService.Companion.all(getActivity());
+                    Log.d(TAG, "shouldOverrideUrlLoading: "+ loginFailedCounter);
                 }
             }catch (IllegalStateException e){
                 Crashlytics.log(e.getMessage());

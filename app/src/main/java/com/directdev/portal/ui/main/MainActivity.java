@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_info:
-                Toast.makeText(this, "No more refresh session popup, everything is now automated :D !", Toast.LENGTH_SHORT).show();
                 Toast.makeText(this, "If you encounter a problem, please check known bugs on Account Tab for guidance", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.action_schedule_webapp:
@@ -213,8 +212,8 @@ public class MainActivity extends AppCompatActivity {
                                 DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                                 dm.enqueue(request);
                             }else{
-                                Toast updating = Toast.makeText(MainActivity.this, "Course material not found, try again after refresh data", Toast.LENGTH_LONG);
-                                updating.show();
+                                Toast.makeText(MainActivity.this, "Material download is disabled for now, Binus's server makes changes that wrecks it", Toast.LENGTH_LONG).show();
+                                Toast.makeText(MainActivity.this, "(ノಠ益ಠ)ノ彡┻━┻", Toast.LENGTH_SHORT).show();
                             }
                         }catch (IllegalStateException e){
                             Toast updating = Toast.makeText(MainActivity.this, "Still refreshing data, please wait", Toast.LENGTH_SHORT);

@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
         if (sharedPref.getInt(getResources().getString(R.string.login_condition_pref), 0) == 1) {
-            UpdateService.all(this);
+            UpdateService.Companion.all(this);
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

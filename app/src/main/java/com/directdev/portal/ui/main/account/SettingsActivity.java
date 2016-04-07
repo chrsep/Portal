@@ -7,8 +7,6 @@ import android.preference.PreferenceFragment;
 
 import com.directdev.portal.R;
 import com.directdev.portal.tools.helper.Portal;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 
 public class SettingsActivity extends Activity {

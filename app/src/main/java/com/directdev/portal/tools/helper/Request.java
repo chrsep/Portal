@@ -30,6 +30,7 @@ public class Request extends StringRequest {
     public Map<String, String> getHeaders() throws AuthFailureError {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Cookie", cookie);
+        headers.put("Referer", "https://newbinusmaya.binus.ac.id/newStudent/index.html");
         return headers;
 
     }

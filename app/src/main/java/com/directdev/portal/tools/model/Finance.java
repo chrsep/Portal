@@ -3,7 +3,6 @@ package com.directdev.portal.tools.model;
 import java.util.Date;
 
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 public class Finance extends RealmObject {
     private Date DUE_DT;
