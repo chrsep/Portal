@@ -14,7 +14,8 @@
         android:id="@+id/journal_exam_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:maxWidth="250dp"/>
 
     <TextView
         android:id="@+id/journal_exam_chair"

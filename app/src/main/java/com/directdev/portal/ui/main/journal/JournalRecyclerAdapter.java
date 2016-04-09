@@ -85,19 +85,27 @@ public class JournalRecyclerAdapter extends RecyclerView.Adapter {
         ScheduleRecyclerAdapter scheduleAdapter = new ScheduleRecyclerAdapter(schedules);
         if(!schedules.isEmpty()){
             scheduleHolder.scheduleRecycler.setLayoutManager(new LinearLayoutManager(ctx));
+            scheduleHolder.scheduleRecycler.setVisibility(View.VISIBLE);
+        }else{
+            scheduleHolder.scheduleRecycler.setVisibility(View.GONE);
         }
         scheduleHolder.scheduleRecycler.setAdapter(scheduleAdapter);
 
         ExamRecyclerAdapter examRecyclerAdapter = new ExamRecyclerAdapter(exams);
         if(!exams.isEmpty()){
             scheduleHolder.examRecycler.setLayoutManager(new LinearLayoutManager(ctx));
+            scheduleHolder.examRecycler.setVisibility(View.VISIBLE);
+        }else{
+            scheduleHolder.examRecycler.setVisibility(View.GONE);
         }
-
         scheduleHolder.examRecycler.setAdapter(examRecyclerAdapter);
 
         FinanceRecyclerAdapter financeRecyclerAdapter = new FinanceRecyclerAdapter(finance);
         if(!finance.isEmpty()){
             scheduleHolder.financeRecycler.setLayoutManager(new LinearLayoutManager(ctx));
+            scheduleHolder.financeRecycler.setVisibility(View.VISIBLE);
+        }else{
+            scheduleHolder.financeRecycler.setVisibility(View.GONE);
         }
         scheduleHolder.financeRecycler.setAdapter(financeRecyclerAdapter);
 

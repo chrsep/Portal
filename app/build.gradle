@@ -32,8 +32,8 @@ android {
         applicationId "com.directdev.portal"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 34
-        versionName "0.2.8c"
+        versionCode 36
+        versionName "0.2.9b"
     }
     buildTypes {
         release {

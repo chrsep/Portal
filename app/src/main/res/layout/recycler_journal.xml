@@ -33,16 +33,19 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/schedule_journal_recycler">
+        android:id="@+id/schedule_journal_recycler"
+        android:visibility="gone">
     </android.support.v7.widget.RecyclerView>
     <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/exam_journal_recycler">
+        android:id="@+id/exam_journal_recycler"
+        android:visibility="gone">
     </android.support.v7.widget.RecyclerView>
     <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/finance_journal_recycler">
+        android:id="@+id/finance_journal_recycler"
+        android:visibility="gone">
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>

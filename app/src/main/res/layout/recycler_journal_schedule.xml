@@ -20,7 +20,8 @@
             android:id="@+id/course"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:maxWidth="350dp"/>
 
         <TextView
             android:id="@+id/mode"
